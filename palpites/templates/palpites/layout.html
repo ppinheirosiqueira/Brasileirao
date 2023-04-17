@@ -1,0 +1,14 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <title>{% block title %}{% endblock %}</title>
+        <link rel="stylesheet" href="{% static '/style.css' %}">
+        {% block style %}{% endblock %}
+    </head>
+    <body>
+        <img src="media/Escudos/vasco.png" alt="teste">
+    </body>
+</html>
