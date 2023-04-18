@@ -1,0 +1,53 @@
+*, *::after, *::before{
+    box-sizing: border-box;
+}
+
+body{
+    background-color: #222;
+    width: 100%;
+    margin: 0;
+}
+
+#topBar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:96%;
+    height:40px;
+    margin: 0% 2%;
+    color: white;
+    border-bottom: solid 1px #444;  
+    display: grid;
+    grid-template-columns: auto auto;
+}
+
+.esquerda{
+    margin: 0;
+    padding: 10px 40px;
+    border: none;
+}
+
+.direita{
+    margin: 0;
+    align-items: right;
+    border: none;
+}
+
+.direita ul{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    justify-content: right;
+}
+
+.nav-item{
+    display: inline-block;
+    list-style: none;
+    padding: 10px 40px;
+}
+
+.nav-item a{
+    color: lightblue;
+    text-decoration: none;
+}

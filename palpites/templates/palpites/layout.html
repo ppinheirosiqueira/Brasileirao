@@ -5,10 +5,37 @@
 <html lang="en">
     <head>
         <title>{% block title %}{% endblock %}</title>
-        <link rel="stylesheet" href="{% static '/style.css' %}">
+        <link rel="stylesheet" href="{% static 'styles/style.css' %}">
         {% block style %}{% endblock %}
     </head>
     <body>
-        <img src="media/Escudos/vasco.png" alt="teste">
+        <div id="topBar">
+            {% if user.is_authenticated %}
+                <div class="esquerda">Bem-Vindo {{ user.username }}</div>
+                <div class="direita">
+                    <ul>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'register_listing' %}">Register Listing</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+                        </li>       
+                    </ul>    
+                </div>
+            {% else %}
+                <div class="esquerda">Não logado</div>
+                <div class="direita">
+                    <ul>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'login' %}">Log In</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'register' %}">Register</a>
+                        </li>
+                    </ul>
+                </div>
+            {% endif %}
+        </div>
+        {% block body %}{% endblock %}
     </body>
 </html>
