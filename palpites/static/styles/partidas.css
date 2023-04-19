@@ -1,0 +1,19 @@
+.partidas{
+    color: white;
+    padding: 5em 0 0 0;
+    height: auto;
+}
+
+.partidas h3{
+    margin: 0 0 0 40%;
+}
+
+.adicionar_partidas{
+    width: 20%;
+    margin: 0% 40%;
+}
+
+.lista_partidas{
+    width: 20%;
+    margin: 0% 40%;
+}

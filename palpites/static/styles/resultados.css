@@ -1,0 +1,46 @@
+.escudo{
+    width: 50px;
+}
+
+.grid{
+    color: white;
+    display: grid;
+    grid-template-areas:
+    'tit1 tit2'
+    'tab1 tab2';
+    grid-template-columns: 1fr 1fr;
+    padding-top: 3em;
+    margin: 0;
+}
+
+.tit1{
+    grid-area: tit1;
+    text-align: center;
+}
+
+.tit2{
+    grid-area: tit2;
+    text-align: center;
+}
+
+.tab1{
+    grid-area: tab1;
+}
+
+.tab2{
+    grid-area: tab2;
+}
+
+.jogos{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    row-gap: 1em;
+    align-items: center;
+    justify-items: center;
+}
+
+.spancol{
+    grid-column: 2 / 7;
+    width: 100px;
+    margin: auto;
+}

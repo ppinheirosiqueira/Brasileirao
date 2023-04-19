@@ -5,6 +5,33 @@
     {{title}}
 {% endblock %}
 
-{% block body %}
+{% block style %}
+    <link rel="stylesheet" href="{% static 'styles/principal.css' %}">
+{% endblock %}
 
+{% block body %}
+    <div class="grid">
+        <span>Aqui vai vir gráfico</span>
+        <div class="ranking">
+            <h2>Ranking dos Usuários</h2>
+            {% if ranking is not null %}
+                <ul>
+                    <li>
+                        <h3>Usuário</h3>
+                        <h3>Pontuação Pepe</h3>
+                        <h3>Pontuação Shroud</h3>
+                    </li>
+                    {% for usuario, pontosP, pontosS in ranking %}
+                        <li>   
+                            <span>{{ usuario }}</span>
+                            <span>{{ pontosP }}</span>
+                            <span>{{ pontosS }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                Não existe nenhuma pontuação de nenhum usuário
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}

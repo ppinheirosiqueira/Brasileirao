@@ -1,0 +1,41 @@
+.times{
+    margin: 5em 2em 0em 2em;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+}
+
+.lista_times{
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    padding: 10px;
+    margin: auto;
+    row-gap: 10px;
+    column-gap: 100px;
+}
+
+.lista_times h2{
+    grid-column-start: 1;
+    grid-column-end: 3;
+    color: white;
+    text-align: center;
+}
+
+.escudo{
+    width: 40px;
+}
+
+.nome{
+    color: white;
+    align-items: center;
+    font-weight: bold;
+    font-size: 30px;
+}
+
+.adicionar_time{
+    color: white;
+    margin: 5em auto;
+}
+
+.adicionar_time form{
+    display: block;
+}

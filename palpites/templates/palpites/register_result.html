@@ -1,0 +1,47 @@
+{% extends "palpites/layout.html" %}
+{% load static %}
+
+{% block title %}
+    {{title}}
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'styles/resultados.css' %}">
+{% endblock %}
+
+{% block body %}
+
+    <div class="grid">
+        <h2 class="tit1">Palpites Feitos</h2>
+        <div class="jogos tab1">
+            {% for feita in partidas_feitas %}
+                <span>{{ feita.partida.rodada }}ª rodada - {{ feita.partida.ano }}</span>
+                <img src="{{ feita.partida.Mandante.escudo }}" alt="escudo_mandante" class="escudo">
+                <span>{{ feita.golsMandante }}</span>
+                <span>X</span>
+                <span>{{ feita.golsVisitante }}</span>
+                <img src="{{ feita.partida.Visitante.escudo }}" alt="escudo_visitante"  class="escudo">
+            {% empty %}
+                <span colspan="6">Sem palpites feitos</span>
+            {% endfor %}
+        </div>
+        <h2 class="tit2">Palpites a Fazer</h2>
+        <div class="tab2">
+            <form class="jogos" action="{% url 'register_result' %}" method="post">
+                {% csrf_token %}
+                {% for falta in partidas_faltantes %}
+                    <span>{{ falta.rodada }}ª rodada - {{ falta.ano }}</span>
+                    <img src="{{ falta.Mandante.escudo }}" alt="escudo_mandante"  class="escudo">
+                    <span><input type="number" name="man_{{falta.id}}" id="man_{{falta.id}}" min="0"></span>
+                    <span>X</span>
+                    <span><input type="number" name="vis_{{falta.id}}" id="vis_{{falta.id}}" min="0"></span>
+                    <img src="{{ falta.Visitante.escudo }}" alt="escudo_visitante"  class="escudo">
+                {% empty %}
+                    <span>Sem palpites a fazer</span>
+                {% endfor %}
+                <input class="spancol" type="submit" value="Palpitar">
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

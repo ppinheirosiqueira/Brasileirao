@@ -1,0 +1,15 @@
+.flexCenter{
+    width: 100%;
+    height: 100%;
+    color: white;
+    display: flex;
+	flex-direction: column;
+    flex-flow: column-nowrap;
+    align-items: center;
+    margin-top: 3em;
+}
+
+.flexCenter a{
+    color: lightblue;
+    text-decoration: none;
+}

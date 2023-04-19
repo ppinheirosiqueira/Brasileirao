@@ -11,11 +11,22 @@
     <body>
         <div id="topBar">
             {% if user.is_authenticated %}
-                <div class="esquerda">Bem-Vindo {{ user.username }}</div>
+                <div class="esquerda"><a href="{% url 'index' %}"><img src="{% static 'icons/home.svg' %}" alt="Home" width="30px"></a><span class="left-40">Bem-Vindo {{ user.username }}</span></div>
                 <div class="direita">
                     <ul>
+                        {% if user.is_staff %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'register_listing' %}">Register Listing</a>
+                            <a class="nav-link" href="admin/">Admin Page</a>
+                        </li>
+                        <li class="nav-item">
+                                <a class="nav-link" href="{% url 'register_team' %}">Registrar Time</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'register_match' %}">Registrar/Alterar Partida</a>
+                            </li>
+                        {% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'register_result' %}">Registrar Resultado</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
@@ -23,7 +34,8 @@
                     </ul>    
                 </div>
             {% else %}
-                <div class="esquerda">Não logado</div>
+
+            <div class="esquerda"><a href="{% url 'index' %}"><img src="{% static 'icons/home.svg' %}" alt="Home" width="30px"></a><span  class="left-40">Não logado</span></div>
                 <div class="direita">
                     <ul>
                         <li class="nav-item">

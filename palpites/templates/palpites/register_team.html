@@ -1,0 +1,38 @@
+{% extends "palpites/layout.html" %}
+{% load static %}
+
+{% block title %}
+    {{title}}
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'styles/times.css' %}">
+{% endblock %}
+
+{% block body %}
+
+    <div class="times">
+        <div class="lista_times">
+            <h2>Lista de Times</h2>
+            {% for time in times %}
+                <span><img src="{{ time.escudo }}" alt="escudo" class="escudo"></span>
+                <span class="nome">{{ time.Nome }}</span>
+            {% empty %}
+                <span>NO</span>
+                <span>Nenhum time Registrado</span>
+            {% endfor %}
+        </div>
+        <div class="adicionar_time">
+            <h2>Registrar Time</h2>
+            <form action="{% url 'register_team' %}" method="post">
+                {% csrf_token %}
+                <label for="time">Nome do time:</label><br>
+                <input  autofocus type="text" name="time" placeholder="Nome do Time"><br><br>
+                <label for="escudo">Endereço do Escudo (lembrar de por media/Escudos/...):</label><br>
+                <input  type="text" name="escudo" placeholder="Escudo do Time"><br><br>
+                <input  type="submit" value="Register">
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

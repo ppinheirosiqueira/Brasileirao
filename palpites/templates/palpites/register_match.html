@@ -1,0 +1,66 @@
+{% extends "palpites/layout.html" %}
+{% load static %}
+
+{% block title %}
+    {{title}}
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'styles/partidas.css' %}">
+{% endblock %}
+
+{% block body %}
+
+    <div class="partidas">
+        {% if message %}
+            <h3>{{ message | safe }}</h3>
+        {% endif %}
+        <div class="adicionar_partidas">
+            <h2>Registrar Partida</h2>
+            <form action="{% url 'register_match' %}" method="post">
+                {% csrf_token %}
+                <label for="mandante">Time Mandante:</label><br>
+                <select id="mandante" name="mandante">
+                    <option value=""></option>
+                    {% for time in times %}
+                        <option value="{{ time }}">{{ time.Nome }}</option>
+                    {% endfor %}
+                </select><br><br>
+                <label for="visitante">Time Visitante:</label><br>
+                <select id="visitante" name="visitante">
+                    <option value=""></option>
+                    {% for time in times %}
+                        <option value="{{ time }}">{{ time.Nome }}</option>
+                    {% endfor %}
+                </select><br><br>
+                <label for="rodada">Rodada:</label><br>
+                <input type="number" name="rodada" min="1" max="38"><br><br>
+                <label for="ano">Ano do Campeonato:</label><br>
+                <input type="number" name="ano" min="2023"><br><br>
+                <label for="date">Dia e Hora do Jogo:</label><br>
+                <input type="datetime-local" id="date" name="date"><br><br>
+                <input type="submit" value="Register">
+            </form>
+        </div>
+        <div class="lista_partidas">
+            <h2>Lista de Partidas</h2>
+            <form action="{% url 'change_match' %}" method="post">
+                {% csrf_token %}
+                <label for="partida">Partida que deseja atualizar:</label><br>
+                <select id="partida" name="partida">
+                    {% for partida in partidas %}
+                        <option value="{{ partida.id }}">{{ partida }}</option>
+                        {% empty %}
+                        <option value="">Nenhuma Partida Registrada</option>
+                    {% endfor %}
+                </select><br><br>
+                <label for="gMan">Gols do Time Mandante:</label><br>
+                <input type="number" name="gMan" min="0"><br><br>
+                <label for="gVis">Gols do Time Visitante</label><br>
+                <input type="number" name="gVis" min="0"><br><br>
+                <input type="submit" value="Atualizar">
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

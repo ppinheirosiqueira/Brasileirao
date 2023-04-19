@@ -1,0 +1,21 @@
+.grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    color: white;
+    padding-top: 3em;
+    margin: 0;
+}
+
+.ranking{
+    display: block;
+}
+
+.ranking ul{
+    list-style: none;
+}
+
+.ranking ul li{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    padding: 0.5em 0;
+}
