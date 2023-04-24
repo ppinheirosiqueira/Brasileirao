@@ -11,7 +11,7 @@
 
 {% block body %}
     <div class="grid">
-        <span>Aqui vai vir gráfico</span>
+        <span><img src="{{ grafico }}" alt="Sem Registro do Jogador {{ user.username }}"></span>
         <div class="ranking">
             <h2>Ranking dos Usuários</h2>
             {% if ranking is not null %}

@@ -7,17 +7,16 @@ from django.urls import reverse
 from .models import User, Time, Partida, Palpite_Partida
 from . import funcoes
 
-import matplotlib
-
-# Create your views here.
-
+# Visão Principal
 def index(request):
 
     return render(request, "palpites\index.html", {
         "title": "Palpites",
-        "ranking": funcoes.ranking()
+        "ranking": funcoes.ranking(),
+        "grafico": funcoes.grafico_padrao(request),
     })
 
+# Views de Administração de Usuario
 def login_view(request):
     if request.method == "POST":
 
@@ -76,6 +75,36 @@ def register(request):
             "title": "Register"
         })
 
+# Views de Usuário
+def register_result(request):
+    if request.method == "POST":
+        for key, value in request.POST.items():
+            if value is not '':
+                if key.startswith('man_'):
+                    team_id, partida_id = key.split('_')
+                    aux = Palpite_Partida(usuario=request.user,partida=Partida.objects.get(id=int(partida_id)),golsMandante=value)
+                if key.startswith('vis_'):
+                    team_id, partida_id = key.split('_')
+                    aux.golsVisitante = value
+                    if aux.golsMandante == aux.golsVisitante:
+                        aux.vencedor = 0
+                    elif aux.golsMandante > aux.golsVisitante:
+                        aux.vencedor = 1
+                    else:
+                        aux.vencedor = 2
+                    aux.save()
+    faltantes = Partida.objects.all()
+    feitas = Palpite_Partida.objects.filter(usuario=request.user.id)
+    for palpite in feitas:
+        if palpite.partida in faltantes:
+            faltantes = faltantes.exclude(id=palpite.partida.id)
+    return render(request, "palpites/register_result.html", {
+                "title": "Registrar Resultado",
+                "partidas_feitas": feitas,
+                "partidas_faltantes": faltantes
+    })
+
+# Views de Administração
 def register_team(request):
     if request.method == "POST":
         nome = request.POST["time"]
@@ -115,34 +144,6 @@ def register_match(request):
                 "title": "Registrar Partida",
                 "partidas": Partida.objects.all(),
                 "times": Time.objects.all()
-    })
-
-def register_result(request):
-    if request.method == "POST":
-        for key, value in request.POST.items():
-            if value is not '':
-                if key.startswith('man_'):
-                    team_id, partida_id = key.split('_')
-                    aux = Palpite_Partida(usuario=request.user,partida=Partida.objects.get(id=int(partida_id)),golsMandante=value)
-                if key.startswith('vis_'):
-                    team_id, partida_id = key.split('_')
-                    aux.golsVisitante = value
-                    if aux.golsMandante == aux.golsVisitante:
-                        aux.vencedor = 0
-                    elif aux.golsMandante > aux.golsVisitante:
-                        aux.vencedor = 1
-                    else:
-                        aux.vencedor = 2
-                    aux.save()
-    faltantes = Partida.objects.all()
-    feitas = Palpite_Partida.objects.filter(usuario=request.user.id)
-    for palpite in feitas:
-        if palpite.partida in faltantes:
-            faltantes = faltantes.exclude(id=palpite.partida.id)
-    return render(request, "palpites/register_result.html", {
-                "title": "Registrar Resultado",
-                "partidas_feitas": feitas,
-                "partidas_faltantes": faltantes
     })
 
 def change_match(request):

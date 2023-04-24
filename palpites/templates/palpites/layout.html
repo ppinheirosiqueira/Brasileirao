@@ -9,45 +9,34 @@
         {% block style %}{% endblock %}
     </head>
     <body>
-        <div id="topBar">
-            {% if user.is_authenticated %}
-                <div class="esquerda"><a href="{% url 'index' %}"><img src="{% static 'icons/home.svg' %}" alt="Home" width="30px"></a><span class="left-40">Bem-Vindo {{ user.username }}</span></div>
-                <div class="direita">
-                    <ul>
-                        {% if user.is_staff %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="admin/">Admin Page</a>
-                        </li>
-                        <li class="nav-item">
-                                <a class="nav-link" href="{% url 'register_team' %}">Registrar Time</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'register_match' %}">Registrar/Alterar Partida</a>
-                            </li>
-                        {% endif %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'register_result' %}">Registrar Resultado</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
-                        </li>       
-                    </ul>    
-                </div>
-            {% else %}
-
-            <div class="esquerda"><a href="{% url 'index' %}"><img src="{% static 'icons/home.svg' %}" alt="Home" width="30px"></a><span  class="left-40">Não logado</span></div>
-                <div class="direita">
-                    <ul>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'login' %}">Log In</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'register' %}">Register</a>
-                        </li>
+        <nav>
+        {% if user.is_authenticated %}
+            <span>Bem-Vindo {{ user.username }}</span>
+            <ul>
+                <li><a href="{% url 'index' %}"><img src="{% static 'icons/home.svg' %}" alt="Home" class="icon_home"></a></li>
+                {% if user.is_staff %}
+                <li><a href="#">Administração</a>
+                    <ul class="sub-option">
+                        <li><a href="admin/">Admin Page</a></li>
+                        <li><a href="{% url 'register_team' %}">Registrar Time</a></li>
+                        <li><a href="{% url 'register_match' %}">Registrar/Alterar Partida</a></li>
                     </ul>
-                </div>
-            {% endif %}
-        </div>
+                </li>
+                {% endif %}
+                <li><a href="{% url 'register_result' %}">Palpitar</a></li>
+                <li><a href="#">Perfil</a>
+                    <ul class="sub-option">
+                        <li><a class="nav-link" href="{% url 'logout' %}">Log Out</a></li>
+                </li>
+            </ul>
+        {% else %}
+            <span>Não logado</span>
+            <ul>
+                <li><a class="nav-link" href="{% url 'login' %}">Log In</a></li>
+                <li><a class="nav-link" href="{% url 'register' %}">Register</a></li>
+            </ul>
+        {% endif %}
+        </nav>
         {% block body %}{% endblock %}
     </body>
 </html>

@@ -20,8 +20,8 @@ class Partida(models.Model):
     ano = models.IntegerField()
     Mandante = models.ForeignKey("Time",on_delete=models.CASCADE, related_name='mandante')
     Visitante = models.ForeignKey("Time",on_delete=models.CASCADE, related_name='visitante')
-    golsMandante = models.IntegerField(default=0)
-    golsVisitante = models.IntegerField(default=0)
+    golsMandante = models.IntegerField(default=-1)
+    golsVisitante = models.IntegerField(default=-1)
     vencedor = models.IntegerField(default=-1)
 
     def __str__(self):
