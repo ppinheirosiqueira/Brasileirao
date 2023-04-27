@@ -3,7 +3,6 @@
 }
 
 .grid{
-    color: white;
     display: grid;
     grid-template-areas:
     'tit1 tit2'

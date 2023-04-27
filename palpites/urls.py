@@ -14,4 +14,5 @@ urlpatterns = [
     path("register_match", views.register_match, name="register_match"),
     path("change_match", views.change_match, name="change_match"),
     path("register_result", views.register_result, name="register_result"),
+    path("match/<int:id>", views.show_match, name="show_match"),
 ]

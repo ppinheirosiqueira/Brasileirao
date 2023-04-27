@@ -17,7 +17,6 @@ class Partida(models.Model):
     id = models.AutoField(primary_key=True)
     dia = models.DateTimeField()
     rodada = models.IntegerField()
-    ano = models.IntegerField()
     Mandante = models.ForeignKey("Time",on_delete=models.CASCADE, related_name='mandante')
     Visitante = models.ForeignKey("Time",on_delete=models.CASCADE, related_name='visitante')
     golsMandante = models.IntegerField(default=-1)

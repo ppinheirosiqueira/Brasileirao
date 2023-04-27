@@ -1,6 +1,8 @@
 from .models import User, Time, Partida, Palpite_Partida
 import matplotlib
 import matplotlib.pyplot as plt
+import random
+from datetime import datetime, timezone, timedelta
 
 import io
 import urllib, base64
@@ -46,34 +48,51 @@ def ranking():
 
     return zip(usernames,pontosP,pontosS)
 
-def grafico_padrao(request):
-
-    matplotlib.use('agg')
+def historico_recent_user(id_jogador):
     x = []
     y = []
 
+    aux_palpites = Palpite_Partida.objects.filter(usuario=id_jogador).order_by('partida__rodada')
+    max_rodada = aux_palpites.last().partida.rodada
+    min_rodada = max_rodada - 10
+    if min_rodada <= 0:
+        min_rodada = 1
+    for i in range(min_rodada,max_rodada+1):
+        x.append(i)
+        auxPontos = pontos_rodada(filtrar_rodada(aux_palpites,i),id_jogador)
+        y.append(auxPontos)
+
+    return x, y
+
+def usuario_aleatorio():
+
+    usuarios = list(User.objects.all())
+    for aux_usuario in reversed(usuarios):
+        if len(Palpite_Partida.objects.filter(usuario=aux_usuario)) == 0:
+            usuarios.remove(aux_usuario)
+
+    usuario = random.choice(usuarios)
+    return usuario.id
+
+def grafico_padrao(request):
+
+    matplotlib.use('agg')
+
     if request.user.is_authenticated is False:
-        return None
+        usuario = usuario_aleatorio()
     else:
         if len(Palpite_Partida.objects.filter(usuario=request.user.id)) > 0:
-            aux_palpites = Palpite_Partida.objects.filter(usuario=request.user.id).order_by('partida__rodada')
-            max_rodada = aux_palpites.last().partida.rodada
-            min_rodada = max_rodada - 10
-            if min_rodada <= 0:
-                min_rodada = 1
-            for i in range(min_rodada,max_rodada+1):
-                x.append(i)
-                auxPontos = pontos_rodada(filtrar_rodada(aux_palpites,i),request.user.id)
-                y.append(auxPontos)
+            usuario = request.user.id
         else:
-            return None
+            usuario = usuario_aleatorio()
+
+    x, y = historico_recent_user(usuario)
 
     plt.bar(x,y) # Definindo que quero em Barras
     plt.xlabel("Rodada")
     plt.ylabel("Pontos")
-    plt.title(f"Pontos Por Rodada de {request.user}")
+    plt.title(f"Pontos Por Rodada de {User.objects.get(id=usuario).username}")
     plt.xticks(range(x[0],x[len(x)-1]+1))
-
 
     # Daqui para baixo não entendi nada, só aceitei que funciona
     fig = plt.gcf()
@@ -99,3 +118,15 @@ def filtrar_rodada(palpites,rodada):
         if palpite.partida.rodada != rodada:
             palpites = palpites.exclude(partida=palpite.partida)
     return palpites
+
+def ultimos_jogos():
+    timezone_offset = -3.0 
+    tzinfo = timezone(timedelta(hours=timezone_offset))
+    partidas = list(Partida.objects.filter(dia__lt=datetime.now(tzinfo))) # __lt = less than https://docs.djangoproject.com/en/3.1/ref/models/querysets/#lt
+    return partidas[len(partidas)-4:len(partidas)-1]
+
+def proximos_jogos():
+    timezone_offset = -3.0 
+    tzinfo = timezone(timedelta(hours=timezone_offset))
+    partidas = list(Partida.objects.filter(dia__gt=datetime.now(tzinfo))) # __gt = Greater than https://docs.djangoproject.com/en/3.1/ref/models/querysets/#gt
+    return partidas[0:3]

@@ -11,7 +11,39 @@
 
 {% block body %}
     <div class="grid">
-        <span><img src="{{ grafico }}" alt="Sem Registro do Jogador {{ user.username }}"></span>
+        <div class="jogos">
+            <h3>Últimos Jogos</h3>
+                {% for last in lastJogos %}
+                    <ul>
+                        <li>
+                            <a href="{% url 'show_match' id=last.id %}">
+                                <span class="texto">{{ last.rodada }}ª Rodada - </span>
+                                <img class="escudo" src="{{ last.Mandante.escudo }}" alt="escudo mandante">
+                                <span class="texto">{{ last.golsMandante }} 
+                                X 
+                                {{ last.golsVisitante }}</span>
+                                <img class="escudo" src="{{ last.Visitante.escudo }}" alt="escudo visitante">
+                            </a>
+                        </li>
+                    </ul>
+                {% empty %}
+                    <span>Não ocorreu jogo algum</span>
+                {% endfor %}
+            <h3>Próximos Jogos</h3>
+                {% for prox in proxJogos %}
+                    <ul>
+                        <li>
+                            <a href="{% url 'show_match' id=prox.id %}">
+                                <span class="texto">{{ prox.rodada }}ª Rodada - </span>
+                                <img class="escudo" src="{{ prox.Mandante.escudo }}" alt="escudo mandante">
+                                <span class="texto">X</span>
+                                <img class="escudo" src="{{ prox.Visitante.escudo }}" alt="escudo visitante">
+                            </a>
+                        </li>                    </ul>
+                {% empty %}
+                    <span>Não temos nenhum jogo registrado para ocorrer</span>
+                {% endfor %}
+        </div>
         <div class="ranking">
             <h2>Ranking dos Usuários</h2>
             {% if ranking is not null %}
@@ -33,5 +65,6 @@
                 Não existe nenhuma pontuação de nenhum usuário
             {% endif %}
         </div>
+        <img src="{{ grafico }}" class="grafico" alt="Sem Registro do Jogador {{ user.username }}">
     </div>
 {% endblock %}

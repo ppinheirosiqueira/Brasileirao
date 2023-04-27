@@ -9,9 +9,10 @@ from . import funcoes
 
 # Visão Principal
 def index(request):
-
     return render(request, "palpites\index.html", {
         "title": "Palpites",
+        "lastJogos": funcoes.ultimos_jogos(),
+        "proxJogos": funcoes.proximos_jogos(),
         "ranking": funcoes.ranking(),
         "grafico": funcoes.grafico_padrao(request),
     })
@@ -79,7 +80,7 @@ def register(request):
 def register_result(request):
     if request.method == "POST":
         for key, value in request.POST.items():
-            if value is not '':
+            if value != '':
                 if key.startswith('man_'):
                     team_id, partida_id = key.split('_')
                     aux = Palpite_Partida(usuario=request.user,partida=Partida.objects.get(id=int(partida_id)),golsMandante=value)
@@ -104,6 +105,9 @@ def register_result(request):
                 "partidas_faltantes": faltantes
     })
 
+def show_match(request,id):
+    pass
+
 # Views de Administração
 def register_team(request):
     if request.method == "POST":
@@ -121,10 +125,9 @@ def register_match(request):
     if request.method == "POST":
         date = request.POST["date"]
         rodada = request.POST["rodada"]
-        ano = request.POST["ano"]
         mandante = request.POST["mandante"]
         visitante = request.POST["visitante"]
-        lista_partidas = Partida.objects.filter(rodada=rodada,ano=ano)
+        lista_partidas = Partida.objects.filter(rodada=rodada,dia=date)
         auxNome = True
         if mandante == visitante:
             auxNome = False
@@ -136,7 +139,7 @@ def register_match(request):
                     auxNome = False
                     break
         if auxNome:
-            aux = Partida(dia=date,rodada=rodada,ano=ano,Mandante=Time.objects.get(Nome=mandante),Visitante=Time.objects.get(Nome=visitante))
+            aux = Partida(dia=date,rodada=rodada,Mandante=Time.objects.get(Nome=mandante),Visitante=Time.objects.get(Nome=visitante))
             aux.save()
             message = "<h3>Jogo Salvo com Sucesso</h3>"
     return render(request, "palpites/register_match.html", {
@@ -147,6 +150,7 @@ def register_match(request):
     })
 
 def change_match(request):
+    message = ""
     if request.method == "POST":
         gMan = request.POST["gMan"]
         gVis = request.POST["gVis"]
@@ -165,7 +169,7 @@ def change_match(request):
             aux.vencedor = 2
             message = message + "Vencedor: Visitante</h3>"
         aux.save()
-    return render(request, "palpites/register_match.html", {
+    return render(request, "palpites/change_match.html", {
                 "message": message,
                 "title": "Registrar Partida",
                 "partidas": Partida.objects.all(),

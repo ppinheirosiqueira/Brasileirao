@@ -1,13 +1,49 @@
 .grid{
     display: grid;
     grid-template-columns: 1fr 1fr;
-    color: white;
     padding: 3em;
     margin: 0;
 }
 
+.jogos{
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+.jogos ul{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.jogos ul li{
+    width: 80%;
+    margin: 0.5em 2em;
+}
+
+.jogos ul li a{
+    text-decoration: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    color: inherit;
+    border: 1px solid black;
+    border-radius: 1em;
+    padding: 0.5em;
+    text-align: center;
+}
+
+.jogos .texto{
+    margin: auto 0;
+}
+
+.jogos .escudo{
+    width: 2em;
+    margin: 0 auto;
+}
+
 .ranking{
-    display: block;
+    display: flex;
+    flex-flow: column nowrap;
 }
 
 .ranking ul{
@@ -18,4 +54,9 @@
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     padding: 0.5em 0;
+}
+
+.grafico{
+    grid-column-start: 1;
+    grid-column-end: 3;
 }

@@ -16,7 +16,6 @@
 .lista_times h2{
     grid-column-start: 1;
     grid-column-end: 3;
-    color: white;
     text-align: center;
 }
 
@@ -25,14 +24,12 @@
 }
 
 .nome{
-    color: white;
     align-items: center;
     font-weight: bold;
     font-size: 30px;
 }
 
 .adicionar_time{
-    color: white;
     margin: 5em auto;
 }
 

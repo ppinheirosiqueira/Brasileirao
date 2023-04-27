@@ -1,0 +1,39 @@
+{% extends "palpites/layout.html" %}
+{% load static %}
+
+{% block title %}
+    {{title}}
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'styles/partidas.css' %}">
+{% endblock %}
+
+{% block body %}
+
+    <div class="partidas">
+        {% if message %}
+            <h3>{{ message | safe }}</h3>
+        {% endif %}
+        <div class="lista_partidas">
+            <h2>Lista de Partidas</h2>
+            <form action="{% url 'change_match' %}" method="post">
+                {% csrf_token %}
+                <label for="partida">Partida que deseja atualizar:</label><br>
+                <select id="partida" name="partida">
+                    {% for partida in partidas %}
+                        <option value="{{ partida.id }}">{{ partida }}</option>
+                        {% empty %}
+                        <option value="">Nenhuma Partida Registrada</option>
+                    {% endfor %}
+                </select><br><br>
+                <label for="gMan">Gols do Time Mandante:</label><br>
+                <input type="number" name="gMan" min="0"><br><br>
+                <label for="gVis">Gols do Time Visitante</label><br>
+                <input type="number" name="gVis" min="0"><br><br>
+                <input type="submit" value="Atualizar">
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
