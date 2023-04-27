@@ -1,0 +1,31 @@
+{% extends "palpites/layout.html" %}
+{% load static %}
+
+{% block title %}
+    {{title}}
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'styles/partida.css' %}">
+{% endblock %}
+
+{% block body %}
+    <div class="partida">
+        <div class="round">{{ partida.rodada }}ª Rodada</div>
+        <img class="escudo" src="/{{ partida.Mandante.escudo }}" alt="escudo mandante">
+        {% if partida.golsMandante != -1 %}
+            <span class="texto">{{ partida.golsMandante }}</span>
+        {% else %}
+            <span></span>
+        {% endif %}
+        <span class="texto">X</span>
+        {% if partida.golsVisitante != -1 %}
+            <span class="texto">{{ partida.golsVisitante }}</span>
+        {% else %}
+            <span></span>
+        {% endif %}        
+        <img class="escudo" src="/{{ partida.Visitante.escudo }}" alt="escudo visitante">
+        <div class="date">{{ partida.dia }}</div>
+    </div>
+
+{% endblock %}

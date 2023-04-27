@@ -1,0 +1,40 @@
+.partida{
+    position: relative;
+    border: 1px solid black;
+    border-radius: 1em;
+    margin: 2em;
+    padding: 1em;
+    display: grid;
+    grid-template-columns: auto auto auto auto auto;
+    justify-items: center;
+    height: 8em;
+}
+
+.partida .escudo{
+    width: 4em;
+    margin: 0 auto;
+}
+
+.partida span{
+    margin: auto 0;
+}
+
+.partida .texto{
+    font-size: 2em;
+}
+
+.round {
+    position: absolute;
+    top: -0.5em;
+    font-size: 2em;
+    background-color: white;
+    padding: 0 0.5em;
+}
+  
+.date {
+    position: absolute;
+    bottom: -0.5em;
+    font-size: 2em;
+    background-color: white;
+    padding: 0 0.5em;
+}

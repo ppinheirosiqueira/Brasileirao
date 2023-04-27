@@ -106,8 +106,12 @@ def register_result(request):
     })
 
 def show_match(request,id):
-    pass
+    partida = Partida.objects.get(id=id)
 
+    return render(request, "palpites/show_match.html", {
+                "title": partida,
+                "partida": partida
+    })
 # Views de Administração
 def register_team(request):
     if request.method == "POST":
