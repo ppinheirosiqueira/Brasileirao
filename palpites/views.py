@@ -3,6 +3,8 @@ from django.db import IntegrityError
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
+from django.http import JsonResponse
+import json
 
 from .models import User, Time, Partida, Palpite_Partida
 from . import funcoes
@@ -11,10 +13,10 @@ from . import funcoes
 def index(request):
     return render(request, "palpites\index.html", {
         "title": "Palpites",
+        "teste": Partida.objects.all(),
         "lastJogos": funcoes.ultimos_jogos(),
         "proxJogos": funcoes.proximos_jogos(),
-        "ranking": funcoes.ranking(),
-        "grafico": funcoes.grafico_padrao(request),
+        "ranking": funcoes.ranking(0,0),
     })
 
 # Views de Administração de Usuario
@@ -26,7 +28,6 @@ def login_view(request):
         password = request.POST["password"]
 
         user = authenticate(request, username=username, password=password)
-        print(user)
 
         # Check if authentication successful
         if user is not None:
@@ -107,11 +108,23 @@ def register_result(request):
 
 def show_match(request,id):
     partida = Partida.objects.get(id=id)
-
+    partidas = list(Partida.objects.all())
+    indice = partidas.index(partida)
+    anterior = partidas[indice-1].id
+    if anterior > id:
+        anterior = None
+    try:
+        proximo = partidas[indice+1].id
+    except:
+        proximo = None
     return render(request, "palpites/show_match.html", {
                 "title": partida,
-                "partida": partida
+                "partida": partida,
+                "palpites": list(Palpite_Partida.objects.filter(partida=partida)),
+                "anterior": anterior,
+                "proxima": proximo,
     })
+
 # Views de Administração
 def register_team(request):
     if request.method == "POST":
@@ -179,3 +192,24 @@ def change_match(request):
                 "partidas": Partida.objects.all(),
                 "times": Time.objects.all()
     })
+
+# Views de Banco de Dados
+
+def userResult(request):
+    jogadores = [
+        {'nome': 'Jogador 1', 'posicao': 'Atacante'},
+        {'nome': 'Jogador 2', 'posicao': 'Meio-campista'},
+        {'nome': 'Jogador 3', 'posicao': 'Zagueiro'},
+    ]
+
+    # Retorne os dados em formato JSON
+    return JsonResponse(jogadores, safe=False)
+
+def ranking(request, ano, rodada):
+
+    rankingPreenchido = funcoes.ranking(ano, rodada)
+    data_list = [dict(zip(('posicao', 'usernames', 'pontosP', 'pontosS'), values)) for values in rankingPreenchido]
+    json_string = json.dumps(data_list)
+    json_data = json.loads(json_string)
+
+    return JsonResponse(json_data, safe=False)

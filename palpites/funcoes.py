@@ -7,6 +7,16 @@ from datetime import datetime, timezone, timedelta
 import io
 import urllib, base64
 
+class Pessoa:
+    def __init__(self, username):
+        self.nome = username
+        self.pontosP = 0
+        self.pontosS = 0
+    def incrementoPontosP(self, valor):
+        self.pontosP += valor
+    def incrementoPontosS(self, valor):
+        self.pontosS += valor
+
 def check_pontuacao_pepe(id_usuario,id_partida):
     pontuacao = 0
     auxPartida = Partida.objects.get(id=id_partida)
@@ -26,27 +36,41 @@ def check_pontuacao_shroud(id_usuario,id_partida):
         if auxPartida.golsVisitante == auxPalpite.golsVisitante: pontuacao = pontuacao + 1
     return pontuacao
 
-def ranking():
-    usuarios = list(User.objects.all()) # Pego todos os Usuarios 
-    for usuario in usuarios: 
-        if len(Palpite_Partida.objects.filter(usuario=usuario.id)) == 0:
-            usuarios.remove(usuario) # Retiro os sem palpites
-    
+def ranking(ano, rodada):
+    if ano == 0 and rodada == 0:
+        palpites = Palpite_Partida.objects.all() # Pega o ranking de tudo
+    elif ano != 0 and rodada == 0:
+        palpites = Palpite_Partida.objects.filter(partida__dia__year=ano) # Pega o ranking de um ano específico
+    elif ano == 0 and rodada != 0:
+        palpites = Palpite_Partida.objects.filter(partida__rodada=rodada) # Pega o ranking de uma rodada específica
+    else:
+        palpites = Palpite_Partida.objects.filter(partida__dia__year=ano,partida__rodada=rodada) # Pega o ranking de uma rodada específica de um ano específico   
+
+    pessoas = {}  # Cria um dicionário vazio
+    for palpite in palpites:
+        if palpite.usuario.username not in pessoas:
+            pessoa = Pessoa(palpite.usuario.username) # crio a pessoa
+            pessoas[pessoa.nome] = pessoa # coloco ela no dicionário
+            pessoa.incrementoPontosP(check_pontuacao_pepe(palpite.usuario.id,palpite.partida.id))
+            pessoa.incrementoPontosS(check_pontuacao_shroud(palpite.usuario.id,palpite.partida.id))
+        else:
+            pessoas[palpite.usuario.username].incrementoPontosP(check_pontuacao_pepe(palpite.usuario.id,palpite.partida.id))
+            pessoas[palpite.usuario.username].incrementoPontosS(check_pontuacao_shroud(palpite.usuario.id,palpite.partida.id))
+
+    pessoas = list(pessoas.items())
+    pessoas_ordenadas = sorted(pessoas, key=lambda x: x[1].pontosP)
     usernames = []
     pontosP = []
     pontosS = []
-    auxPontosP = 0
-    auxPontosS = 0
-    for usuario in usuarios:
-        palpites = list(Palpite_Partida.objects.filter(usuario=usuario.id))
-        for palpite in palpites:
-            auxPontosP = auxPontosP + check_pontuacao_pepe(usuario.id,palpite.partida.id)
-            auxPontosS = auxPontosS + check_pontuacao_shroud(usuario.id,palpite.partida.id)
-        usernames.append(usuario.username)
-        pontosP.append(auxPontosP)
-        pontosS.append(auxPontosS)
-
-    return zip(usernames,pontosP,pontosS)
+    posicao = []
+    i = 1
+    for pessoa in pessoas_ordenadas:
+        posicao.append(i)
+        usernames.append(pessoa[1].nome)
+        pontosP.append(pessoa[1].pontosP)
+        pontosS.append(pessoa[1].pontosS)
+        i+=1
+    return zip(posicao,usernames,pontosP,pontosS)
 
 def historico_recent_user(id_jogador):
     x = []
@@ -123,7 +147,7 @@ def ultimos_jogos():
     timezone_offset = -3.0 
     tzinfo = timezone(timedelta(hours=timezone_offset))
     partidas = list(Partida.objects.filter(dia__lt=datetime.now(tzinfo))) # __lt = less than https://docs.djangoproject.com/en/3.1/ref/models/querysets/#lt
-    return partidas[len(partidas)-4:len(partidas)-1]
+    return partidas[len(partidas)-3:len(partidas)]
 
 def proximos_jogos():
     timezone_offset = -3.0 

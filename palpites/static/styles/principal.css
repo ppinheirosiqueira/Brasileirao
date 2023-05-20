@@ -41,7 +41,43 @@
     margin: 0 auto;
 }
 
+#ranking{
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    grid-template-rows: 4em 4em auto;
+    row-gap: 0.5em;
+}
+
+#ranking label{
+    text-align: center;
+    margin: auto 0;
+}
+
+#ranking .select{
+    width: 7em;
+    height: 2.5em;
+    background-color: #f2f2f2;
+    color: #333;
+    border: 1px solid #ccc;
+    padding: 5px;
+    font-size: 1em;
+    margin: auto 0;
+}
+      
+#ranking .meu-select option {
+    background-color: #fff;
+    color: #333;
+}
+
+
+#ranking h2{
+    grid-column-start: 1;
+    grid-column-end: 5;
+}
+
 .ranking{
+    grid-column-start: 1;
+    grid-column-end: 5;
     display: flex;
     flex-flow: column nowrap;
 }
@@ -52,11 +88,11 @@
 
 .ranking ul li{
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
     padding: 0.5em 0;
 }
 
-.grafico{
+#grafico{
     grid-column-start: 1;
     grid-column-end: 3;
 }

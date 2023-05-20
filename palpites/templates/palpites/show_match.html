@@ -11,6 +11,11 @@
 
 {% block body %}
     <div class="partida">
+        {% if anterior != None %}
+            <a href="{% url 'show_match' id=anterior %}"><button class="arrow-button left-arrow">&#8592;</button></a>
+        {% else %}
+            <span></span>
+        {% endif %}
         <div class="round">{{ partida.rodada }}ª Rodada</div>
         <img class="escudo" src="/{{ partida.Mandante.escudo }}" alt="escudo mandante">
         {% if partida.golsMandante != -1 %}
@@ -25,7 +30,28 @@
             <span></span>
         {% endif %}        
         <img class="escudo" src="/{{ partida.Visitante.escudo }}" alt="escudo visitante">
+        {% if proxima != None %}
+            <a href="{% url 'show_match' id=proxima %}"><button class="arrow-button right-arrow">&#8594;</button></a>
+        {% else %}
+            <span></span>
+        {% endif %}
         <div class="date">{{ partida.dia }}</div>
     </div>
-
+    <div class="palpites">
+        {% if palpites|length > 0 %}
+            <h3>Palpites</h3>
+            {% for palpite in palpites %}
+                <div class="jogo">
+                    <div class="player">{{ palpite.usuario }}</div>
+                    <img class="escudo" src="/{{ partida.Mandante.escudo }}" alt="escudo mandante">
+                    <span class="texto">{{ palpite.golsMandante }}</span>
+                    <span class="texto">X</span>
+                    <span class="texto">{{ palpite.golsVisitante }}</span>        
+                    <img class="escudo" src="/{{ partida.Visitante.escudo }}" alt="escudo visitante">
+                </div>
+            {% endfor %}
+        {% else %}
+            Não houve palpites dessa partida
+        {% endif %}
+    </div>
 {% endblock %}

@@ -3,6 +3,7 @@ from . import views
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.views.generic.base import RedirectView
 from brasileirao.settings import STATIC_URL
+from django.contrib.auth.views import PasswordChangeView
 
 urlpatterns = [
     path('', views.index, name="index"),
@@ -10,9 +11,12 @@ urlpatterns = [
     path("login", views.login_view, name="login"),
     path("logout", views.logout_view, name="logout"),
     path("register", views.register, name="register"),
+    path("change_password", PasswordChangeView.as_view(), name="change_password"),
     path("register_team", views.register_team, name="register_team"),
     path("register_match", views.register_match, name="register_match"),
     path("change_match", views.change_match, name="change_match"),
     path("register_result", views.register_result, name="register_result"),
     path("match/<int:id>", views.show_match, name="show_match"),
+    path("user_result",views.userResult, name="user_result"),
+    path("ranking/<int:ano>/<int:rodada>", views.ranking, name="ranking"),
 ]

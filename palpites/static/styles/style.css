@@ -35,7 +35,7 @@ nav {
 
 .icon_home{
     width: 2em;
-    filter: invert(42%) sepia(93%) saturate(1352%) hue-rotate(87deg) brightness(119%) contrast(119%);
+    /* filter: invert(42%) sepia(93%) saturate(1352%) hue-rotate(87deg) brightness(119%) contrast(119%); */
 }
 
 nav ul {
@@ -50,17 +50,17 @@ nav li {
 }
 
 nav li:hover{
-    background-color: #111;
+    background-color: #cccccc;
 }
 
 nav li a {
     display: block;
     text-align: center;
-    padding: 0 20px 0 0;
-    height: 50px;
+    height: 3.5em;
     line-height: inherit;
     text-decoration: none;
     font-weight: bold;
+    width: 8em;
 }
 
 /* Sub Option */
@@ -70,6 +70,7 @@ nav ul li ul{
 
 nav li:hover .sub-option {
     display: block;
+    background-color: white;
 }
 
 .sub-option {
@@ -77,7 +78,6 @@ nav li:hover .sub-option {
     position: absolute;
     top: 50px;
     right: 0;
-    min-width: 160px;
     z-index: 1;
 }
 
@@ -88,5 +88,5 @@ nav li:hover .sub-option {
 }
 
 .sub-option li a:hover {
-    background-color: #111;
+    background-color: #cccccc;
 }
