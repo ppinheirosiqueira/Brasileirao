@@ -1,78 +1,47 @@
-.grid{
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 3em;
-    margin: 0;
-}
-
-.jogos{
+.container {
     display: flex;
-    flex-flow: column nowrap;
+    flex-wrap: wrap;
 }
 
-.jogos ul{
-    list-style: none;
-    margin: 0;
-    padding: 0;
+.rankingContainer, .partidas, .graficoContainer {
+    width: 100%;
 }
 
-.jogos ul li{
-    width: 80%;
-    margin: 0.5em 2em;
+@media (min-width: 992px) {
+    .rankingContainer {
+        width: 50%;
+    }
+
+    .partidas {
+        width: 50%;
+    }
+
+    .graficoContainer {
+        width: 100%;
+    }
 }
 
-.jogos ul li a{
-    text-decoration: none;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    color: inherit;
-    border: 1px solid black;
-    border-radius: 1em;
-    padding: 0.5em;
-    text-align: center;
-}
-
-.jogos .texto{
-    margin: auto 0;
-}
-
-.jogos .escudo{
-    width: 2em;
-    margin: 0 auto;
-}
-
-#ranking{
+.rankingContainer{
     display: grid;
     grid-template-columns: auto auto auto auto;
     grid-template-rows: 4em 4em auto;
     row-gap: 0.5em;
 }
 
-#ranking label{
+.rankingContainer label{
     text-align: center;
     margin: auto 0;
 }
-
-#ranking .select{
-    width: 7em;
-    height: 2.5em;
-    background-color: #f2f2f2;
-    color: #333;
-    border: 1px solid #ccc;
-    padding: 5px;
-    font-size: 1em;
-    margin: auto 0;
-}
       
-#ranking .meu-select option {
+.rankingContainer .meu-select option {
     background-color: #fff;
     color: #333;
 }
 
-
-#ranking h2{
+.rankingContainer h2{
     grid-column-start: 1;
     grid-column-end: 5;
+    text-align: center;
 }
 
 .ranking{
@@ -92,7 +61,60 @@
     padding: 0.5em 0;
 }
 
-#grafico{
-    grid-column-start: 1;
-    grid-column-end: 3;
+.ranking a{
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+}
+
+.partidas{
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+.partidas ul{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.partidas ul li{
+    width: 80%;
+    margin: 0.5em 2em;
+}
+
+.partidas ul li a{
+    text-decoration: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    color: inherit;
+    border: 1px solid black;
+    border-radius: 1em;
+    padding: 0.5em;
+    text-align: center;
+}
+
+.partidas .texto{
+    margin: auto 0;
+}
+
+.partidas .escudo{
+    width: 2em;
+    margin: 0 auto;
+}
+
+.graficoContainer{
+    padding: 0 10%;
+    margin: 2em 0;
+}
+
+.select{
+    width: 7em;
+    height: 2.5em;
+    background-color: #f2f2f2;
+    color: #333;
+    border: 1px solid #ccc;
+    padding: 5px;
+    font-size: 1em;
+    margin: auto 0;
 }

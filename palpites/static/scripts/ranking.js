@@ -1,3 +1,4 @@
+window.addEventListener('load', function() {
 // Parte do Ranking
 
 var anoEscolhido = document.getElementById("ano")
@@ -43,8 +44,9 @@ function exibirDados(data) {
     if (data.length != 0){
         texto = "<ul><li><h3>Posição</h3><h3>Usuário</h3><h3>Pontuação Pepe</h3><h3>Pontuação Shroud</h3></li>"
         data.forEach(function(jogador){
-            texto += "<li><span>" + jogador.posicao + "</span><span>" + jogador.usernames + "</span><span>" + jogador.pontosP + "</span><span>" + jogador.pontosS + "</span></li></ul>"
+            texto += "<li><span>" + jogador.posicao + "</span><span><a href=user/" + jogador.ids + ">" + jogador.usernames + "</a></span><span>" + jogador.pontosP + "</span><span>" + jogador.pontosS + "</span></li>"
         })
+        texto += "</ul>"
         resultadoDiv[0].innerHTML = texto
     }
     else{
@@ -52,3 +54,4 @@ function exibirDados(data) {
     }
 
 }
+});

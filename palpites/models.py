@@ -2,9 +2,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
-class User(AbstractUser):
-    pass
-
 class Time(models.Model):
     id = models.AutoField(primary_key=True)
     Nome = models.CharField(max_length=30,unique=True)
@@ -12,6 +9,13 @@ class Time(models.Model):
 
     def __str__(self):
         return self.Nome
+
+class User(AbstractUser):
+    favorite_team = models.ForeignKey(Time, on_delete=models.SET_NULL, null=True, blank=True)
+    profile_image = models.ImageField(upload_to='profile_images', default='caminho/para/imagem_inexistente.jpg')
+
+    def __str__(self):
+        return self.username
 
 class Partida(models.Model):
     id = models.AutoField(primary_key=True)

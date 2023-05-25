@@ -1,0 +1,45 @@
+{% extends "palpites/layout.html" %}
+{% load static %}
+
+{% block title %}
+    Perfil do Usuário - {{ usuario.username }}
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'styles/user.css' %}">
+{% endblock %}
+
+{% block body %}
+    <div class="profile">
+        <h1>Perfil do Usuário</h1>
+        <div class="profile-info">
+            <img src="{{ usuario.profile_image.url }}" alt="Imagem de Perfil" class="profile-image">
+            <div class="user-info">
+                <h2>{{ usuario.username }}</h2>
+                <p>Time Favorito: {{ usuario.favorite_team.Nome }}</p>
+                <p>Média de Pontos Pepe: {{ average_points_pepe|floatformat:2 }}</p>
+                <p>Média de Pontos Shroud: {{ average_points_shroud|floatformat:2 }}</p>
+                <p>Jogos Palpitados: {{ total_predictions }}</p>
+                <p>% de Acerto dos Gols do Mandante: {{ accuracy_goals_mandante|floatformat:2 }}%</p>
+                <p>% de Acerto dos Gols do Visitante: {{ accuracy_goals_visitante|floatformat:2 }}%</p>
+                <p>% de Acerto do Resultado: {{ accuracy_result|floatformat:2 }}%</p>
+            </div>
+        </div>
+    </div>
+    {% if usuario.id == user.id %}
+    <div class="profile">
+        <p>Atualizar Imagem de Perfil</p>
+        <form action="{% url 'profile' id=usuario.id %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_div }}
+            <button type="submit">Atualizar Imagem</button>
+        </form>
+        <p>Atualizar Time favorito</p>
+        <form action="{% url 'alterar_time_favorito' id=usuario.id %}" method="post">
+            {% csrf_token %}
+            {{ form2.as_p }}
+            <button type="submit">Salvar</button>
+        </form>
+    </div>
+    {% endif %}
+{% endblock %}

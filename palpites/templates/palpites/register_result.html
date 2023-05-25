@@ -10,27 +10,25 @@
 {% endblock %}
 
 {% block body %}
-
-    <div class="grid">
-        <h2 class="tit1">Palpites Feitos</h2>
-        <div class="jogos tab1">
+    <form class="formulario" action="{% url 'register_result' %}" method="post">
+        <h2>Palpites Feitos</h2>
+        <div class="jogos">
             {% for feita in partidas_feitas %}
-                <span>{{ feita.partida.rodada }}ª rodada - {{ feita.partida.ano }}</span>
+                <span class="rodada">{{ feita.partida.rodada }}ª rodada - {{ feita.partida.ano }}</span>
                 <img src="{{ feita.partida.Mandante.escudo }}" alt="escudo_mandante" class="escudo">
-                <span>{{ feita.golsMandante }}</span>
+                <span><input type="number" name="man_{{feita.partida.id}}" id="man_{{feita.partida.id}}" min="0" value="{{ feita.golsMandante }}"></span>
                 <span>X</span>
-                <span>{{ feita.golsVisitante }}</span>
+                <span><input type="number" name="vis_{{feita.partida.id}}" id="vis_{{feita.partida.id}}" min="0" value="{{ feita.golsVisitante }}"></span>
                 <img src="{{ feita.partida.Visitante.escudo }}" alt="escudo_visitante"  class="escudo">
             {% empty %}
                 <span colspan="6">Sem palpites feitos</span>
             {% endfor %}
         </div>
-        <h2 class="tit2">Palpites a Fazer</h2>
-        <div class="tab2">
-            <form class="jogos" action="{% url 'register_result' %}" method="post">
+        <h2>Palpites a Fazer</h2>
+        <div class="jogos">
                 {% csrf_token %}
                 {% for falta in partidas_faltantes %}
-                    <span>{{ falta.rodada }}ª rodada - {{ falta.ano }}</span>
+                    <span class="rodada">{{ falta.rodada }}ª rodada - {{ falta.ano }}</span>
                     <img src="{{ falta.Mandante.escudo }}" alt="escudo_mandante"  class="escudo">
                     <span><input type="number" name="man_{{falta.id}}" id="man_{{falta.id}}" min="0"></span>
                     <span>X</span>
@@ -39,9 +37,7 @@
                 {% empty %}
                     <span>Sem palpites a fazer</span>
                 {% endfor %}
-                <input class="spancol" type="submit" value="Palpitar">
-            </form>
         </div>
-    </div>
-
+        <input class="button" type="submit" value="Palpitar">
+    </form>
 {% endblock %}

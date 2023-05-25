@@ -1,22 +1,54 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.db import IntegrityError
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.http import JsonResponse
 import json
+from datetime import datetime, timezone, timedelta
 
 from .models import User, Time, Partida, Palpite_Partida
 from . import funcoes
 
+from django import forms
+
+class ProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['profile_image']
+
+class TimeFavoritoForm(forms.Form):
+    time_favorito = forms.ModelChoiceField(queryset=Time.objects.all(), empty_label="Selecione um time")
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super(TimeFavoritoForm, self).__init__(*args, **kwargs)
+        self.fields['time_favorito'].empty_label = "Selecione um time"
+        if user:
+            self.fields['time_favorito'].initial = user.favorite_team
+
 # Visão Principal
 def index(request):
+    palpites = Palpite_Partida.objects.all()
+    anos = []
+    rodadas = []
+    usuarios = []
+    for palpite in palpites:
+        if palpite.partida.rodada not in rodadas:
+            rodadas.append(palpite.partida.rodada)
+        if palpite.partida.dia.year not in anos:
+            anos.append(palpite.partida.dia.year)
+        if palpite.usuario.username not in usuarios:
+            usuarios.append(palpite.usuario.username)
     return render(request, "palpites\index.html", {
         "title": "Palpites",
         "teste": Partida.objects.all(),
         "lastJogos": funcoes.ultimos_jogos(),
         "proxJogos": funcoes.proximos_jogos(),
         "ranking": funcoes.ranking(0,0),
+        "anos": anos,
+        "rodadas": rodadas,
+        "usuarios": usuarios,
     })
 
 # Views de Administração de Usuario
@@ -95,6 +127,10 @@ def register_result(request):
                     else:
                         aux.vencedor = 2
                     aux.save()
+    # timezone_offset = -3.0 
+    # tzinfo = timezone(timedelta(hours=timezone_offset))
+    # faltantes = Partida.objects.filter(dia__gt=datetime.now(tzinfo))
+    # feitas = Palpite_Partida.objects.filter(usuario=request.user.id,partida__dia__gt=datetime.now(tzinfo))
     faltantes = Partida.objects.all()
     feitas = Palpite_Partida.objects.filter(usuario=request.user.id)
     for palpite in feitas:
@@ -124,6 +160,43 @@ def show_match(request,id):
                 "anterior": anterior,
                 "proxima": proximo,
     })
+
+def userView(request,id):
+    form = ProfileUpdateForm(instance=request.user)
+    form2 = TimeFavoritoForm()
+    usuario = User.objects.get(id=id)
+    aGm, aGv, aR = funcoes.accuracy_user(id)
+
+    return render(request, "palpites\show_user.html", {
+        "title": f"Perfil do Usuário - {usuario.username}",
+        "usuario": usuario,
+        "average_points_pepe": funcoes.average_pepe(id),
+        "average_points_shroud": funcoes.average_shroud(id),
+        "total_predictions": len(Palpite_Partida.objects.filter(usuario=id)),
+        "accuracy_goals_mandante": aGm,
+        "accuracy_goals_visitante": aGv,
+        "accuracy_result": aR,
+        "form": form,
+        "form2": form2,
+    })
+
+def profile(request,id):
+    if request.method == 'POST':
+        form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+    url = reverse('userView', args=(id,))
+    return redirect(url)
+
+def alterar_time_favorito(request,id):
+    if request.method == 'POST':
+        form = TimeFavoritoForm(request.POST)
+        if form.is_valid():
+            user = request.user
+            user.favorite_team = Time.objects.get(Nome=form.cleaned_data['time_favorito'])
+            user.save()
+    url = reverse('userView', args=(id,))
+    return redirect(url)
 
 # Views de Administração
 def register_team(request):
@@ -194,22 +267,56 @@ def change_match(request):
     })
 
 # Views de Banco de Dados
-
-def userResult(request):
-    jogadores = [
-        {'nome': 'Jogador 1', 'posicao': 'Atacante'},
-        {'nome': 'Jogador 2', 'posicao': 'Meio-campista'},
-        {'nome': 'Jogador 3', 'posicao': 'Zagueiro'},
-    ]
-
-    # Retorne os dados em formato JSON
-    return JsonResponse(jogadores, safe=False)
-
 def ranking(request, ano, rodada):
 
     rankingPreenchido = funcoes.ranking(ano, rodada)
-    data_list = [dict(zip(('posicao', 'usernames', 'pontosP', 'pontosS'), values)) for values in rankingPreenchido]
+    data_list = [dict(zip(('posicao', 'usernames', 'ids', 'pontosP', 'pontosS'), values)) for values in rankingPreenchido]
     json_string = json.dumps(data_list)
     json_data = json.loads(json_string)
 
+    return JsonResponse(json_data, safe=False)
+
+def userResult(request,usuarios,rod_Ini,rod_Fin):
+    #FF6384 (Rosa)  #36A2EB (Azul)  #FFCE56 (Amarelo)   #4BC0C0 (Turquesa)  #9966FF (Roxo)  #FF9F40 (Laranja)   #00E676 (Verde)
+    cores = ["#FF6384","#36A2EB","#FFCE56","#4BC0C0","#9966FF","#FF9F40","#00E676"]
+
+    usernames = []
+    if usuarios == "todos":
+        palpites = Palpite_Partida.objects.filter(partida__rodada__gte=rod_Ini, partida__rodada__lte=rod_Fin)
+        for palpite in palpites:
+            if palpite.usuario.username not in usernames:
+                usernames.append(palpite.usuario.username)
+    elif usuarios == "voce":
+        usernames.append(request.user.username)
+    else:
+        usernames = usuarios.split("+")
+
+    rodadas = []
+    for i in range(rod_Ini,rod_Fin+1):
+        rodadas.append(i)
+
+    grafico = {
+        "labels": rodadas,
+        "datasets":[]
+    }
+
+    i = 0
+    for username in usernames:
+        usuario = User.objects.get(username=username)
+        pontosP = []
+        for rodada in rodadas:
+            pontosP.append(funcoes.pontos_rodadas_pepe(usuario.id,rodada))
+        aux = {
+            "label": username,
+            "data": pontosP,
+            "borderColor": cores[i],
+            "fill":False,
+        }
+        i += 1
+        grafico['datasets'].append(aux)
+ 
+    json_string = json.dumps(grafico)
+    json_data = json.loads(json_string)
+
+    # Retorne os dados em formato JSON
     return JsonResponse(json_data, safe=False)

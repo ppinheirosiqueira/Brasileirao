@@ -35,7 +35,7 @@
         {% else %}
             <span></span>
         {% endif %}
-        <div class="date">{{ partida.dia }}</div>
+        <div class="date">{{ partida.dia|date:"d/m/Y H:i:s" }}</div>
     </div>
     <div class="palpites">
         {% if palpites|length > 0 %}

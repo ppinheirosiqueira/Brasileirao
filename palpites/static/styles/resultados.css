@@ -1,33 +1,7 @@
-.escudo{
-    width: 50px;
-}
-
-.grid{
-    display: grid;
-    grid-template-areas:
-    'tit1 tit2'
-    'tab1 tab2';
-    grid-template-columns: 1fr 1fr;
-    padding-top: 3em;
-    margin: 0;
-}
-
-.tit1{
-    grid-area: tit1;
-    text-align: center;
-}
-
-.tit2{
-    grid-area: tit2;
-    text-align: center;
-}
-
-.tab1{
-    grid-area: tab1;
-}
-
-.tab2{
-    grid-area: tab2;
+.formulario {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .jogos{
@@ -38,8 +12,27 @@
     justify-items: center;
 }
 
-.spancol{
-    grid-column: 2 / 7;
-    width: 100px;
-    margin: auto;
+.jogos .rodada{
+  font-size: 1em;
+}
+
+.escudo{
+  width: 50px;
+}
+
+.button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #444;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1em;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #666;
 }
