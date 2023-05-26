@@ -22,4 +22,5 @@ urlpatterns = [
     path("ranking/<int:ano>/<int:rodada>", views.ranking, name="ranking"),
     path("alterar_time_favorito/<int:id>", views.alterar_time_favorito, name="alterar_time_favorito"),
     path("profile/<int:id>", views.profile, name="profile"),
+    path('accounts/password_change_done/', RedirectView.as_view(pattern_name='index'), name='password_change_done'),
 ]
