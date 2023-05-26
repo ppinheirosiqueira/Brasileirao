@@ -165,8 +165,12 @@ def show_match(request,id):
     })
 
 def userView(request,id):
-    form = ProfileUpdateForm(instance=request.user)
-    form2 = TimeFavoritoForm()
+    try: 
+        form = ProfileUpdateForm(instance=request.user)
+        form2 = TimeFavoritoForm()
+    except:
+        form = ""
+        form2 = ""
     usuario = User.objects.get(id=id)
     aGm, aGv, aR = funcoes.accuracy_user(id)
 
