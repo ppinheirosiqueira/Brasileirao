@@ -40,7 +40,7 @@ def index(request):
             anos.append(palpite.partida.dia.year)
         if palpite.usuario.username not in usuarios:
             usuarios.append(palpite.usuario.username)
-    return render(request, "palpites\index.html", {
+    return render(request, "palpites/index.html", {
         "title": "Palpites",
         "teste": Partida.objects.all(),
         "lastJogos": funcoes.ultimos_jogos(),
@@ -174,7 +174,7 @@ def userView(request,id):
     usuario = User.objects.get(id=id)
     aGm, aGv, aR = funcoes.accuracy_user(id)
 
-    return render(request, "palpites\show_user.html", {
+    return render(request, "palpites/show_user.html", {
         "title": f"Perfil do Usuário - {usuario.username}",
         "usuario": usuario,
         "average_points_pepe": funcoes.average_pepe(id),
