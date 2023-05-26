@@ -118,3 +118,24 @@
     font-size: 1em;
     margin: auto 0;
 }
+
+.checkbox-container {
+    margin-top: 1em;
+    display: none;
+}
+
+.checkbox-container label {
+    margin-bottom: 1em;
+    margin-right: 1em;
+}
+
+.checkbox-container input[type="checkbox"] {
+    width: 1em;
+    height: 1em;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+.checkbox-container span {
+    vertical-align: middle;
+}

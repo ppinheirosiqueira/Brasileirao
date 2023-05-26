@@ -105,6 +105,14 @@
                     <option value="{{ rodada }}">{{ rodada }}</option>
                 {% endfor %}
             </select>
+            <div id="checkboxes" class="checkbox-container">
+                {% for usuario in usuarios %}
+                    <label>
+                        <input type="checkbox" id="{{ usuario }}Check" name="usuarios" value="{{ usuario }}" onclick="modificarUsuario('{{usuario}}')">
+                        <span>{{ usuario }}</span>
+                    </label>
+                {% endfor %}
+            </div>
             <canvas id="grafico"></canvas>
         </div>
     </div>

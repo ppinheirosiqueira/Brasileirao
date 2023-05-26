@@ -116,10 +116,13 @@ def register_result(request):
             if value != '':
                 if key.startswith('man_'):
                     team_id, partida_id = key.split('_')
-                    aux = Palpite_Partida(usuario=request.user,partida=Partida.objects.get(id=int(partida_id)),golsMandante=value)
+                    if (len(Palpite_Partida.objects.filter(usuario=request.user,partida=partida_id))==1):
+                        aux = Palpite_Partida.objects.get(usuario=request.user,partida=partida_id) # Se o usuário já palpitou, não vou criar outro palpite para ele
+                    else:
+                        aux = Palpite_Partida(usuario=request.user,partida=Partida.objects.get(id=int(partida_id)),golsMandante=int(value))
                 if key.startswith('vis_'):
                     team_id, partida_id = key.split('_')
-                    aux.golsVisitante = value
+                    aux.golsVisitante = int(value)
                     if aux.golsMandante == aux.golsVisitante:
                         aux.vencedor = 0
                     elif aux.golsMandante > aux.golsVisitante:
@@ -127,12 +130,12 @@ def register_result(request):
                     else:
                         aux.vencedor = 2
                     aux.save()
-    # timezone_offset = -3.0 
-    # tzinfo = timezone(timedelta(hours=timezone_offset))
-    # faltantes = Partida.objects.filter(dia__gt=datetime.now(tzinfo))
-    # feitas = Palpite_Partida.objects.filter(usuario=request.user.id,partida__dia__gt=datetime.now(tzinfo))
-    faltantes = Partida.objects.all()
-    feitas = Palpite_Partida.objects.filter(usuario=request.user.id)
+    timezone_offset = -3.0 
+    tzinfo = timezone(timedelta(hours=timezone_offset))
+    faltantes = Partida.objects.filter(dia__gt=datetime.now(tzinfo))
+    feitas = Palpite_Partida.objects.filter(usuario=request.user.id,partida__dia__gt=datetime.now(tzinfo))
+    #faltantes = Partida.objects.all()
+    #feitas = Palpite_Partida.objects.filter(usuario=request.user.id)
     for palpite in feitas:
         if palpite.partida in faltantes:
             faltantes = faltantes.exclude(id=palpite.partida.id)
@@ -217,7 +220,7 @@ def register_match(request):
         rodada = request.POST["rodada"]
         mandante = request.POST["mandante"]
         visitante = request.POST["visitante"]
-        lista_partidas = Partida.objects.filter(rodada=rodada,dia=date)
+        lista_partidas = Partida.objects.filter(rodada=rodada)
         auxNome = True
         if mandante == visitante:
             auxNome = False
@@ -288,6 +291,8 @@ def userResult(request,usuarios,rod_Ini,rod_Fin):
                 usernames.append(palpite.usuario.username)
     elif usuarios == "voce":
         usernames.append(request.user.username)
+        if usernames[0] == '':
+            usernames[0]= User.objects.get(id=funcoes.usuario_aleatorio()).username      
     else:
         usernames = usuarios.split("+")
 
