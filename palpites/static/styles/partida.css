@@ -77,6 +77,18 @@
     height: 5em;
 }
 
+@media (max-width: 992px) {
+    .palpites .jogo{
+        flex-basis: 50%;
+    }
+}
+
+@media (max-width: 600px){
+    .palpites .jogo{
+        flex-basis: 100%;
+    }
+}
+
 .palpites .jogo .escudo{
     width: 1.5em;
     margin: auto;
