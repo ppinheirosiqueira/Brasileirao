@@ -1,5 +1,12 @@
 # Palpites de futebol
 
+[![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org)
+[![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript)
+[![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)](https://developer.mozilla.org/pt-BR/docs/Web/HTML)
+[![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)](https://developer.mozilla.org/pt-BR/docs/Web/CSS)
+[![requirement](https://img.shields.io/badge/Framework-Django-darkgreen)](https://www.djangoproject.com)
+
+
 ## Descrição
 
 Este projeto consiste em uma aplicação web que permite que usuários possam palpitar em jogos do Brasileirão. Os palpites são comparados com os resultados reais dos jogos e pontuações são dadas aos usuários de acordo com seus acertos.
@@ -18,6 +25,8 @@ Existem dois padrões de pontuação nessa implementação:
 
 Um ranking foi feito com tais pontuações e um gráfico de pontuação de usuários em diferentes rodadas de um campeonato.
 
+Caso deseje ver o site em funcionamento, visite: https://pepepepi.pythonanywhere.com/
+
 ## Tecnologias Utilizadas
 
 - Django: Um framework web em Python utilizado para o desenvolvimento do backend da aplicação.
@@ -33,13 +42,12 @@ Um ranking foi feito com tais pontuações e um gráfico de pontuação de usuá
 - Exibição do gráfico de pontuação de usuários em diferentes rodadas do campeonato.
 - Filtros para selecionar quais usuários e quais rodadas deseja visualizar no gráfico.
 
-
 ## Instruções de Uso
 
 1. Faça o clone deste repositório para o seu ambiente de desenvolvimento.
 2. Execute o servidor Django com o comando `python manage.py runserver`.
 3. Acesse a aplicação no navegador utilizando o endereço `http://localhost:8000`.
-4. Na página inicial, utilize os filtros disponíveis para personalizar a visualização do gráfico de pontuação.
+4. Divirta-se, recomendo que elimine o banco de dados caso vá usar, mas caso queira utilizar este para ver como funciona, o adm tem login e senha: admin
 
 ## Estrutura do Projeto
 
@@ -55,19 +63,23 @@ O projeto não está dos mais bem estruturados dado que fiz para me divertir com
 
 ## Melhorias Futuras
 
+- Melhoria do banco de dados. Por querer utilizar um serviço gratuito na internet, não queria deixar o banco de dados ficar pesado, graças a isso, alguns elementos que poderiam ser uteis no futuro foram neglicenciados. Como, por exemplo:
+  - Criação de uma entidade Campeonato, ou pelo menos um campo deste na partida, permitindo que vários rankings e gráficos de um campeonato específico fosse criado
+  - Criação do campo edição na partida, contando assim a edição do campeonato em que este jogo ocorre, os filtros atuais utilizam o dia, sendo assim ruins/impossível para campeonatos europeus
+  - Melhorar os times, colocando uma sigla, o nome completo, etc
 - Criar mais aplicativos e deixar assim o código mais modular:
   - Melhorar muito a parte de Usuário do sistema, as páginas de registro/modificação de senha foram basicamente deixadas as padrões do django;
   - Melhorar a parte de administração do sistema, criando um aplicativo somente para os administradores;
-- Adicionar suporte para múltiplos campeonatos:
-  - Para isso o modelo teria que ser atualizado, onde cada partida teria que ser linkada a um campeonato e provavelmente adicionar ao campeonato a edição dele, para que seja possível filtrar as partidas pela edição e não pelo ano (permitindo assim a existência de campeonatos europeus)
-  - Com a adição de novos campeonatos, seria bom que o Usuário pudesse filtrar os jogos na aba de Palpitar, para que mostre os campeonatos que ele deseja
+- Caso crie múltiplos campeonatos:
+  - Seria bom que o Usuário pudesse filtrar os campeonatos favoritos, para que assim, na página principal e na aba de Palpitar aparecessem os jogos/rankings/gráficos destes campeonatos
 - Criação de grupos de Usuários:
   - Caso o projeto se tornasse grande, um gráfico com todos os usuários se tornaria inviável, sendo de bom gosto criar um grupo para que cada usuário se compare com seus amigos;
 - Adição de mais cores no gráfico:
   - O gráfico onde se mostra todos os usuários possui uma limitação de 7 usuários porque o site foi feito para minha pessoa e seus amigos, a melhor solução seria ver uma forma de randomizar cores em um espectro (cores vibrantes ou claras) dado que o fundo do site foi definido como uma cor mais escura; 
-- Adição de um tema claro e que seja salvo no perfil do usuário a preferência dele, afinal, não é porque a pessoa é maluca que devemos obrigá-la a usar o tema escuro.
+- Adição de um tema claro e que seja salvo no perfil do usuário a preferência dele, afinal, não é porque a pessoa é maluca que devemos obrigá-la a usar o tema escuro;
+- Criação de códigos automatizados para criação dos jogos e coleta dos resultados de cada campeonato.
 
-- Diversas outras melhorias que podem surgir enquanto eu e meus amigos vamos usando o site. Inclusive, caso deseje ver o site em funcionamento, acesse o link: 
+- Diversas outras melhorias que podem surgir enquanto eu e meus amigos vamos usando o site.
 
 ## Contribuição
 
