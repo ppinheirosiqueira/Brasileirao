@@ -89,7 +89,13 @@
         <div class="graficoContainer">
             <label for="usuario">Usuário: </label>
             <select name="usuario" id="usuario" class="select">
-                <option value="voce">Você</option>
+                <option value="voce">
+                    {% if user.is_authenticated %}
+                        Você
+                    {% else %}
+                        Aleatório
+                    {% endif %}
+                </option>
                 <option value="todos">Todos</option>
                 <option value="selecionar">Selecionar</option>
             </select>
