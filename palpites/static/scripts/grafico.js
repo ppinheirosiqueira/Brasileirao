@@ -99,22 +99,22 @@ function exibirGrafico(data){
   var canvas = document.getElementById('grafico')
   var ctx = canvas.getContext('2d');
 
-  var minimo = 30
-  var maximo = 0
+  // var minimo = 30
+  // var maximo = 0
 
-  data.datasets.forEach(function(dados){
-    if (minimo > Math.min.apply(null, dados.data)){
-      minimo = Math.min.apply(null, dados.data)
-    }
-    if (maximo < Math.max.apply(null, dados.data)){
-      maximo =  Math.max.apply(null, dados.data)
-    }
-  })
+  // data.datasets.forEach(function(dados){
+  //   if (minimo > Math.min.apply(null, dados.data)){
+  //     minimo = Math.min.apply(null, dados.data)
+  //   }
+  //   if (maximo < Math.max.apply(null, dados.data)){
+  //     maximo =  Math.max.apply(null, dados.data)
+  //   }
+  // })
 
-  minimo = minimo - 5
-  if (minimo < 0) minimo = 0
-  maximo = maximo + 5
-  if (maximo > 30) maximo = 30
+  // minimo = minimo - 5
+  // if (minimo < 0) minimo = 0
+  // maximo = maximo + 5
+  // if (maximo > 30) maximo = 30
 
   var options = {
       responsive: true,
@@ -131,8 +131,8 @@ function exibirGrafico(data){
           }
         },
         y: {
-          min: minimo, // Valor mínimo do eixo Y
-          max: maximo, // Valor máximo do eixo Y
+          min: 0, // Valor mínimo do eixo Y
+          max: 30, // Valor máximo do eixo Y
           display: true,
           title: {
             display: true,

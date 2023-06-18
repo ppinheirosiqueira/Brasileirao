@@ -29,17 +29,15 @@ class TimeFavoritoForm(forms.Form):
 
 # Visão Principal
 def index(request):
-    palpites = Palpite_Partida.objects.all()
+    anosAux = list(Partida.objects.all().dates("dia","year").distinct()) 
+    rodadas = list(Partida.objects.all().values_list("rodada",flat=True).distinct())
+    usuariosAux = list(Palpite_Partida.objects.all().values_list("usuario",flat=True).distinct()) 
     anos = []
-    rodadas = []
     usuarios = []
-    for palpite in palpites:
-        if palpite.partida.rodada not in rodadas:
-            rodadas.append(palpite.partida.rodada)
-        if palpite.partida.dia.year not in anos:
-            anos.append(palpite.partida.dia.year)
-        if palpite.usuario.username not in usuarios:
-            usuarios.append(palpite.usuario.username)
+    for ano in anosAux:
+        anos.append(ano.year)
+    for usuario in usuariosAux:
+        usuarios.append(User.objects.get(id=usuario).username)
     return render(request, "palpites/index.html", {
         "title": "Palpites",
         "teste": Partida.objects.all(),
@@ -118,6 +116,7 @@ def register_result(request):
                     team_id, partida_id = key.split('_')
                     if (len(Palpite_Partida.objects.filter(usuario=request.user,partida=partida_id))==1):
                         aux = Palpite_Partida.objects.get(usuario=request.user,partida=partida_id) # Se o usuário já palpitou, não vou criar outro palpite para ele
+                        aux.golsMandante = int(value)
                     else:
                         aux = Palpite_Partida(usuario=request.user,partida=Partida.objects.get(id=int(partida_id)),golsMandante=int(value))
                 if key.startswith('vis_'):
@@ -285,24 +284,20 @@ def ranking(request, ano, rodada):
 
 def userResult(request,usuarios,rod_Ini,rod_Fin):
     #FF6384 (Rosa)  #36A2EB (Azul)  #FFCE56 (Amarelo)   #4BC0C0 (Turquesa)  #9966FF (Roxo)  #FF9F40 (Laranja)   #00E676 (Verde)
-    cores = ["#FF6384","#36A2EB","#FFCE56","#4BC0C0","#9966FF","#FF9F40","#00E676"]
+    #cores = ["#FF6384","#36A2EB","#FFCE56","#4BC0C0","#9966FF","#FF9F40","#00E676"]
 
     usernames = []
     if usuarios == "todos":
         palpites = Palpite_Partida.objects.filter(partida__rodada__gte=rod_Ini, partida__rodada__lte=rod_Fin)
-        for palpite in palpites:
-            if palpite.usuario.username not in usernames:
-                usernames.append(palpite.usuario.username)
+        usernames = palpites.values_list("usuario__username",flat=True).distinct()
     elif usuarios == "voce":
         usernames.append(request.user.username)
         if usernames[0] == '':
-            usernames[0]= User.objects.get(id=funcoes.usuario_aleatorio()).username      
+            usernames[0]= Palpite_Partida.objects.all().order_by('?').first().usuario.username 
     else:
         usernames = usuarios.split("+")
 
-    rodadas = []
-    for i in range(rod_Ini,rod_Fin+1):
-        rodadas.append(i)
+    rodadas = list(range(rod_Ini, rod_Fin + 1))
 
     grafico = {
         "labels": rodadas,
@@ -311,14 +306,13 @@ def userResult(request,usuarios,rod_Ini,rod_Fin):
 
     i = 0
     for username in usernames:
-        usuario = User.objects.get(username=username)
         pontosP = []
         for rodada in rodadas:
-            pontosP.append(funcoes.pontos_rodadas_pepe(usuario.id,rodada))
+            pontosP.append(funcoes.check_pontuacao_pepe(Palpite_Partida.objects.filter(partida__rodada=rodada,usuario__username=username)))
         aux = {
             "label": username,
             "data": pontosP,
-            "borderColor": cores[i],
+            "borderColor": funcoes.cores[i],
             "fill":False,
         }
         i += 1
