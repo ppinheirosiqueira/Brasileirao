@@ -101,6 +101,7 @@ def register(request):
                 "message": "Username already taken."
             })
         login(request, user)
+        funcoes.cores = funcoes.clores_claras()
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "palpites/register.html",{
