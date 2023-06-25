@@ -19,6 +19,7 @@ nav {
     top: 0;
     right: 0;
     background-color: inherit;
+    z-index: 9999;
 
     height: 4em;
 }
@@ -93,4 +94,18 @@ nav ul li:hover .sub-option {
 
 .sub-option li a:hover {
     background-color: #333;
+}
+
+@media (max-width: 1250px){
+    html, body{
+        font-size: xx-large;
+    }
+
+    .profile-image-bar{
+        display: none;
+    }
+
+    nav span{
+        margin-left: 0.5em;
+    }
 }

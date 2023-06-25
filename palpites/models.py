@@ -13,6 +13,7 @@ class Time(models.Model):
 class User(AbstractUser):
     favorite_team = models.ForeignKey(Time, on_delete=models.SET_NULL, null=True, blank=True)
     profile_image = models.ImageField(upload_to='profile_images', default='caminho/para/imagem_inexistente.jpg')
+    cor = models.CharField(max_length=7, null=True)
 
     def __str__(self):
         return self.username

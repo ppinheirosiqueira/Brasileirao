@@ -117,34 +117,34 @@ function exibirGrafico(data){
   if (maximo > 30) maximo = 30
 
   var options = {
-      responsive: true,
-      scales: {
-        x: {
+    responsive: true,
+    scales: {
+      x: {
+        display: true,
+        title: {
           display: true,
-          title: {
-            display: true,
-            text: 'Rodada',
-            color: 'white',
-          },
-          ticks: {
-            color: 'white' 
-          }
+          text: 'Rodada',
+          color: 'white',
         },
-        y: {
-          min: minimo, // Valor mínimo do eixo Y
-          max: maximo, // Valor máximo do eixo Y
+        ticks: {
+          color: 'white' 
+        }
+      },
+      y: {
+        min: minimo, // Valor mínimo do eixo Y
+        max: maximo, // Valor máximo do eixo Y
+        display: true,
+        title: {
           display: true,
-          title: {
-            display: true,
-            text: 'Pontuação',
-            color: 'white',
-          },
-          ticks: {
-            color: 'white' 
-          }
+          text: 'Pontuação',
+          color: 'white',
+        },
+        ticks: {
+          color: 'white' 
         }
       }
     }
+  }
 
   try{
     window.myChart = new Chart(ctx, { // necessário o window. para tornar a variável global, dado que vou precisar acessar o chart fora do try

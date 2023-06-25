@@ -27,19 +27,48 @@
         </div>
     </div>
     {% if usuario.id == user.id %}
-    <div class="profile">
-        <p>Atualizar Imagem de Perfil</p>
-        <form action="{% url 'profile' id=usuario.id %}" method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form.as_table }}
-            <button type="submit">Atualizar Imagem</button>
-        </form>
-        <p>Atualizar Time favorito</p>
-        <form action="{% url 'alterar_time_favorito' id=usuario.id %}" method="post">
-            {% csrf_token %}
-            {{ form2.as_p }}
-            <button type="submit">Salvar</button>
-        </form>
-    </div>
+        <hr width="50%">
+        <div class="formularios">
+            <div class="container">
+                <input type="checkbox" id="checkbox-imagem" class="checkbox-imagem">
+                <label for="checkbox-imagem">
+                    Atualizar Imagem de Perfil<span class="indicator"></span>
+                </label>
+                <div class="content-imagem">
+                    <form action="{% url 'profile' id=usuario.id %}" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form.as_table }}
+                        <button type="submit">Atualizar Imagem</button>
+                    </form>
+                </div>
+            </div>
+            <div class="container">
+                <input type="checkbox" id="checkbox-time" class="checkbox-time">
+                <label for="checkbox-time">
+                    Atualizar Time Favorito<span class="indicator"></span>
+                </label>
+                <div class="content-time">
+                    <form action="{% url 'alterar_time_favorito' id=usuario.id %}" method="post">
+                        {% csrf_token %}
+                        {{ form2.as_p }}
+                        <button type="submit">Salvar</button>
+                    </form>
+                </div>
+            </div>
+            <div class="container">
+                <input type="checkbox" id="checkbox-cor" class="checkbox-cor">
+                <label for="checkbox-cor">
+                    Atualizar cor do gráfico<span class="indicator"></span>
+                </label>
+                <div class="content-cor">
+                    <form action="{% url 'alterar_cor' id=usuario.id %}" method="post">
+                        {% csrf_token %}
+                        <label for="cor">Selecione uma cor:</label>
+                        <input type="color" id="cor" name="cor">
+                        <button type="submit">Enviar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     {% endif %}
 {% endblock %}

@@ -7,20 +7,6 @@
     width: 100%;
 }
 
-@media (min-width: 992px) {
-    .rankingContainer {
-        width: 50%;
-    }
-
-    .partidas {
-        width: 50%;
-    }
-
-    .graficoContainer {
-        width: 100%;
-    }
-}
-
 .rankingContainer{
     display: grid;
     grid-template-columns: auto auto auto auto;
@@ -59,6 +45,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     padding: 0.5em 0;
+    column-gap: 1em;
 }
 
 .ranking a{
@@ -72,6 +59,10 @@
     flex-flow: column nowrap;
 }
 
+.partidas h3{
+    margin: 0.5em auto;
+}
+
 .partidas ul{
     list-style: none;
     margin: 0;
@@ -80,7 +71,7 @@
 
 .partidas ul li{
     width: 80%;
-    margin: 0.5em 2em;
+    margin: 0.5em auto;
 }
 
 .partidas ul li a{
@@ -91,6 +82,7 @@
     border: 1px solid black;
     border-radius: 1em;
     padding: 0.5em;
+    align-items: center;
     text-align: center;
 }
 
@@ -104,16 +96,15 @@
     margin: 0 auto;
 }
 
-@media (min-width: 992px) {
-    .partidas .escudo{
-        width: 3em;
-        margin: 0 auto;
-    }
-}
-
 .graficoContainer{
     padding: 0 10%;
     margin: 2em 0;
+}
+
+.graficoContainer .seletores{
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto;
+    align-items: center;
 }
 
 .select{
@@ -146,4 +137,26 @@
 
 .checkbox-container span {
     vertical-align: middle;
+}
+
+@media (max-width: 1250px) {
+    .partidas .escudo{
+        width: 3em;
+        margin: 0 auto;
+    }
+
+    .graficoContainer .seletores{
+        grid-template-columns: auto auto;
+    }
+}
+
+@media (min-width: 1250px){
+    .rankingContainer {
+        width: 50%;
+    }
+
+    .partidas {
+        width: 50%;
+    }
+
 }

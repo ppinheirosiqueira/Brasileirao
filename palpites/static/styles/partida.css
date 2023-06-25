@@ -8,6 +8,7 @@
     grid-template-columns: auto auto auto auto auto auto auto;
     justify-items: center;
     height: 8em;
+    align-items: center;
 }
 
 .partida .escudo{
@@ -62,7 +63,7 @@
 }
 
 .palpites h3{
-    font-size: 2em;
+    font-size: 3em;
     width: 100%;
 }
 
@@ -75,15 +76,16 @@
     grid-template-columns: auto auto auto auto auto;
     justify-items: center;
     height: 5em;
+    font-size: 2em;
 }
 
-@media (max-width: 992px) {
+@media (max-width: 1500px) {
     .palpites .jogo{
         flex-basis: 50%;
     }
 }
 
-@media (max-width: 600px){
+@media (max-width: 1250px){
     .palpites .jogo{
         flex-basis: 100%;
     }

@@ -1,2 +1,3 @@
 brasileirao/__pycache__/
 palpites/__pycache__/
+*.sqlite3

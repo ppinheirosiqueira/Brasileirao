@@ -55,62 +55,65 @@
         </div>
         <div class="partidas">
             <h3>Últimos Jogos</h3>
+            <ul>
                 {% for last in lastJogos %}
-                    <ul>
-                        <li>
-                            <a href="{% url 'show_match' id=last.id %}">
-                                <span class="texto">{{ last.rodada }}ª Rodada - </span>
-                                <img class="escudo" src="{{ last.Mandante.escudo }}" alt="escudo mandante">
-                                <span class="texto">{{ last.golsMandante }} 
-                                X 
-                                {{ last.golsVisitante }}</span>
-                                <img class="escudo" src="{{ last.Visitante.escudo }}" alt="escudo visitante">
-                            </a>
-                        </li>
-                    </ul>
+                    <li>
+                        <a href="{% url 'show_match' id=last.id %}">
+                            <span class="texto">{{ last.rodada }}ª Rodada - </span>
+                            <img class="escudo" src="{{ last.Mandante.escudo }}" alt="escudo mandante">
+                            <span class="texto">{{ last.golsMandante }} 
+                            X 
+                            {{ last.golsVisitante }}</span>
+                            <img class="escudo" src="{{ last.Visitante.escudo }}" alt="escudo visitante">
+                        </a>
+                    </li>
                 {% empty %}
                     <span>Não ocorreu jogo algum</span>
                 {% endfor %}
+            </ul>
             <h3>Próximos Jogos</h3>
+            <ul>
                 {% for prox in proxJogos %}
-                    <ul>
-                        <li>
-                            <a href="{% url 'show_match' id=prox.id %}">
-                                <span class="texto">{{ prox.rodada }}ª Rodada - </span>
-                                <img class="escudo" src="{{ prox.Mandante.escudo }}" alt="escudo mandante">
-                                <span class="texto">X</span>
-                                <img class="escudo" src="{{ prox.Visitante.escudo }}" alt="escudo visitante">
-                            </a>
-                        </li>                    </ul>
+                    <li>
+                        <a href="{% url 'show_match' id=prox.id %}">
+                            <span class="texto">{{ prox.rodada }}ª Rodada - </span>
+                            <img class="escudo" src="{{ prox.Mandante.escudo }}" alt="escudo mandante">
+                            <span class="texto">X</span>
+                            <img class="escudo" src="{{ prox.Visitante.escudo }}" alt="escudo visitante">
+                        </a>
+                    </li>                   
                 {% empty %}
                     <span>Não temos nenhum jogo registrado para ocorrer</span>
                 {% endfor %}
+            </ul>
         </div>
         <div class="graficoContainer">
-            <label for="usuario">Usuário: </label>
-            <select name="usuario" id="usuario" class="select">
-                <option value="voce">
-                    {% if user.is_authenticated %}
-                        Você
-                    {% else %}
-                        Aleatório
-                    {% endif %}
-                </option>
-                <option value="todos">Todos</option>
-                <option value="selecionar">Selecionar</option>
-            </select>
-            <label for="rodada_inicial">Rodada Inicial: </label>
-            <select name="rodada_inicial" id="rodada_inicial" class="select">
-                {% for rodada in rodadas %}
-                    <option value="{{ rodada }}">{{ rodada }}</option>
-                {% endfor %}
-            </select>
-            <label for="rodada_final">Rodada Final: </label>
-            <select name="rodada_final" id="rodada_final" class="select">
-                {% for rodada in rodadas %}
-                    <option value="{{ rodada }}">{{ rodada }}</option>
-                {% endfor %}
-            </select>
+            <div class="seletores">
+                <label for="usuario">Usuário: </label>
+                <select name="usuario" id="usuario" class="select">
+                    <option value="voce">
+                        {% if user.is_authenticated %}
+                            Você
+                        {% else %}
+                            Aleatório
+                        {% endif %}
+                    </option>
+                    <option value="todos">Todos</option>
+                    <option value="selecionar">Selecionar</option>
+                </select>
+                <label for="rodada_inicial">Rodada Inicial: </label>
+                <select name="rodada_inicial" id="rodada_inicial" class="select">
+                    {% for rodada in rodadas %}
+                        <option value="{{ rodada }}">{{ rodada }}</option>
+                    {% endfor %}
+                </select>
+                <label for="rodada_final">Rodada Final: </label>
+                <select name="rodada_final" id="rodada_final" class="select">
+                    {% for rodada in rodadas %}
+                        <option value="{{ rodada }}">{{ rodada }}</option>
+                    {% endfor %}
+                </select>
+            </div>
             <div id="checkboxes" class="checkbox-container">
                 {% for usuario in usuarios %}
                     <label>

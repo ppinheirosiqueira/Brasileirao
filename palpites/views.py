@@ -101,7 +101,8 @@ def register(request):
                 "message": "Username already taken."
             })
         login(request, user)
-        funcoes.cores = funcoes.clores_claras()
+        user.cor = funcoes.gerar_cor_clara()
+        #funcoes.cores = funcoes.clores_claras()
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "palpites/register.html",{
@@ -201,6 +202,16 @@ def alterar_time_favorito(request,id):
         if form.is_valid():
             user = request.user
             user.favorite_team = Time.objects.get(Nome=form.cleaned_data['time_favorito'])
+            user.save()
+    url = reverse('userView', args=(id,))
+    return redirect(url)
+
+def alterar_cor(request,id):
+    if request.method == 'POST':
+        cor = request.POST["cor"]
+        if len(cor) == 7:
+            user = request.user
+            user.cor = cor
             user.save()
     url = reverse('userView', args=(id,))
     return redirect(url)
@@ -305,7 +316,6 @@ def userResult(request,usuarios,rod_Ini,rod_Fin):
         "datasets":[]
     }
 
-    i = 0
     for username in usernames:
         pontosP = []
         for rodada in rodadas:
@@ -313,10 +323,9 @@ def userResult(request,usuarios,rod_Ini,rod_Fin):
         aux = {
             "label": username,
             "data": pontosP,
-            "borderColor": funcoes.cores[i],
+            "borderColor": User.objects.get(username=username).cor if User.objects.get(username=username).cor else funcoes.gerar_cor_clara(),
             "fill":False,
         }
-        i += 1
         grafico['datasets'].append(aux)
  
     json_string = json.dumps(grafico)

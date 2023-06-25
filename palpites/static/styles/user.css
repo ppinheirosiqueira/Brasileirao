@@ -3,7 +3,7 @@
 }
 
 .profile h1 {
-    font-size: 24px;
+    font-size: 2em;
     margin-bottom: 20px;
 }
 
@@ -22,11 +22,74 @@
 }
 
 .user-info h2 {
-    font-size: 20px;
+    font-size: 1.5em;
     margin-bottom: 10px;
 }
 
 .user-info p {
-    font-size: 16px;
+    font-size: 1em;
     margin-bottom: 8px;
+}
+
+input[type=checkbox]{
+    display: none;
+}
+
+label {
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+}
+
+.indicator {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-left: 2px solid;
+    border-bottom: 2px solid;
+    transform: rotate(-45deg);
+    transition: transform 0.3s ease;
+    margin-left: 2em;
+}
+
+.formularios{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.formularios a{
+    color: lightblue;
+}
+
+.container{
+    text-align: center;
+    border: 1px solid lightgray;
+    padding: 1em 2em 1em 2em;
+    width: 50%;
+}
+
+.content-imagem, .content-time, .content-cor {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+  
+.checkbox-imagem:checked ~ .content-imagem, .checkbox-time:checked ~ .content-time, .checkbox-cor:checked ~ .content-cor {
+    max-height: 300px;
+}
+
+.checkbox-imagem:checked + label .indicator, .checkbox-time:checked ~ label .indicator, .checkbox-cor:checked ~ label .indicator{
+    transform: rotate(-225deg);
+}
+
+@media (max-width: 1250px){
+    .profile-image {
+        width: 250px;
+        height: 250px;
+    }
+
+    .profile-info {
+        flex-direction: column;
+    }
 }

@@ -50,11 +50,11 @@ def ranking(ano, rodada):
 
     usernames, ids, pontosP, pontosS = zip(*tuplas_ordenadas)
     posicao = []
-    for i, _ in enumerate(usernames, start=1):
+    for i, _ in enumerate(usernames, start=0):
         if i < len(usernames) and (pontosP[i] == pontosP[i - 1] and pontosS[i] == pontosS[i - 1]):
             posicao.append("-")
         else:
-            posicao.append(i)
+            posicao.append(i+1)
 
     return zip(posicao,usernames,ids,pontosP,pontosS)
 
