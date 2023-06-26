@@ -74,8 +74,6 @@ O projeto não está dos mais bem estruturados dado que fiz para me divertir com
   - Seria bom que o Usuário pudesse filtrar os campeonatos favoritos, para que assim, na página principal e na aba de Palpitar aparecessem os jogos/rankings/gráficos destes campeonatos
 - Criação de grupos de Usuários:
   - Caso o projeto se tornasse grande, um gráfico com todos os usuários se tornaria inviável, sendo de bom gosto criar um grupo para que cada usuário se compare com seus amigos;
-- Adição de mais cores no gráfico:
-  - O gráfico onde se mostra todos os usuários possui uma limitação de 7 usuários porque o site foi feito para minha pessoa e seus amigos, a melhor solução seria ver uma forma de randomizar cores em um espectro (cores vibrantes ou claras) dado que o fundo do site foi definido como uma cor mais escura; 
 - Adição de um tema claro e que seja salvo no perfil do usuário a preferência dele, afinal, não é porque a pessoa é maluca que devemos obrigá-la a usar o tema escuro;
 - Criação de códigos automatizados para criação dos jogos e coleta dos resultados de cada campeonato.
 
