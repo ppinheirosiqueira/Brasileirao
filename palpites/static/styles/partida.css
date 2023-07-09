@@ -60,6 +60,13 @@
     margin: 1em;
     padding: 0.5em;
     flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+@media (max-width: 1000px){
+    .palpites{
+        flex-direction: column;
+    }
 }
 
 .palpites h3{
@@ -75,20 +82,15 @@
     display: grid;
     grid-template-columns: auto auto auto auto auto;
     justify-items: center;
-    height: 5em;
     font-size: 2em;
+    padding: 1em 0;
+    margin: 0.5em;
 }
 
-@media (max-width: 1500px) {
-    .palpites .jogo{
-        flex-basis: 50%;
-    }
-}
-
-@media (max-width: 1250px){
-    .palpites .jogo{
-        flex-basis: 100%;
-    }
+.palpites .jogo a{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .palpites .jogo .escudo{
@@ -104,6 +106,30 @@
     position: absolute;
     top: -0.5em;
     left: 2em;
+    font-size: 1em;
+    background-color: #222;
+    padding: 0 0.5em;
+}
+
+.palpites .red_border{
+    border: 1px solid red;
+}
+
+.palpites .orange_border{
+    border: 1px solid orange;
+}
+
+.palpites .yellow_border{
+    border: 1px solid yellow;
+}
+
+.palpites .green_border{
+    border: 1px solid green;
+}
+
+.resultado{
+    position: absolute;
+    bottom: -0.5em;
     font-size: 1em;
     background-color: #222;
     padding: 0 0.5em;

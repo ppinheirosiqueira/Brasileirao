@@ -1,6 +1,5 @@
 from .models import User, Time, Partida, Palpite_Partida
 from django.db.models import F
-from datetime import datetime, timezone, timedelta
 
 import random
 import colorsys
@@ -10,6 +9,12 @@ def check_pontuacao_pepe(palpites):
     visitante = palpites.filter(golsVisitante=F('partida__golsVisitante')).count()
     vencedor = palpites.filter(vencedor=F('partida__vencedor')).count()
     return mandante+visitante+vencedor
+
+def check_pontuacao_pepe_jogo(palpite):
+    mandante = 1 if palpite.golsMandante == palpite.partida.golsMandante else 0
+    visitante = 1 if palpite.golsVisitante == palpite.partida.golsVisitante else 0
+    vencedor = 1 if palpite.vencedor == palpite.partida.vencedor else 0
+    return mandante + visitante + vencedor
 
 def check_pontuacao_shroud(palpites):
     mandante = palpites.filter(golsMandante=F('partida__golsMandante'),vencedor=F('partida__vencedor')).count()
@@ -84,30 +89,6 @@ def average_shroud(id_usuario):
     soma = check_pontuacao_shroud(palpites)
     return soma/(len(palpites))
 
-# Função dos jogos na tela inicial
-def ultimos_jogos():
-    timezone_offset = -3.0 
-    tzinfo = timezone(timedelta(hours=timezone_offset))
-    partidas = list(Partida.objects.filter(dia__lt=datetime.now(tzinfo))) # __lt = less than https://docs.djangoproject.com/en/3.1/ref/models/querysets/#lt
-    return partidas[len(partidas)-3:len(partidas)]
-
-def proximos_jogos():
-    timezone_offset = -3.0 
-    tzinfo = timezone(timedelta(hours=timezone_offset))
-    partidas = list(Partida.objects.filter(dia__gt=datetime.now(tzinfo))) # __gt = Greater than https://docs.djangoproject.com/en/3.1/ref/models/querysets/#gt
-    return partidas[0:3]
-
-# Sem um bom nome no momento
-def usuario_aleatorio():
-
-    usuarios = list(User.objects.all())
-    for aux_usuario in reversed(usuarios):
-        if len(Palpite_Partida.objects.filter(usuario=aux_usuario)) == 0:
-            usuarios.remove(aux_usuario)
-
-    usuario = random.choice(usuarios)
-    return usuario.id
-
 def gerar_cor_clara():
     # Gerar um valor de cor aleatório em tons claros
     # Você pode ajustar os valores de mínimo e máximo para controlar a gama de cores claras geradas
@@ -122,12 +103,3 @@ def gerar_cor_clara():
     cor_hex = "#{:02x}{:02x}{:02x}".format(int(r * 255), int(g * 255), int(b * 255))
 
     return cor_hex
-
-def clores_claras():
-    cores = []
-    for i in range(User.objects.all().count()-1):
-        cores.append(gerar_cor_clara())
-
-    return cores
-
-cores = clores_claras()

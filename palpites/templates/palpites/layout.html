@@ -5,7 +5,7 @@
 <html lang="en">
     <head>
         <title>{% block title %}{% endblock %}</title>
-        <link rel="stylesheet" href="{% static 'styles/style.css' %}">
+        <link rel="stylesheet" href="{% static 'styles/layout.css' %}">
         {% block style %}{% endblock %}
     </head>
     <body>
@@ -13,17 +13,18 @@
         {% if user.is_authenticated %}
             <span><img src="{{ user.profile_image.url }}" alt="Imagem de Perfil" class="profile-image-bar">Bem-Vindo {{ user.username }}</span>
             <ul>
-                <li><a href="{% url 'index' %}"><img src="{% static 'icons/home.svg' %}" alt="Home" class="icon_home"></a></li>
+                <li><a href="{% url 'home' %}"><img src="{% static 'icons/home.svg' %}" alt="Home" class="icon_home"></a></li>
                 {% if user.is_staff %}
                 <li><a href="#">Administração</a>
                     <ul class="sub-option">
-                        <li><a href="admin/">Admin Page</a></li>
+                        <li><a href="../admin/">Admin Page</a></li>
                         <li><a href="{% url 'register_team' %}">Registrar Time</a></li>
                         <li><a href="{% url 'register_match' %}">Registrar Partida</a></li>
                         <li><a href="{% url 'change_match' %}">Alterar Partida</a></li>
                     </ul>
                 </li>
                 {% endif %}
+                <li><a href="{% url 'show_teams' %}">Times</a></li>
                 <li><a href="{% url 'register_result' %}">Palpitar</a></li>
                 <li><a>Perfil</a>
                     <ul class="sub-option">
@@ -35,7 +36,7 @@
         {% else %}
             <span>Não logado</span>
             <ul>
-                <li><a href="{% url 'index' %}"><img src="{% static 'icons/home.svg' %}" alt="Home" class="icon_home"></a></li>
+                <li><a href="{% url 'home' %}"><img src="{% static 'icons/home.svg' %}" alt="Home" class="icon_home"></a></li>
                 <li><a class="nav-link" href="{% url 'login' %}">Log In</a></li>
                 <li><a class="nav-link" href="{% url 'register' %}">Register</a></li>
             </ul>

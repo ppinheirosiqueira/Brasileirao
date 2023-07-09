@@ -16,23 +16,27 @@
             <h3>{{ message | safe }}</h3>
         {% endif %}
         <div class="lista_partidas">
-            <h2>Lista de Partidas</h2>
-            <form action="{% url 'change_match' %}" method="post">
-                {% csrf_token %}
-                <label for="partida">Partida que deseja atualizar:</label><br>
-                <select id="partida" name="partida">
-                    {% for partida in partidas %}
-                        <option value="{{ partida.id }}">{{ partida }}</option>
-                        {% empty %}
-                        <option value="">Nenhuma Partida Registrada</option>
-                    {% endfor %}
-                </select><br><br>
-                <label for="gMan">Gols do Time Mandante:</label><br>
-                <input type="number" name="gMan" min="0"><br><br>
-                <label for="gVis">Gols do Time Visitante</label><br>
-                <input type="number" name="gVis" min="0"><br><br>
-                <input type="submit" value="Atualizar">
-            </form>
+            {% if partida|length > 0 %}
+                <h2>Lista de Partidas</h2>
+                <form action="{% url 'change_match' %}" method="post">
+                    {% csrf_token %}
+                    <label for="partida">Partida que deseja atualizar:</label><br>
+                    <select id="partida" name="partida">
+                        {% for partida in partidas %}
+                            <option value="{{ partida.id }}">{{ partida }}</option>
+                            {% empty %}
+                            <option value="">Nenhuma Partida Registrada</option>
+                        {% endfor %}
+                    </select><br><br>
+                    <label for="gMan">Gols do Time Mandante:</label><br>
+                    <input type="number" name="gMan" min="0"><br><br>
+                    <label for="gVis">Gols do Time Visitante</label><br>
+                    <input type="number" name="gVis" min="0"><br><br>
+                    <input type="submit" value="Atualizar">
+                </form>
+            {% else %}
+                Não existem partidas a serem atualizadas
+            {% endif %}
         </div>
     </div>
 

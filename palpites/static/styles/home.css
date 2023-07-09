@@ -1,0 +1,255 @@
+.container{
+    display: flex;
+    flex-direction: row;
+}
+
+/* Parte do Ranking */
+.rankingContainer{
+    min-height: 75dvh;
+    flex-grow: 0.8;
+}
+
+@media (max-width: 1000px) {
+    .container{
+        flex-direction: column;
+    }
+}
+
+.rankingContainer h1{
+    text-align: center;
+}
+
+.rankingContainer .filtro{
+    margin: 0 30%;
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.5em;
+}
+
+.rankingContainer .filtro select{
+    color: white;
+    background-color: #222;
+    border: none;
+    font-size: 0.8em;
+    border-width: 2px;
+    border-style: outset;
+    border-color: #ccc;
+}
+
+.rankingContainer .ranking{
+    margin: 0 15%;
+    width: 70%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    justify-items: center;
+    align-items: center; 
+}
+
+@media (max-width: 1000px) {
+    .rankingContainer{
+        min-height: 0;
+        margin-bottom: 3em;
+        font-size: 1.3em;
+    }
+}
+
+.rankingContainer .ranking .posicao{
+    font-size: 1.5em;
+    justify-content: center;
+    width: 1.5em;
+    height: 1.5em;
+    display: flex;
+    align-items: center;
+    margin: 0.5em 0 0 0;
+}
+
+.rankingContainer .ranking .ouro{
+    background-color: gold;
+    border-radius: 50%;
+    color: black;
+}
+
+.rankingContainer .ranking .prata{
+    background-color: silver;
+    border-radius: 50%;
+    color: black;
+}
+
+.rankingContainer .ranking .bronze{
+    background-color: #CD7F32;
+    border-radius: 50%;
+    color: black;
+}
+
+.rankingContainer .ranking .usuario{
+    font-size: 1.5em;
+    justify-content: center;
+    width: 1.5em;
+    height: 1.5em;
+    display: flex;
+    align-items: center;
+    margin: 0.5em 0 0 0;
+}
+
+.rankingContainer .ranking a{
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+}
+
+.rankingContainer .ranking .pontos{
+    font-size: 1.5em;
+    justify-content: center;
+    width: 1.5em;
+    height: 1.5em;
+    display: flex;
+    align-items: center;
+    margin: 0.5em 0 0 0;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    background-color: #333;
+    color: #fff;
+    text-align: left;
+    border-radius: 5px;
+    padding: 10px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.pepe{
+    width: 350px;
+}
+
+.shroud{
+    width: 600px;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Parte dos jogos */
+.jogos{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+@media (max-width: 1000px) {
+    .jogos{
+        font-size: 2em;
+    }
+}
+
+.pagination{
+    margin-bottom: 0.5em;
+}
+
+.pagination button{
+    background-color: #222;
+    color: white;
+    font-size: 1em;
+    margin: 0 0.5em;
+    padding: 0.2em 0.8em;
+    border-width: 2px;
+    border-style: outset;
+    border-color: #ccc;
+}
+
+.pagination span{
+    color:white;
+}
+
+.container-partidas{
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.5em;
+}
+
+.partida a .escudo{
+    width: 2em;
+}
+
+.partida a{
+    text-decoration: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    color: inherit;
+    border: 1px solid black;
+    border-radius: 1em;
+    padding: 0.5em;
+    align-items: center;
+    text-align: center;
+}
+
+.partida .texto{
+    margin: auto 0;
+    font-size: 1em;
+}
+
+.partida .escudo{
+    width: 2em;
+    margin: 0 auto;
+}
+
+/* Parte do Gráfico */
+
+.graficoContainer{
+    padding: 0 10%;
+    margin: 2em 0;
+}
+
+.graficoContainer .seletores{
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto;
+    align-items: center;
+}
+
+.graficoContainer .seletores select{
+    width: 7em;
+    height: 2.5em;
+    border-width: 2px;
+    border-style: outset;
+    border-color: #ccc;    
+    padding: 5px;
+    font-size: 1em;
+    margin: auto 0;
+    color: white;
+    background-color: #222;
+
+}
+
+.checkbox-container {
+    margin-top: 1em;
+    display: none;
+}
+
+.checkbox-container label {
+    margin-bottom: 1em;
+    margin-right: 1em;
+}
+
+.checkbox-container input[type="checkbox"] {
+    width: 1em;
+    height: 1em;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+.checkbox-container span {
+    vertical-align: middle;
+}

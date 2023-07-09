@@ -1,0 +1,140 @@
+{% extends "palpites/layout.html" %}
+{% load static %}
+
+{% block title %}
+    {{title}}
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'styles/home.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="{% static 'scripts/grafico.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/ranking.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/jogos.js' %}"></script>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="rankingContainer">
+            <h1>Ranking dos Usuários</h1>
+            <div class="filtro">
+                <label for="ano">Ano: </label>
+                <select name="ano" id="ano" class="select">
+                    <option value="0">Todos</option>
+                    {% for ano in anos %}
+                        <option value="{{ ano }}">{{ ano }}</option>
+                    {% endfor %}
+                </select>
+                <label for="rodada">Rodada: </label>
+                <select name="rodada" id="rodada" class="select">
+                    <option value="0">Todas</option>
+                    {% for rodada in rodadas %}
+                        <option value="{{ rodada }}">{{ rodada }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="ranking">
+                {% if ranking is not null %}
+                    <h2>Posição</h2>
+                    <h2>Usuário</h2>
+                    <div class="tooltip">
+                        <span class="tooltiptext pepe">
+                            Acertou o número de gols do mandante: 1 ponto
+                            <br>
+                            Acertou o número de gols do visitante: 1 ponto
+                            <br>
+                            Acertou quem venceu ou empatou: 1 ponto
+                        </span>
+                        <h2>Pontuação Pepe</h2>
+                    </div>
+                    <div class="tooltip">
+                        <span class="tooltiptext shroud">
+                            Acertou quem venceu ou empatou: 1 ponto
+                            <br>
+                            Caso acertou quem venceu/empatou e acertou o número de gols do mandante: 1 ponto
+                            <br>
+                            Caso acertou quem venceu/empatou e acertou o número de gols do visitante: 1 ponto
+                        </span>
+                        <h2>Pontuação Shroud</h2>
+                    </div>
+                    {% for posicao, usuario, id, pontosP, pontosS in ranking %}
+                            <span class="posicao {% if posicao == 1 %}ouro{% elif posicao == 2 %}prata{% elif posicao == 3 %}bronze{% endif %}">{{ posicao }}</span>   
+                            <span class="usuario"><a href="{%  url 'userView' id=id %}">{{ usuario }}</a></span>
+                            <span class="pontos">{{ pontosP }}</span>
+                            <span class="pontos">{{ pontosS }}</span>
+                    {% endfor %}
+                {% else %}
+                    Não existe nenhuma pontuação de nenhum usuário na rodada e ano especificados
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="jogos">
+            <div class="pagination">
+                {% if page.has_previous %}
+                    <button id="anterior" onclick="AttPagina({{ page.previous_page_number }})">Voltar</button>
+                {% endif %}
+                
+                <span>Página {{ page.number }} de {{ page.paginator.num_pages }}</span>
+                
+                {% if page.has_next %}
+                    <button id="proxima" onclick="AttPagina({{ page.next_page_number }})">Próxima</button>
+                {% endif %}
+            </div>
+            <div class="container-partidas">
+                {% for partida in page %}
+                    <div class="partida">
+                        <a href="{% url 'show_match' id=partida.id %}">
+                            <span class="texto">{{ partida.rodada }}ª Rodada - </span>
+                            <img class="escudo" src="{{ partida.Mandante.escudo }}" alt="escudo mandante">
+                            <span class="texto">{% if partida.golsMandante > -1 %}{{ partida.golsMandante }}{% endif %} 
+                            X 
+                            {% if partida.golsVisitante > -1 %}{{ partida.golsVisitante }}{% endif %}</span>
+                            <img class="escudo" src="{{ partida.Visitante.escudo }}" alt="escudo visitante">
+                        </a>        
+                    </div>
+                {% empty %}
+                    <p>Nenhuma partida disponível.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="graficoContainer">
+        <div class="seletores">
+            <label for="usuario">Usuário: </label>
+            <select name="usuario" id="usuario" class="select">
+                <option value="voce">
+                    {% if user.is_authenticated %}
+                        Você
+                    {% else %}
+                        Aleatório
+                    {% endif %}
+                </option>
+                <option value="todos">Todos</option>
+                <option value="selecionar">Selecionar</option>
+            </select>
+            <label for="rodada_inicial">Rodada Inicial: </label>
+            <select name="rodada_inicial" id="rodada_inicial">
+                {% for rodada in rodadas %}
+                    <option value="{{ rodada }}">{{ rodada }}</option>
+                {% endfor %}
+            </select>
+            <label for="rodada_final">Rodada Final: </label>
+            <select name="rodada_final" id="rodada_final">
+                {% for rodada in rodadas %}
+                    <option value="{{ rodada }}">{{ rodada }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div id="checkboxes" class="checkbox-container">
+            {% for usuario in usuarios %}
+                <label>
+                    <input type="checkbox" id="{{ usuario }}Check" name="usuarios" value="{{ usuario }}" onclick="modificarUsuario('{{usuario}}')">
+                    <span>{{ usuario }}</span>
+                </label>
+            {% endfor %}
+        </div>
+        <canvas id="grafico"></canvas>
+    </div>
+{% endblock %}

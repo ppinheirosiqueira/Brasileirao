@@ -8,15 +8,12 @@ anoEscolhido.addEventListener("change", function() {
     var selectedOptionAno = anoEscolhido.value
     var selectedOptionRodada = rodadaEscolhida.value
 
-    // Fazer a requisição AJAX usando fetch()
     fetch('ranking/' + selectedOptionAno + '/' + selectedOptionRodada)
     .then(response => response.json())
     .then(data => {
-        // Tratar a resposta da requisição
         exibirDados(data);
     })
     .catch(error => {
-        // Tratar erros
         console.error(error);
     });
 })
@@ -30,7 +27,6 @@ rodadaEscolhida.addEventListener('change', function(){
             return response.json();
         })
         .then(function(data) {
-            // Manipule os dados retornados aqui
             exibirDados(data);
         })
         .catch(function(error) {
@@ -39,14 +35,25 @@ rodadaEscolhida.addEventListener('change', function(){
 });
   
 function exibirDados(data) {
-    //var resultadoDiv = document.getElementById('grafico');
     resultadoDiv = document.getElementsByClassName('ranking')
     if (data.length != 0){
-        texto = "<ul><li><h3>Posição</h3><h3>Usuário</h3><h3>Pontuação Pepe</h3><h3>Pontuação Shroud</h3></li>"
+        texto = cabecalho()
         data.forEach(function(jogador){
-            texto += "<li><span>" + jogador.posicao + "</span><span><a href=user/" + jogador.ids + ">" + jogador.usernames + "</a></span><span>" + jogador.pontosP + "</span><span>" + jogador.pontosS + "</span></li>"
+            texto += "<span class='posicao"
+            if (jogador.posicao == 1){
+                texto += " ouro'>"
+            }
+            else if(jogador.posicao == 2){
+                texto += " prata'>"
+            }
+            else if(jogador.posicao == 3){
+                texto += " bronze'>"
+            }
+            else{
+                texto += "'>"
+            }
+            texto += jogador.posicao + "</span><span class='usuario'><a href=user/" + jogador.ids + ">" + jogador.usernames + "</a></span><span class='pontos'>" + jogador.pontosP + "</span><span class='pontos'>" + jogador.pontosS + "</span>"
         })
-        texto += "</ul>"
         resultadoDiv[0].innerHTML = texto
     }
     else{
@@ -55,3 +62,30 @@ function exibirDados(data) {
 
 }
 });
+
+function cabecalho(){
+    return `
+    <h2>Posição</h2>
+    <h2>Usuário</h2>
+    <div class="tooltip">
+        <span class="tooltiptext pepe">
+            Acertou o número de gols do mandante: 1 ponto
+            <br>
+            Acertou o número de gols do visitante: 1 ponto
+            <br>
+            Acertou quem venceu ou empatou: 1 ponto
+        </span>
+        <h2>Pontuação Pepe</h2>
+    </div>
+    <div class="tooltip">
+        <span class="tooltiptext shroud">
+            Acertou quem venceu ou empatou: 1 ponto
+            <br>
+            Caso acertou quem venceu/empatou e acertou o número de gols do mandante: 1 ponto
+            <br>
+            Caso acertou quem venceu/empatou e acertou o número de gols do visitante: 1 ponto
+        </span>
+        <h2>Pontuação Shroud</h2>
+    </div>
+    `
+}

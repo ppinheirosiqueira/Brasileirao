@@ -1,0 +1,59 @@
+{% extends "palpites/layout.html" %}
+{% load static %}
+
+{% block title %}
+    Time - {{ time.Nome }}
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'styles/time.css' %}">
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <img src="../{{ time.escudo }}" alt="escudo" class="escudo">
+        <div class="nome">{{ time.Nome }}</div>
+        <hr width="80%">
+        {% if fas|length > 0 %}
+            <div class="fas">
+                <h2>Torcedores</h2>
+                {% for torcedor in fas %}
+                    <a href="{%  url 'userView' id=torcedor.id %}">
+                        <img src="../{{ torcedor.profile_image.url }}" alt="perfil do {{ torcedor.username }}" class="perfil">
+                        {{ torcedor.username }}
+                    </a>
+                {% endfor %}
+            </div>
+            <hr width="80%">
+        {% endif %}
+        <div class="partidas">
+            <h2>Partidas</h2>
+            {% for jogo in jogos %}
+                <a href="{% url 'show_match' id=jogo.id %}">
+                    <img class="escudo" src="../{{ jogo.Mandante.escudo }}" alt="escudo mandante">
+                    <span class="texto">
+                        {% if jogo.golsMandante > -1 %}{{ jogo.golsMandante }}{% endif %}
+                        X 
+                        {% if jogo.golsVisitante > -1 %}{{ jogo.golsVisitante }}{% endif %}
+                    </span>
+                    <img class="escudo" src="../{{ jogo.Visitante.escudo }}" alt="escudo visitante">
+                </a>
+            {% endfor %}
+        </div>
+        <hr width="80%">
+        <h2>Ranking jogadores com suas taxas de acerto</h2>
+        <div class="ranking">
+            <div class="header span-2">Usuario</div>
+            <div class="header">%</div>
+            {% for usuario, porcentagem in acertos %}
+                <a href="{%  url 'userView' id=usuario.id %}">
+                    <img src="../{{ usuario.profile_image.url }}" alt="perfil do {{ usuario.username }}" class="perfil">
+                </a>
+                <a href="{%  url 'userView' id=usuario.id %}">
+                    <div class="nome">{{ usuario.username }}</div>
+                </a>                    
+                <div class="porcentagem">{{ porcentagem|floatformat:2 }}</div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

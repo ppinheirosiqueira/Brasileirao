@@ -6,6 +6,8 @@ from django.urls import reverse
 from django.http import JsonResponse
 import json
 from datetime import datetime, timezone, timedelta
+from django.core.paginator import Paginator
+from django.core import serializers
 
 from .models import User, Time, Partida, Palpite_Partida
 from . import funcoes
@@ -28,7 +30,7 @@ class TimeFavoritoForm(forms.Form):
             self.fields['time_favorito'].initial = user.favorite_team
 
 # Visão Principal
-def index(request):
+def home(request):
     anosAux = list(Partida.objects.all().dates("dia","year").distinct()) 
     rodadas = list(Partida.objects.all().values_list("rodada",flat=True).distinct())
     usuariosAux = list(Palpite_Partida.objects.all().values_list("usuario",flat=True).distinct()) 
@@ -38,16 +40,35 @@ def index(request):
         anos.append(ano.year)
     for usuario in usuariosAux:
         usuarios.append(User.objects.get(id=usuario).username)
-    return render(request, "palpites/index.html", {
+
+    paginator = Paginator(Partida.objects.all(), 10)  # Divida as partidas em páginas de 10 partidas cada
+    page_number = request.GET.get('page', paginator.num_pages)  # Obtenha o número da página atual dos parâmetros da URL
+    page = paginator.get_page(page_number)
+    return render(request, "palpites/home.html", {
         "title": "Palpites",
-        "teste": Partida.objects.all(),
-        "lastJogos": funcoes.ultimos_jogos(),
-        "proxJogos": funcoes.proximos_jogos(),
+        "page": page,
         "ranking": funcoes.ranking(0,0),
         "anos": anos,
         "rodadas": rodadas,
         "usuarios": usuarios,
     })
+
+def get_partidas(request, pagina):
+    paginator = Paginator(Partida.objects.all(), 10)
+    page_number = request.GET.get('page', pagina)
+    page = paginator.get_page(page_number)
+    
+    partidas = page.object_list
+    serialized_partidas = serializers.serialize('json', partidas)
+    serialized_times = serializers.serialize('json', Time.objects.all())
+    
+    data = {
+        'partidas': serialized_partidas,
+        'total': page.paginator.num_pages,
+        'times': serialized_times,
+    }
+    
+    return JsonResponse(data)
 
 # Views de Administração de Usuario
 def login_view(request):
@@ -62,7 +83,7 @@ def login_view(request):
         # Check if authentication successful
         if user is not None:
             login(request, user)
-            return HttpResponseRedirect(reverse("index"))
+            return HttpResponseRedirect(reverse("home"))
         else:
             return render(request, "palpites/login.html", {
                 "title": "Login",
@@ -75,7 +96,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return HttpResponseRedirect(reverse("index"))
+    return HttpResponseRedirect(reverse("home"))
 
 def register(request):
     if request.method == "POST":
@@ -102,14 +123,13 @@ def register(request):
             })
         login(request, user)
         user.cor = funcoes.gerar_cor_clara()
-        #funcoes.cores = funcoes.clores_claras()
-        return HttpResponseRedirect(reverse("index"))
+        return HttpResponseRedirect(reverse("home"))
     else:
         return render(request, "palpites/register.html",{
             "title": "Register"
         })
 
-# Views de Usuário
+# Views padrões
 def register_result(request):
     if request.method == "POST":
         for key, value in request.POST.items():
@@ -157,12 +177,21 @@ def show_match(request,id):
         proximo = partidas[indice+1].id
     except:
         proximo = None
+
+    palpites = Palpite_Partida.objects.filter(partida=partida).order_by("usuario__username")
+    resultados = []
+    for palpite in palpites:
+        resultados.append(funcoes.check_pontuacao_pepe_jogo(palpite))
+    
+    zipado = zip(palpites,resultados)
+    
     return render(request, "palpites/show_match.html", {
                 "title": partida,
                 "partida": partida,
-                "palpites": list(Palpite_Partida.objects.filter(partida=partida)),
+                "palpites": zipado,
                 "anterior": anterior,
                 "proxima": proximo,
+                "tamanho_palpites": len(palpites),
     })
 
 def userView(request,id):
@@ -186,6 +215,36 @@ def userView(request,id):
         "accuracy_result": aR,
         "form": form,
         "form2": form2,
+    })
+
+def show_teams(request):
+    return render(request, "palpites/times.html",{
+        "title": "Times",
+        "times": Time.objects.all(),
+    })
+
+def show_team(request,id):
+    time = Time.objects.get(id=id)
+    fas = User.objects.filter(favorite_team=id)
+    jogos = Partida.objects.filter(Mandante=id) | Partida.objects.filter(Visitante=id)
+    jogos = jogos.order_by("rodada")
+    palpites = Palpite_Partida.objects.filter(partida__in=jogos)
+    usuariosAux = list(set(palpites.values_list("usuario", flat=True)))
+    usuarios = User.objects.filter(id__in=usuariosAux)
+    porcentagem = []
+    for usuario in usuarios:
+        pontos = funcoes.check_pontuacao_pepe(palpites.filter(usuario=usuario))
+        total = 3*palpites.filter(usuario=usuario).count()
+        porcentagem.append(100*pontos/total)
+
+    acertos = zip(usuarios,porcentagem)
+    acertos = sorted(acertos, key=lambda x: x[1], reverse=True)
+
+    return render(request, "palpites/time.html", {
+        "time": time,
+        "fas": fas,
+        "jogos": jogos,
+        "acertos": acertos,
     })
 
 def profile(request,id):
@@ -258,6 +317,7 @@ def register_match(request):
     })
 
 def change_match(request):
+    limite_data = datetime.now() - timedelta(days=3)
     message = ""
     if request.method == "POST":
         gMan = request.POST["gMan"]
@@ -280,7 +340,7 @@ def change_match(request):
     return render(request, "palpites/change_match.html", {
                 "message": message,
                 "title": "Registrar Partida",
-                "partidas": Partida.objects.all(),
+                "partidas": Partida.objects.filter(dia__gt=limite_data),
                 "times": Time.objects.all()
     })
 
@@ -295,9 +355,6 @@ def ranking(request, ano, rodada):
     return JsonResponse(json_data, safe=False)
 
 def userResult(request,usuarios,rod_Ini,rod_Fin):
-    #FF6384 (Rosa)  #36A2EB (Azul)  #FFCE56 (Amarelo)   #4BC0C0 (Turquesa)  #9966FF (Roxo)  #FF9F40 (Laranja)   #00E676 (Verde)
-    #cores = ["#FF6384","#36A2EB","#FFCE56","#4BC0C0","#9966FF","#FF9F40","#00E676"]
-
     usernames = []
     if usuarios == "todos":
         palpites = Palpite_Partida.objects.filter(partida__rodada__gte=rod_Ini, partida__rodada__lte=rod_Fin)

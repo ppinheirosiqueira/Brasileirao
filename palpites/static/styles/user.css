@@ -83,7 +83,7 @@ label {
     transform: rotate(-225deg);
 }
 
-@media (max-width: 1250px){
+@media (max-width: 1000px){
     .profile-image {
         width: 250px;
         height: 250px;

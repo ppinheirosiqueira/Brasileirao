@@ -1,0 +1,127 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.escudo{
+    width: 15em;
+}
+
+.nome{
+    font-size: 5em;
+}
+
+.perfil{
+    width: 4em;
+}
+
+.fas{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.fas h2{
+    text-align: center;
+    flex-basis: 100%;
+    margin: 0;
+}
+
+.fas a{
+    color: white;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 1em;
+}
+
+.partidas{
+    margin: 0 20%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 1000px) {
+    .partidas{
+        font-size: 2em;
+    }
+}
+
+.partidas h2{
+    text-align: center;
+    flex-basis: 100%;
+    margin: 1em 0 1em 0;
+}
+
+.partidas a{
+    text-decoration: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    color: inherit;
+    border: 1px solid black;
+    border-radius: 1em;
+    padding: 0.5em;
+    margin: 0 1em 0.5em 1em;
+    align-items: center;
+    text-align: center;
+    flex-grow: 1;
+    max-width: 30%;
+}
+
+.partidas .escudo{
+    width: 2em;
+    margin: 0 auto;
+}
+
+.partidas .texto{
+    margin: auto 0;
+    font-size: 1em;
+    padding: 0 0.5em;
+}
+
+.ranking{
+    margin: 0 20% 2em 20%;
+    width: 60%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    row-gap: 0.5em;
+}
+
+@media (max-width: 1000px) {
+    .ranking{
+        font-size: 2em;
+    }
+}
+
+.ranking a{
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ranking a .nome{
+    font-size: 1em;
+}
+
+.ranking .header{
+    font-size: 3em;
+    text-align: center;
+    margin-bottom: 0.5em;
+}
+
+.ranking .span-2{
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+.ranking .porcentagem{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

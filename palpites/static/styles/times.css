@@ -1,38 +1,28 @@
-.times{
-    margin: 5em 2em 0em 2em;
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-}
-
-.lista_times{
-    display: grid;
-    grid-template-columns: 1fr 4fr;
-    padding: 10px;
-    margin: auto;
-    row-gap: 10px;
-    column-gap: 100px;
-}
-
-.lista_times h2{
-    grid-column-start: 1;
-    grid-column-end: 3;
+h2{
     text-align: center;
 }
 
-.escudo{
-    width: 40px;
+.times{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    padding: 0 20%;
+    row-gap: 1em;
 }
 
-.nome{
+.times a{
+    text-decoration: none;
+    text-align: center;
+    display: grid;
+    grid-template-columns: 1fr 4fr;
     align-items: center;
+}
+
+.times a .escudo{
+    width: 2em;
+    margin: auto;
+}
+
+.times a .nome{
+    color: white;
     font-weight: bold;
-    font-size: 30px;
-}
-
-.adicionar_time{
-    margin: 5em auto;
-}
-
-.adicionar_time form{
-    display: block;
 }
