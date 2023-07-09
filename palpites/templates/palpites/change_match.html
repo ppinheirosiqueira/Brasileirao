@@ -16,7 +16,7 @@
             <h3>{{ message | safe }}</h3>
         {% endif %}
         <div class="lista_partidas">
-            {% if partida|length > 0 %}
+            {% if partidas|length > 0 %}
                 <h2>Lista de Partidas</h2>
                 <form action="{% url 'change_match' %}" method="post">
                     {% csrf_token %}
