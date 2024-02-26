@@ -1,0 +1,80 @@
+{% extends "palpites/layout.html" %}
+{% load static %}
+
+{% block title %}
+    {{title}}
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/partida.css' %}?v=2.4">
+{% endblock %}
+
+{% block body %}
+    <div class="partida">
+        {% if anterior != None %}
+            {% if time %}
+                <a href="{% url 'show_match_time' id=anterior time=time %}"><button type="button" class="arrow-button left-arrow">&#8592;</button></a>
+            {% else %}
+                <a href="{% url 'show_match' id=anterior %}"><button type="button" class="arrow-button left-arrow">&#8592;</button></a>
+            {% endif %}
+        {% else %}
+            <span></span>
+        {% endif %}
+        <div class="round">
+            <a href="{% url 'edicao' campeonato=partida.Rodada.edicao_campeonato.campeonato.id edicao=partida.Rodada.edicao_campeonato.num_edicao %}">{{ partida.Rodada.edicao_campeonato }}</a>
+             - 
+            <a href="{% url 'rodada' campeonato=partida.Rodada.edicao_campeonato.campeonato.id edicao=partida.Rodada.edicao_campeonato.num_edicao rodada=partida.Rodada.num %}">{{ partida.Rodada.nome }}</a>
+        </div>
+        <a href="{% url 'show_team' id=partida.Mandante.id %}" title="{{ partida.Mandante.Nome }}">    
+            <img class="escudo" src="/{{ partida.Mandante.escudo }}" alt="escudo mandante">
+        </a>
+        {% if partida.golsMandante != -1 %}
+            <span class="texto">{{ partida.golsMandante }}</span>
+        {% else %}
+            <span></span>
+        {% endif %}
+        <span class="texto">X</span>
+        {% if partida.golsVisitante != -1 %}
+            <span class="texto">{{ partida.golsVisitante }}</span>
+        {% else %}
+            <span></span>
+        {% endif %}
+        <a href="{% url 'show_team' id=partida.Visitante.id %}" title="{{ partida.Visitante.Nome }}">    
+            <img class="escudo" src="/{{ partida.Visitante.escudo }}" alt="escudo visitante">
+        </a>
+        {% if proxima != None %}
+            {% if time %}
+                <a href="{% url 'show_match_time' id=proxima time=time %}"><button type="button" class="arrow-button right-arrow">&#8594;</button></a>
+            {% else %}
+                <a href="{% url 'show_match' id=proxima %}"><button type="button" class="arrow-button right-arrow">&#8594;</button></a>
+            {% endif %}        
+        {% else %}
+            <span></span>
+        {% endif %}
+        <div class="date">{{ partida.dia|date:"d/m/Y H:i:s" }}</div>
+    </div>
+    <div class="palpites">
+        {% if tamanho_palpites > 0 %}
+            <h1>Palpites</h1>
+            <div class="jogos">
+                {% for palpite, resultado in palpites %}
+                    <div class="{% if resultado == 0 %}red_border{% elif resultado == 1 %}orange_border{% elif resultado == 2 %}yellow_border{% elif resultado == 3 %}green_border{% endif %} jogo">
+                        <div class="player"><a href="{%  url 'userView' id=palpite.usuario.id %}">{{ palpite.usuario }}</a></div>
+                        <a href="{% url 'show_team' id=partida.Mandante.id %}">
+                            <img class="escudo" src="/{{ partida.Mandante.escudo }}" alt="escudo mandante">
+                        </a>
+                        <span class="texto">{{ palpite.golsMandante }}</span>
+                        <span class="texto">X</span>
+                        <span class="texto">{{ palpite.golsVisitante }}</span>
+                        <a href="{% url 'show_team' id=partida.Visitante.id %}">    
+                            <img class="escudo" src="/{{ partida.Visitante.escudo }}" alt="escudo visitante">
+                        </a>
+                        <div class="resultado">{{  resultado }}</div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            Não houve palpites dessa partida
+        {% endif %}
+    </div>
+{% endblock %}

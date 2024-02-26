@@ -1,0 +1,73 @@
+.container {
+  padding: 5em 0 0 0;
+  height: auto;
+}
+@media (max-width: 1000px) {
+  .container {
+    padding: 2em 0 0 0;
+  }
+}
+.container h3 {
+  margin: 0 0 0 40%;
+}
+.container .partidas {
+  width: 40%;
+  margin: 0% 30%;
+}
+@media (max-width: 1000px) {
+  .container .partidas {
+    width: 80%;
+    margin: 0% 10%;
+  }
+}
+.container .partidas form label {
+  font-size: 2em;
+}
+.container .partidas form select {
+  width: 7em;
+  height: 2.5em;
+  border-width: 2px;
+  border-style: outset;
+  border-color: var(--border);
+  padding: 5px;
+  font-size: 1em;
+  margin: auto 0;
+  color: var(--fc);
+  background-color: var(--bg);
+  width: 100%;
+}
+.container .partidas form input[type=number] {
+  color: var(--fc);
+  background-color: var(--bg);
+  height: 100%;
+  font-size: 2em;
+  width: 100%;
+  text-align: center;
+  border: 1px solid var(--border);
+}
+.container .partidas form input[type=datetime-local] {
+  color: var(--fc);
+  background-color: var(--bg);
+  height: 100%;
+  font-size: 1.5em;
+  width: 100%;
+  text-align: center;
+  border: 1px solid var(--border);
+}
+.container .partidas form input[type=submit] {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: var(--bg);
+  color: var(--fc);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 1em;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+.container .partidas form input[type=submit]:hover {
+  background-color: var(--hover);
+}
+
+/*# sourceMappingURL=att_partida.css.map */

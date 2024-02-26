@@ -1,0 +1,43 @@
+{% extends "palpites/layout.html" %}
+{% load static %}
+
+{% block title %}
+    {{title}}
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/palpitar.css' %}?v=1.0">
+{% endblock %}
+
+{% block body %}
+    <form class="formulario" action="{% url 'palpitar' %}" method="post">
+        <h2>Palpites Feitos</h2>
+        <div class="jogos">
+            {% for feita in partidas_feitas %}
+                <span class="rodada">{{ feita.partida.Rodada }}</span>
+                <img src="{{ feita.partida.Mandante.escudo }}" alt="escudo_mandante" class="escudo" title="{{ feita.partida.Mandante.Nome }}">
+                <span><input type="number" name="man_{{feita.partida.id}}" id="man_{{feita.partida.id}}" min="0" value="{{ feita.golsMandante }}"></span>
+                <span>X</span>
+                <span><input type="number" name="vis_{{feita.partida.id}}" id="vis_{{feita.partida.id}}" min="0" value="{{ feita.golsVisitante }}"></span>
+                <img src="{{ feita.partida.Visitante.escudo }}" alt="escudo_visitante"  class="escudo" title="{{ feita.partida.Visitante.Nome }}">
+            {% empty %}
+                <span class="texto">Sem palpites feitos</span>
+            {% endfor %}
+        </div>
+        <h2>Palpites a Fazer</h2>
+        <div class="jogos">
+                {% csrf_token %}
+                {% for falta in partidas_faltantes %}
+                    <span class="rodada">{{ falta.Rodada }}</span>
+                    <img src="{{ falta.Mandante.escudo }}" alt="escudo_mandante"  class="escudo" title="{{ falta.Mandante.Nome }}">
+                    <span><input type="number" name="man_{{falta.id}}" id="man_{{falta.id}}" min="0"></span>
+                    <span>X</span>
+                    <span><input type="number" name="vis_{{falta.id}}" id="vis_{{falta.id}}" min="0"></span>
+                    <img src="{{ falta.Visitante.escudo }}" alt="escudo_visitante"  class="escudo" title="{{ falta.Visitante.Nome }}">
+                {% empty %}
+                    <span class="texto">Sem palpites a fazer</span>
+                {% endfor %}
+        </div>
+        <input type="submit" value="Palpitar">
+    </form>
+{% endblock %}

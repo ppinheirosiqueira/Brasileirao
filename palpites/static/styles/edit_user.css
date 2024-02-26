@@ -1,0 +1,52 @@
+body:not(.darkTheme) .formularios a {
+  color: red;
+}
+
+.formularios {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.formularios a {
+  color: lightblue;
+}
+.formularios input[type=checkbox] {
+  display: none;
+}
+.formularios label {
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+}
+.formularios .indicator {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-left: 2px solid;
+  border-bottom: 2px solid;
+  transform: rotate(-45deg);
+  transition: transform 0.3s ease;
+  margin-left: 2em;
+}
+.formularios .container {
+  text-align: center;
+  border: 1px solid lightgray;
+  padding: 1em 2em 1em 2em;
+  width: 50%;
+}
+@media (max-width: 1000px) {
+  .formularios .container {
+    width: 90%;
+  }
+}
+.formularios .content-imagem, .formularios .content-time, .formularios .content-cor, .formularios .content-cor-2 {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+.formularios .checkbox-imagem:checked ~ .content-imagem, .formularios .checkbox-time:checked ~ .content-time, .formularios .checkbox-cor:checked ~ .content-cor, .formularios .checkbox-cor-2:checked ~ .content-cor-2 {
+  max-height: 300px;
+}
+.formularios .checkbox-imagem:checked + label .indicator, .formularios .checkbox-time:checked ~ label .indicator, .formularios .checkbox-cor:checked ~ label .indicator, .formularios .checkbox-cor-2:checked ~ label .indicator {
+  transform: rotate(-225deg);
+}

@@ -1,0 +1,11 @@
+.container {
+  width: 80%;
+  margin: 0 auto;
+}
+.container a {
+  font-weight: bold;
+  color: var(--fc);
+  text-decoration: none;
+}
+
+/*# sourceMappingURL=about.css.map */

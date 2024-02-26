@@ -1,0 +1,135 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+  margin: 0 20%;
+  text-align: center;
+}
+@media (max-width: 1000px) {
+  .container {
+    margin: 0;
+  }
+}
+.container button {
+  padding: 16px;
+  background-color: var(--bg);
+  color: var(--fc);
+  font-size: 1em;
+  margin: 0 0.5em;
+  padding: 0.5em 1.5em;
+  border-width: 2px;
+  border-style: outset;
+  border-color: var(--border);
+  cursor: pointer;
+}
+@media (max-width: 1000px) {
+  .container .cPC {
+    display: none;
+  }
+}
+.container .cPC .palpite {
+  border-collapse: collapse;
+  margin: 1em auto;
+  width: 100%;
+}
+.container .cPC th {
+  font-size: x-large;
+}
+.container .cPC th, .container .cPC td {
+  border: 2px solid var(--fc);
+  width: 25%;
+  height: 40px;
+  text-align: center;
+}
+.container .cPC .escudo {
+  height: 35px;
+  width: 35px;
+  cursor: grab;
+}
+.container .cPC .dragged-item {
+  opacity: 0.5;
+  border: 3px dashed red !important;
+}
+.container .cPC .drop-highlight {
+  background-color: #3498db;
+  color: #fff;
+  border: 2px solid #fff;
+}
+.container .cMobile {
+  display: none;
+}
+@media (max-width: 1000px) {
+  .container .cMobile {
+    display: block;
+  }
+}
+.container .cMobile h3 {
+  margin-bottom: 1em;
+  width: 100%;
+  text-align: center;
+}
+.container .cMobile .palpitarMobile {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 5%;
+  margin: 0 2%;
+}
+.container .cMobile .palpitarMobile .palpiteMobile {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+}
+.container .cMobile .palpitarMobile .palpiteMobile span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+.container .cMobile .palpitarMobile .palpiteMobile .escudo {
+  width: 35px;
+  height: 35px;
+}
+.container .cMobile .palpitarMobile .palpiteMobile .opaque-div {
+  opacity: 0.1;
+  pointer-events: none;
+}
+.container .cMobile .palpitarMobile #console {
+  float: right;
+  border-collapse: separate;
+  border-spacing: 0 0.5em;
+}
+.container .cMobile .palpitarMobile #console td:nth-child(1) {
+  width: 10%;
+}
+.container .cMobile .palpitarMobile #console td:nth-child(2) {
+  width: 80%;
+}
+.container .cMobile .palpitarMobile #console td:nth-child(3) {
+  width: 10%;
+}
+.container .cMobile .palpitarMobile #console button {
+  padding: 4px;
+  background-color: var(--bg);
+  color: var(--fc);
+  font-size: 0.6em;
+  margin: 0;
+  padding: 0.5em;
+  border-width: 2px;
+  border-style: outset;
+  border-color: var(--border);
+  cursor: pointer;
+}
+.container .cMobile .botoes {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  position: fixed;
+  bottom: 4em;
+  height: 4em;
+  padding: 0.5em 0;
+  background-color: var(--bg);
+}
+
+/*# sourceMappingURL=palpitar_campeonato.css.map */

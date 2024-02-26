@@ -1,0 +1,57 @@
+{
+  "campeonato": "Campeonato Brasileiro",
+  "edicao_campeonato": "2023",
+  "rodada": "38",
+  "jogos": [
+    {
+      "data": "06/12/2023 19:00",
+      "mandante": "Goiás",
+      "visitante": "América-MG"
+    },
+    {
+      "data": "06/12/2023 21:30",
+      "mandante": "Fluminense",
+      "visitante": "Grêmio"
+    },
+    {
+      "data": "06/12/2023 21:30",
+      "mandante": "Vasco",
+      "visitante": "Bragantino"
+    },
+    {
+      "data": "06/12/2023 21:30",
+      "mandante": "São Paulo",
+      "visitante": "Flamengo"
+    },
+    {
+      "data": "06/12/2023 21:30",
+      "mandante": "Santos",
+      "visitante": "Fortaleza"
+    },
+    {
+      "data": "06/12/2023 21:30",
+      "mandante": "Cruzeiro",
+      "visitante": "Palmeiras"
+    },
+    {
+      "data": "06/12/2023 21:30",
+      "mandante": "Internacional",
+      "visitante": "Botafogo"
+    },
+    {
+      "data": "06/12/2023 21:30",
+      "mandante": "Corinthians/Coritiba",
+      "visitante": "Corinthians/Coritiba"
+    },
+    {
+      "data": "06/12/2023 21:30",
+      "mandante": "Bahia",
+      "visitante": "Atlético-MG/Atlético-GO"
+    },
+    {
+      "data": "06/12/2023 21:30",
+      "mandante": "Cuiabá",
+      "visitante": "Athletico"
+    }
+  ]
+}

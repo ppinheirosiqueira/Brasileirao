@@ -1,0 +1,69 @@
+{% extends "palpites/layout.html" %}
+{% load static %}
+
+{% block title %}
+    Perfil do Usuário - {{ usuario.username }}
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'styles/edit_user.css' %}?v=1.0">
+{% endblock %}
+
+{% block body %}
+    <div class="formularios">
+        <div class="container">
+            <input type="checkbox" id="checkbox-imagem" class="checkbox-imagem">
+            <label for="checkbox-imagem">
+                Atualizar Imagem de Perfil<span class="indicator"></span>
+            </label>
+            <div class="content-imagem">
+                <form action="{% url 'profile' id=usuario.id %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_table }}
+                    <button type="submit">Atualizar Imagem</button>
+                </form>
+            </div>
+        </div>
+        <div class="container">
+            <input type="checkbox" id="checkbox-time" class="checkbox-time">
+            <label for="checkbox-time">
+                Atualizar Time Favorito<span class="indicator"></span>
+            </label>
+            <div class="content-time">
+                <form action="{% url 'alterar_time_favorito' id=usuario.id %}" method="post">
+                    {% csrf_token %}
+                    {{ form2.as_p }}
+                    <button type="submit">Salvar</button>
+                </form>
+            </div>
+        </div>
+        <div class="container">
+            <input type="checkbox" id="checkbox-cor" class="checkbox-cor">
+            <label for="checkbox-cor">
+                Atualizar Cor do Gráfico em Páginas Escuras<span class="indicator"></span>
+            </label>
+            <div class="content-cor">
+                <form action="{% url 'alterar_cor_clara' id=usuario.id %}" method="post">
+                    {% csrf_token %}
+                    <label for="cor">Selecione uma cor:</label>
+                    <input type="color" id="cor" name="cor">
+                    <button type="submit">Enviar</button>
+                </form>
+            </div>
+        </div>
+        <div class="container">
+            <input type="checkbox" id="checkbox-cor-2" class="checkbox-cor-2">
+            <label for="checkbox-cor-2">
+                Atualizar Cor do Gráfico em Páginas Claras<span class="indicator"></span>
+            </label>
+            <div class="content-cor-2">
+                <form action="{% url 'alterar_cor_escura' id=usuario.id %}" method="post">
+                    {% csrf_token %}
+                    <label for="cor">Selecione uma cor:</label>
+                    <input type="color" id="cor" name="cor">
+                    <button type="submit">Enviar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

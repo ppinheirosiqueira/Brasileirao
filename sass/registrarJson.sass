@@ -1,0 +1,56 @@
+@use 'mixins'
+
+.container
+    @include mixins.flex-column
+    font-size: 1rem
+
+    h3
+        font-size: 2em
+
+    label
+        font-size: 2em
+
+    input[type="number"]
+        color: var(--fc)
+        background-color: var(--bg)
+        height: 100%
+        font-size: 2em
+        width: 40%
+        text-align: center
+        border: 1px solid var(--fc)
+
+    button
+        padding: 10px 20px
+        background-color: var(--bg)
+        color: var(--fc)
+        border: 1px solid var(--fc)
+        border-radius: 4px
+        font-size: 1em
+        text-align: center
+        text-decoration: none
+        cursor: pointer
+
+        &:hover
+            background-color: var(--hover)
+    
+    .partidas
+        width: 100%
+        margin: 2em 1em
+        gap: 1em
+        display: flex
+        flex-wrap: wrap
+        flex-direction: column
+        justify-content: space-evenly
+        text-align: center
+
+        select
+            color: var(--fc)
+            background-color: var(--bg)
+            height: 100%
+            font-size: 2em
+            width: 10%
+            text-align: center
+            border: 1px solid var(--fc)
+
+    #registrar
+        width: 10%

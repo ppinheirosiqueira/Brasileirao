@@ -1,0 +1,33 @@
+{% extends "palpites/layout.html" %}
+{% load static %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/campeonato.css' %}?v=1.0">
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1>Lista de Campeonatos</h1>
+        {% for campeonato, edicoes in campeonatos.items %}
+            <select name="{{ campeonato }}" id="{{ campeonato }}" onchange="redirect(this)">
+                <option>{{ campeonato }}</option>
+                {% for edicao in edicoes %}
+                    <option data-url="{% url 'edicao' campeonato=edicao.campeonato.id edicao=edicao.num_edicao %}">{{ edicao }}</option>
+                {% endfor %}
+            </select>
+        {% endfor %}
+    </div>
+    <script>
+        function redirect(select) {
+            var selectedOption = select.options[select.selectedIndex]
+            var url = selectedOption.getAttribute('data-url')
+            if (url) {
+                window.location.href = url
+            }
+        }
+    </script>
+{% endblock %}

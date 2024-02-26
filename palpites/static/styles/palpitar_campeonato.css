@@ -1,0 +1,45 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+  margin: 0 20%;
+  text-align: center;
+}
+.container button {
+  padding: 16px;
+  background-color: var(--bg);
+  color: var(--fc);
+  font-size: 1em;
+  margin: 0 0.5em;
+  padding: 0.5em 1.5em;
+  border-width: 2px;
+  border-style: outset;
+  border-color: var(--fc);
+  cursor: pointer;
+}
+.container .palpite {
+  border-collapse: collapse;
+}
+.container .palpite th {
+  font-size: x-large;
+}
+.container .palpite th, .container .palpite td {
+  border: 2px solid var(--fc);
+  width: 25%;
+  height: 40px;
+  text-align: center;
+}
+.container .palpite .escudo {
+  height: 35px;
+  width: 35px;
+  cursor: grab;
+}
+.container .palpite .dragged-item {
+  opacity: 0.5;
+  border: 3px dashed red !important;
+}
+.container .palpite .drop-highlight {
+  background-color: #3498db;
+  color: #fff;
+  border: 2px solid #fff;
+}

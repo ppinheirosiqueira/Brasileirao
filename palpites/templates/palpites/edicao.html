@@ -1,0 +1,192 @@
+{% extends "palpites/layout.html" %}
+{% load static %}
+
+{% block title %}
+    {{ edicao }}
+{% endblock %}
+
+{% block style %}
+    <script>
+        var edicaoId = {{ edicao.id }}
+    </script>
+    <link rel="stylesheet" href="{% static 'css/edicao_campeonato.css' %}">
+    <script type="text/javascript" src="{% static 'scripts/classificacao.js' %}?v=1.0"></script>
+    <script type="text/javascript" src="{% static 'scripts/jogosEdicao.js' %}?v=1.0"></script>
+{% endblock %}
+
+{% block body %}
+    <div class="nomeCampeonato">
+        {{ edicao.campeonato }}
+        <select onchange="redirect(this)">
+            {% for outraEdicao in edicoes %}
+                {% if outraEdicao == edicao %}
+                    <option selected>{{ outraEdicao.edicao }}</option>
+                {% else %}
+                    <option data-url="{% url 'edicao' campeonato=outraEdicao.campeonato.id edicao=outraEdicao.num_edicao %}">{{ outraEdicao.edicao }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+    </div>
+    {% if edicao.campeonato.pontosCorridos and not edicao.comecou %}
+        <div class="palpitarClassificacao">
+            <a href="{% url 'palpiteEdicao' edicao=edicao.id %}">PALPITAR CLASSIFICAÇÃO</a>
+        </div>
+    {% endif %}
+    {% if edicao.terminou %}
+        <div class="final">
+            <div class="podium">
+                <div class="tituloPodio"><h1>Campeão</h1></div>
+                <a class="imagem1" href="{%  url 'userView' id=campeaoPepe.0.id %}"><img src="/media/{{ campeaoPepe.0.imagem }}" alt="Primeiro Lugar"></a>
+                <div class="first-place">{{ campeaoPepe.0.pontos }}</div>
+                <a class="imagem2" href="{%  url 'userView' id=campeaoPepe.1.id %}"><img src="/media/{{ campeaoPepe.1.imagem }}" alt="Segundo Lugar"></a>
+                <div class="second-place">{{ campeaoPepe.1.pontos }}</div>
+                <a class="imagem3" href="{%  url 'userView' id=campeaoPepe.2.id %}"><img src="/media/{{ campeaoPepe.2.imagem }}" alt="Terceiro Lugar"></a>
+                <div class="third-place">{{ campeaoPepe.2.pontos }}</div>
+            </div>
+            <table class="ranking">
+                <thead>
+                    <tr>
+                        <th>Posição</th>
+                        <th>Usuário</th>
+                        <th>Pontuação</th>
+                        <th>Dif. Gols</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for posicao, usuario, id, pontosP, difGols in ranking %}
+                        <tr>
+                            <td>
+                                {% if posicao == 1 or posicao == 2 or posicao == 3 %}
+                                    <span class="{% if posicao == 1 %}ouro{% elif posicao == 2 %}prata{% elif posicao == 3 %}bronze{% endif %}">{{ posicao }}</span>
+                                {% else %}
+                                    {{ posicao }}
+                                {% endif %}
+                            </td>
+                            <td><a href="{%  url 'userView' id=id %}">{{ usuario }}</a></td>
+                            <td>{{ pontosP }}</td>
+                            <td>{{ difGols }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+    {% if edicao.campeonato.pontosCorridos %}
+        <div class="filtro">
+            <div class="selecao">
+                <input type="radio" name="tipo" id="ambos" onclick="attClassificacao(0)" checked><label for="ambos">Ambos</label>
+                <input type="radio" name="tipo" id="mandante" onclick="attClassificacao(1)"><label for="mandante">Mandante</label>
+                <input type="radio" name="tipo" id="visitante" onclick="attClassificacao(2)"><label for="visitante">Visitante</label>
+            </div>
+            <div class="rodadas">
+                <label for="rodadaInicial">Rodada Inicial: </label>
+                <select name="rodadaInicial" id="rodadaInicial" class="select">
+                    {% for rodada in rodadas %}
+                        <option value="{{ rodada.num }}">{{ rodada.nome }}</option>
+                    {% endfor %}
+                </select>
+                <label for="rodadaFinal">Rodada Final: </label>
+                <select name="rodadaFinal" id="rodadaFinal" class="select">
+                    {% for rodada in rodadas %}
+                        <option value="{{ rodada.num }}" {% if forloop.last %}selected{% endif %}>{{ rodada.nome }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="classificacao">
+            <table class="tabelaClassificacao">
+                <thead>
+                    <tr>
+                        {% if temPalpite %}<th>Seu Palpite</th>{% endif %}
+                        <th>#</th>
+                        <th>Time</th>
+                        <th>P</th>
+                        <th>J</th>
+                        <th>V</th>
+                        <th>E</th>
+                        <th>D</th>
+                        <th>GP</th>
+                        <th>GC</th>
+                        <th>SG</th>
+                        <th>Aproveitamento</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if temPalpite %}
+                        {% for palpite, posicao, time in classificacao %}
+                            <tr>
+                                <td class="nome">{{ palpite.time }}</td>
+                                <td>{{ posicao }}</td>
+                                <td class="nome">{{ time.time }}</td>
+                                <td>{{ time.pontos }}</td>
+                                <td>{{ time.jogos }}</td>
+                                <td>{{ time.vitorias }}</td>
+                                <td>{{ time.empates }}</td>
+                                <td>{{ time.derrotas }}</td>
+                                <td>{{ time.gols_pro }}</td>
+                                <td>{{ time.gols_contra }}</td>
+                                <td>{{ time.saldo_gols }}</td>
+                                <td>{{ time.aproveitamento|floatformat:2 }}%</td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        {% for posicao, time in classificacao %}
+                            <tr>
+                                <td>{{ posicao }}</td>
+                                <td class="nome">{{ time.time }}</td>
+                                <td>{{ time.pontos }}</td>
+                                <td>{{ time.jogos }}</td>
+                                <td>{{ time.vitorias }}</td>
+                                <td>{{ time.empates }}</td>
+                                <td>{{ time.derrotas }}</td>
+                                <td>{{ time.gols_pro }}</td>
+                                <td>{{ time.gols_contra }}</td>
+                                <td>{{ time.saldo_gols }}</td>
+                                <td>{{ time.aproveitamento|floatformat:2 }}%</td>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}                    
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+    <div class="jogos">
+        <h1>Jogos</h1>
+        <div class="pagination">
+            {% if page.has_previous %}
+                <button type="button" id="anterior" onclick="AttPagina({{ page.previous_page_number }})">Voltar</button>
+            {% endif %}
+            
+            <span>Página {{ page.number }} de {{ page.paginator.num_pages }}</span>
+            
+            {% if page.has_next %}
+                <button type="button" id="proxima" onclick="AttPagina({{ page.next_page_number }})">Próxima</button>
+            {% endif %}
+        </div>
+        <div class="container-partidas">
+            {% for partida in page %}
+                <div class="partida">
+                    <a href="{% url 'show_match' id=partida.id %}">
+                        <span class="texto nomeCampeonato">{{ partida.Rodada.edicao_campeonato.campeonato}} - {{ partida.Rodada.nome }}</span>
+                        <img class="escudo" src="../../{{ partida.Mandante.escudo }}" alt="escudo mandante" title="{{ partida.Mandante.Nome }}">
+                        <span class="texto">{% if partida.golsMandante > -1 %}{{ partida.golsMandante }}{% endif %} 
+                        X 
+                        {% if partida.golsVisitante > -1 %}{{ partida.golsVisitante }}{% endif %}</span>
+                        <img class="escudo" src="../../{{ partida.Visitante.escudo }}" alt="escudo visitante" title="{{ partida.Visitante.Nome }}">
+                    </a>        
+                </div>
+            {% empty %}
+                <p>Nenhuma partida disponível.</p>
+            {% endfor %}
+        </div>
+    </div>
+    <script>
+        function redirect(select) {
+            var selectedOption = select.options[select.selectedIndex]
+            var url = selectedOption.getAttribute('data-url')
+            if (url) {
+                window.location.href = url
+            }
+        }
+    </script>
+{% endblock %}

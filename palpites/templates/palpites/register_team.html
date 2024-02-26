@@ -1,0 +1,54 @@
+{% extends "palpites/layout.html" %}
+{% load static %}
+
+{% block title %}
+    {{title}}
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'styles/registrar_time.css' %}?v=1.2">
+{% endblock %}
+
+{% block body %}
+    {% if message %}
+    <h3>{{ message | safe }}</h3>
+    {% endif %}
+    <div class="adicionar_time">
+        <h2>Registrar Novo Time</h2>
+        <form action="{% url 'register_team' %}" method="post">
+            {% csrf_token %}
+            <label for="time">Nome do time:</label><br>
+            <input autofocus type="text" name="time" placeholder="Nome do Time"><br><br>
+            <label for="escudo">Endereço do Escudo:</label><br>
+            <input type="text" name="escudo" placeholder="Escudo do Time"><br><br>
+            <input type="submit" value="Registrar">
+        </form>
+    </div>
+    <div class="formularios">
+        <h2>Registrar Times em um Campeonato</h2>
+        <form action="{% url 'register_team_tournament' %}" method="post">
+            {% csrf_token %}
+            {% for edicao in edicoes %}
+                <div class="container">
+                    <input type="checkbox" id="edicao_{{ edicao.id }}" class="checkbox-spoiler">
+                    <label for="edicao_{{ edicao.id }}">
+                        {{ edicao }}<span class="indicator"></span>
+                    </label>
+                    <div class="content-spoiler times_checkbox">
+                        {% for time in times %}
+                            <label for="{{edicao.campeonato.id}}_{{edicao.id}}_{{time.id}}">
+                                <input type="checkbox" 
+                                        name="times" 
+                                        value="{{edicao.campeonato.id}}_{{edicao.id}}_{{ time.id }}" 
+                                        id="{{edicao.campeonato.id}}_{{edicao.id}}_{{time.id}}" 
+                                        {% if time in edicao.times.all %}checked{% endif %}>
+                                {{ time.Nome }}
+                            </label>
+                        {% endfor %}   
+                    </div>
+                </div>
+            {% endfor %}
+            <input type="submit" value="Registrar">
+        </form>
+    </div>
+{% endblock %}

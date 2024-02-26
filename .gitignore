@@ -1,0 +1,5 @@
+brasileirao/__pycache__/
+palpites/__pycache__/
+palpites/migrations/
+*.sqlite3
+db.sqlite3

@@ -1,0 +1,53 @@
+@use 'mixins'
+
+.formulario
+    @include mixins.flex-column
+    font-size: 1rem
+    gap: 1em
+    margin-bottom: 1em
+
+    .jogos
+        @include mixins.grid-center
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr
+        row-gap: 1em
+
+        @include mixins.mobile
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr
+
+        .texto
+            grid-column: 1 / 7 
+
+        .rodada
+            font-size: 1em
+
+            @include mixins.mobile
+                display: none
+        
+        .escudo
+            width: 2em
+    
+    span
+        input[type="number"]
+            color: var(--fc)
+            background-color: var(--bg)
+            height: 100%
+            font-size: 2em
+            width: 70%
+            margin: 0 auto
+            text-align: center
+            border: 1px solid var(--border)
+
+    input[type="submit"]
+        display: inline-block
+        padding: 10px 20px
+        background-color: var(--bg)
+        color: var(--fc)
+        border: 1px solid var(--border)
+        border-radius: 4px
+        font-size: 1em
+        text-align: center
+        text-decoration: none
+        cursor: pointer
+
+        &:hover
+            background-color: var(--hover)

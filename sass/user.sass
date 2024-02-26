@@ -1,0 +1,69 @@
+@use 'mixins'
+
+.profile
+    text-align: center
+    font-size: 1rem
+    margin-bottom: 1em
+
+    h1
+        font-size: 2em
+        margin-bottom: 20px
+
+    .profile-info 
+        @include mixins.flex-center
+
+        @include mixins.mobile
+            flex-direction: column
+
+        .profile-image 
+            width: 150px
+            height: 150px
+            border-radius: 50%
+            object-fit: cover
+            margin-right: 20px
+
+            @include mixins.mobile
+                width: 250px
+                height: 250px
+
+        .user-info 
+            h2 
+                font-size: 1.5em
+                margin-bottom: 1.5em
+
+            p 
+                font-size: 1em
+                margin-bottom: 1em
+
+hr
+    margin: auto
+
+h1
+    text-align: center
+    margin: 1em 0
+
+.aproveitamento
+    margin: 2em auto
+    border-collapse: collapse
+    width: 80%
+
+    th, td
+        padding: 8px
+        text-align: center
+
+    td
+        width: 25%
+        .escudo
+            width: 2em
+
+    th 
+        border-bottom: 1px solid var(--fc)
+        font-size: 1.5em
+    
+    tr
+        height: 2em
+
+    tr:nth-child(even)
+        background: linear-gradient(to right, var(--bg), var(--hover), var(--bg))
+
+

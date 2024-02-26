@@ -1,0 +1,33 @@
+.container {
+  margin: 0 10%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+@media (max-width: 1000px) {
+  .container {
+    margin: 0 5%;
+  }
+}
+.container h1 {
+  margin-bottom: 1em;
+}
+.container select {
+  width: 20%;
+  height: 2.5em;
+  border-width: 2px;
+  border-style: outset;
+  border-color: var(--border);
+  padding: 5px;
+  font-size: 1em;
+  margin: auto 0;
+  color: var(--fc);
+  background-color: var(--bg);
+}
+@media (max-width: 1000px) {
+  .container select {
+    width: 90%;
+  }
+}
+
+/*# sourceMappingURL=campeonato.css.map */

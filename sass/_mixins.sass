@@ -1,0 +1,33 @@
+@mixin flex-center
+    display: flex
+    align-items: center
+    justify-content: center
+    text-align: center
+
+@mixin grid-center
+    display: grid
+    align-items: center
+    text-align: center
+    justify-items: center
+
+@mixin flex-start
+    display: flex
+    align-items: center
+    justify-content: flex-start
+
+@mixin flex-column
+    display: flex
+    flex-direction: column
+    align-items: center
+
+@mixin link
+    text-decoration: none
+    color: var(--fc)
+
+@mixin meio-mobile
+    @media(max-width: 1500px)
+        @content
+
+@mixin mobile
+    @media(max-width: 1000px)
+        @content

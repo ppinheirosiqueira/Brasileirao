@@ -1,0 +1,30 @@
+.container {
+  margin: 0 10%;
+}
+@media (max-width: 1000px) {
+  .container {
+    margin: 0 5%;
+  }
+}
+.container h1 {
+  margin-bottom: 1em;
+}
+.container a {
+  text-decoration: none;
+  color: var(--fc);
+  font-size: x-large;
+  position: relative;
+  padding-left: 20px;
+}
+.container a::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 5px 0 5px 8px;
+  border-color: transparent transparent transparent var(--fc);
+}

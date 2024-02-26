@@ -1,0 +1,100 @@
+{% extends "palpites/layout.html" %}
+{% load static %}
+
+{% block title %}
+    Palpitar em {{ edicao }}
+{% endblock %}
+
+{% block style %}    
+    <script>
+        var campeonatoId = {{ edicao.campeonato.id }}
+        var edicaoId = {{ edicao.id }}
+    </script>
+    <script type="text/javascript" src="{% static 'scripts/palpitarCampeonato.js' %}?v=1.1"></script>
+    <link rel="stylesheet" href="{% static 'css/palpitar_campeonato.css' %}?v=1.0">
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="cPC">
+            <h1>
+                Palpite do {{ edicao }}
+            </h1>
+            <h1>
+                Arraste os times para posição que deseja e depois submeta o seu palpite!
+            </h1>
+            <table class="palpite">
+                <thead>
+                    <tr>
+                        <th>Posição</th>
+                        <th>Time</th>
+                        <th>Posição</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ordem, time, ordem_10, time_10 in times %}
+                        <tr>
+                            <td>{{ ordem }}</td>
+                            <td     data-value="{{ ordem }}" 
+                                    draggable="true" 
+                                    ondragstart="drag(event)" 
+                                    ondragover="highlightDropArea(event)" 
+                                    ondragleave="unhighlightDropArea(event)" 
+                                    ondrop="drop(event)" 
+                                    ondragover="allowDrop(event)">
+                            <img class="escudo" src="../{{ time.escudo }}" alt="escudo_{{ time }}">
+                            </td>
+                            <td>{{ ordem_10 }}</td>
+                            <td     data-value="{{ ordem_10 }}" 
+                                    draggable="true" 
+                                    ondragstart="drag(event)" 
+                                    ondragover="highlightDropArea(event)" 
+                                    ondragleave="unhighlightDropArea(event)" 
+                                    ondrop="drop(event)" 
+                                    ondragover="allowDrop(event)">
+                            <img class="escudo" src="../{{ time_10.escudo }}" alt="escudo_{{ time_10 }}">
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="button" onclick="processarPalpite()">Submeter</button>
+        </div>
+        <div class="cMobile">
+            <h3>
+                Palpite do {{ edicao }}
+            </h3>
+            <h3>
+                Clique nos times e depois submeta o seu palpite!
+            </h3>
+            <div class="palpitarMobile">
+                <div class="palpiteMobile">
+                    {% for ordem, time, ordem_10, time_10 in times %}
+                        <span data-value="{{ time.Nome }}" ontouchstart="touchStart(event)">
+                            <img class="escudo" src="../{{ time.escudo }}" alt="escudo_{{ time }}">
+                        </span>
+                        <span data-value="{{ time_10.Nome }}" ontouchstart="touchStart(event)">
+                            <img class="escudo" src="../{{ time_10.escudo }}" alt="escudo_{{ time_10 }}">
+                        </span>
+                    {% endfor %}
+                </div>
+                <table id="console">
+                    {% for i in range %}
+                    <tr>
+                        <td>{{ i }}</td>
+                        <td data-value="cel_{{ i }}"></td>
+                        <td><button type="button" onclick="retirar({{ i }})">X</button></td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <div class="aux"></div>
+            <div class="botoes">
+                <button type="button" onclick="reset()">Resetar</button>
+                <button type="button" onclick="undo()">Undo</button>
+                <button type="button" onclick="processarPalpiteMobile()">Submeter</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}

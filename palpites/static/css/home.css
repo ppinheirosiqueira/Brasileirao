@@ -1,0 +1,254 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  font-size: 1rem;
+}
+@media (max-width: 1000px) {
+  .container {
+    flex-direction: column;
+  }
+}
+.container .rankingContainer {
+  min-height: 75dvh;
+  flex-grow: 0.8;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+@media (max-width: 1000px) {
+  .container .rankingContainer {
+    min-height: 0;
+    margin-bottom: 1em;
+  }
+}
+.container .rankingContainer h1 {
+  text-align: center;
+}
+.container .rankingContainer .filtro {
+  margin: 0 20%;
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.5em;
+  align-items: center;
+}
+@media (max-width: 1000px) {
+  .container .rankingContainer .filtro {
+    margin: 0 5%;
+    flex-direction: column;
+    gap: 0.25em;
+  }
+}
+.container .rankingContainer .filtro select {
+  color: var(--fc);
+  background-color: var(--bg);
+  border: none;
+  font-size: 0.8em;
+  border-width: 2px;
+  border-style: outset;
+  border-color: var(--border);
+  padding: 0.5em;
+}
+@media (max-width: 1000px) {
+  .container .rankingContainer .filtro select {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 0.8em;
+  }
+}
+.container .rankingContainer .ranking {
+  margin: 0 15%;
+  width: 70%;
+  border-collapse: collapse;
+}
+.container .rankingContainer .ranking th, .container .rankingContainer .ranking td {
+  padding: 8px;
+  text-align: center;
+}
+.container .rankingContainer .ranking th {
+  border-bottom: 1px solid var(--border);
+  font-size: 1.5em;
+}
+.container .rankingContainer .ranking tr {
+  height: 2em;
+}
+.container .rankingContainer .ranking tr:nth-child(even) {
+  background: linear-gradient(to right, var(--bg), var(--hover), var(--bg));
+}
+@media (max-width: 1000px) {
+  .container .rankingContainer .ranking {
+    margin: 0;
+    width: 100%;
+    font-size: 0.8em;
+  }
+}
+.container .rankingContainer .ranking td span {
+  width: 1.5em;
+  height: 1.5em;
+  color: black;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+.container .rankingContainer .ranking .ouro {
+  background-color: gold;
+}
+.container .rankingContainer .ranking .prata {
+  background-color: silver;
+}
+.container .rankingContainer .ranking .bronze {
+  background-color: #CD7F32;
+}
+.container .rankingContainer .ranking a {
+  font-size: 1.5em;
+  text-decoration: none;
+  color: var(--fc);
+  font-weight: bold;
+}
+.container .rankingContainer .ranking .pontos {
+  font-size: 1.5em;
+  justify-content: center;
+  width: 1.5em;
+  height: 1.5em;
+  display: flex;
+  align-items: center;
+  margin: 0.5em 0 0 0;
+}
+.container .rankingContainer .ranking .erro {
+  padding: 2em 0;
+  font-size: 1.5em;
+}
+.container .jogos {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 20%;
+}
+@media (max-width: 1000px) {
+  .container .jogos {
+    margin: 2% 5%;
+    width: 90%;
+  }
+}
+.container .jogos .pagination {
+  margin-bottom: 0.5em;
+}
+.container .jogos .pagination button {
+  background-color: var(--bg);
+  color: var(--fc);
+  margin: 0 0.5em;
+  padding: 0.2em 0.8em;
+  border-width: 2px;
+  border-style: outset;
+  border-color: var(--border);
+  cursor: pointer;
+}
+.container .jogos .pagination span {
+  color: var(--fc);
+}
+.container .jogos .container-partidas {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.5em;
+  width: 100%;
+}
+.container .jogos .container-partidas .partida a {
+  display: grid;
+  align-items: center;
+  text-align: center;
+  justify-items: center;
+  text-decoration: none;
+  grid-template-columns: auto auto auto;
+  color: inherit;
+  border: 1px solid var(--border);
+  border-radius: 1em;
+  padding: 0.5em;
+}
+@media (max-width: 1000px) {
+  .container .jogos .container-partidas .partida a {
+    border-radius: 2em;
+  }
+}
+.container .jogos .container-partidas .partida a .escudo {
+  width: 2em;
+  margin: 0 auto;
+}
+@media (max-width: 1000px) {
+  .container .jogos .container-partidas .partida a .escudo {
+    width: 3em;
+  }
+}
+.container .jogos .container-partidas .partida a .nomeCampeonato {
+  grid-column-start: 1;
+  grid-column-end: 4;
+}
+.container .jogos .container-partidas .partida a .texto {
+  display: flex;
+  justify-content: space-evenly;
+  margin: auto 0;
+  font-size: 1em;
+}
+
+.graficoContainer {
+  padding: 0 10%;
+  margin-top: 2em;
+}
+@media (max-width: 1000px) {
+  .graficoContainer {
+    display: none;
+  }
+}
+.graficoContainer .seletores {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 2fr 1fr 1fr 1fr 1fr;
+  align-items: center;
+}
+@media (max-width: 1000px) {
+  .graficoContainer .seletores {
+    grid-template-columns: auto auto;
+    font-size: 0.6em;
+    width: 100%;
+  }
+}
+.graficoContainer .seletores select {
+  width: 7em;
+  height: 2.5em;
+  border-width: 2px;
+  border-style: outset;
+  border-color: var(--border);
+  padding: 5px;
+  font-size: 1em;
+  margin: auto 0;
+  color: var(--fc);
+  background-color: var(--bg);
+}
+@media (max-width: 1000px) {
+  .graficoContainer .seletores select {
+    width: 90%;
+  }
+}
+.graficoContainer .seletores #campeonato {
+  width: 90%;
+}
+.graficoContainer .checkbox-container, .graficoContainer .radio-container {
+  margin-top: 1em;
+  display: none;
+}
+.graficoContainer .checkbox-container label, .graficoContainer .radio-container label {
+  margin-bottom: 1em;
+  margin-right: 1em;
+}
+.graficoContainer .checkbox-container span {
+  vertical-align: middle;
+}
+.graficoContainer .checkbox-container input[type=checkbox] {
+  width: 1em;
+  height: 1em;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+/*# sourceMappingURL=home.css.map */
