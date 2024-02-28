@@ -7,27 +7,29 @@
 
 {% block style %}
     <link rel="stylesheet" href="{% static 'css/campeonato.css' %}?v=1.0">
+    <script type="text/javascript" src="{% static 'scripts/selecionarCampeonato.js' %}?v=1.0"></script>
 {% endblock %}
 
-{% block body %}
-    <div class="container">
-        <h1>Lista de Campeonatos</h1>
-        {% for campeonato, edicoes in campeonatos.items %}
-            <select name="{{ campeonato }}" id="{{ campeonato }}" onchange="redirect(this)">
-                <option>{{ campeonato }}</option>
-                {% for edicao in edicoes %}
-                    <option data-url="{% url 'edicao' campeonato=edicao.campeonato.id edicao=edicao.num_edicao %}">{{ edicao }}</option>
-                {% endfor %}
-            </select>
-        {% endfor %}
-    </div>
-    <script>
-        function redirect(select) {
-            var selectedOption = select.options[select.selectedIndex]
-            var url = selectedOption.getAttribute('data-url')
-            if (url) {
-                window.location.href = url
-            }
-        }
-    </script>
+{% block bodyPC %}
+    <h1>Lista de Campeonatos</h1>
+    {% for campeonato, edicoes in campeonatos.items %}
+        <select name="{{ campeonato }}" id="{{ campeonato }}" onchange="redirect(this)">
+            <option>{{ campeonato }}</option>
+            {% for edicao in edicoes %}
+                <option data-url="{% url 'edicao' campeonato=edicao.campeonato.id edicao=edicao.num_edicao %}">{{ edicao }}</option>
+            {% endfor %}
+        </select>
+    {% endfor %}
+{% endblock %}
+
+{% block bodyMobile %}
+    <h1>Lista de Campeonatos</h1>
+    {% for campeonato, edicoes in campeonatos.items %}
+        <select name="{{ campeonato }}" id="{{ campeonato }}" onchange="redirect(this)">
+            <option>{{ campeonato }}</option>
+            {% for edicao in edicoes %}
+                <option data-url="{% url 'edicao' campeonato=edicao.campeonato.id edicao=edicao.num_edicao %}">{{ edicao }}</option>
+            {% endfor %}
+        </select>
+    {% endfor %}
 {% endblock %}

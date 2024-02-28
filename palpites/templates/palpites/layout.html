@@ -1,4 +1,5 @@
 {% load static %}
+{% load user_agents %}
 
 <!DOCTYPE html>
 
@@ -7,20 +8,75 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block title %}{% endblock %}</title>
-        <link rel="stylesheet" href="{% static 'css/layout.css' %}?v=1.1">
+        {% if request|is_pc %}
+            <link rel="stylesheet" href="{% static 'css/layout_pc.css' %}?v=1.0">
+        {% else %}
+            <link rel="stylesheet" href="{% static 'css/layout_mobile.css' %}?v=1.0">
+            <script src="{% static 'scripts/mudarIcone.js' %}?v=1.0"></script>
+        {% endif %}
         <script src="{% static 'scripts/changeTheme.js' %}?v=1.0"></script>
         {% block style %}{% endblock %}
     </head>
+
     <body {% if not user.is_authenticated or user.dark %}class="darkTheme"{% endif %}>
-        <nav>
-        {% if user.is_authenticated %}
-            <span><img src="{{ user.profile_image.url }}" alt="Imagem de Perfil" class="profile-image-bar">Bem-Vindo {{ user.username }}</span>
-            <div id="pcBar">
-                <a href="{% url 'home' %}"><img src="{% static 'icons/home.svg' %}" alt="Home" class="icon_home"></a>
-                <a href="{% url 'about' %}">Informações</a>
-                {% if user.is_staff %}
-                <div class="dropdown"><span>Administração</span>
-                    <div class="dropdown-content">
+        {% if request|is_pc %}
+            <nav>
+                {% if user.is_authenticated %}
+                    <span><img src="{{ user.profile_image.url }}" alt="Imagem de Perfil" class="profile-image-bar">Bem-Vindo {{ user.username }}</span>
+                    <a href="{% url 'home' %}"><img src="{% static 'icons/home.svg' %}" alt="Home" class="icon_home"></a>
+                    <a href="{% url 'info' %}">Informações</a>
+                    {% if user.is_staff %}
+                    <div class="dropdown"><span>Administração</span>
+                        <div class="dropdown-content">
+                            <a href="../../admin/">Admin Page</a>
+                            <a href="{% url 'register_tournament' %}">Registrar Campeonato</a>
+                            <a href="{% url 'register_team' %}">Registrar Time</a>
+                            <a href="{% url 'register_match' %}">Registrar Partida</a>
+                            <a href="{% url 'register_matches' %}">Registrar por Json</a>
+                            <a href="{% url 'change_match' %}">Alterar Partida</a>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <a href="{% url 'campeonatos' %}">Campeonatos</a>
+                    <a href="{% url 'show_teams' %}">Times</a>
+                    <a href="{% url 'palpitar' %}">Palpitar</a>
+                    <a href="{% url 'groups' %}">Grupos</a>
+                    <div class="dropdown"><span>Perfil</span>
+                        <div class="dropdown-content">
+                            <a class="nav-link" href="{% url 'userView' id=user.id %}">Visualizar Perfil</a>
+                            <a class="nav-link" href="{% url 'editUserView' id=user.id %}">Editar Perfil</a>
+                            <a class="nav-link" href="{% url 'change_password' %}">Mudar Senha</a>
+                            <button class="theme-toggle" type="button">
+                                {% if user.dark %}
+                                    <img src="{% static 'icons/moon.svg' %}" alt="moon">
+                                {% else %}
+                                    <img src="{% static 'icons/sun.svg' %}" alt="sun">
+                                {% endif %}
+                            </button>
+                            <a class="nav-link" href="{% url 'logout' %}">Sair</a>
+                        </div>
+                    </div>
+                {% else %}
+                    <span>Não logado</span>
+                    <a href="{% url 'home' %}"><img src="{% static 'icons/home.svg' %}" alt="Home" class="icon_home"></a>
+                    <a href="{% url 'info' %}">Informações</a>
+                    <a class="nav-link" href="{% url 'login' %}">Entrar</a>
+                    <a class="nav-link" href="{% url 'register' %}">Registrar</a>
+                {% endif %}
+            </nav>
+        {% else %}
+            <nav>
+                {% if user.is_authenticated %}
+                    <span>Bem-Vindo {{ user.username }}</span>
+                    <a href="{% url 'home' %}"><img src="{% static 'icons/home.svg' %}" alt="Home" class="icon_home"></a>
+                    <a href="{% url 'info' %}"><img src="{% static 'icons/info.svg' %}" alt="Informações" class="icon"></a>
+                    {% if user.is_staff %}
+                    <input type="checkbox" id="openAdm" name="openAdm" onchange="mudarIcone('Admin',checked)">
+                    <label for="openAdm">
+                        <img src="{% static 'icons/gear.svg' %}" alt="Administração" class="abrirAdmin icon">
+                        <img src="{% static 'icons/close-x.svg' %}" alt="Fechar-Usuários" class="fecharAdmin icon">
+                    </label>
+                    <div class="dropdown-adm">
                         <a href="../../admin/">Admin Page</a>
                         <a href="{% url 'register_tournament' %}">Registrar Campeonato</a>
                         <a href="{% url 'register_team' %}">Registrar Time</a>
@@ -28,106 +84,52 @@
                         <a href="{% url 'register_matches' %}">Registrar por Json</a>
                         <a href="{% url 'change_match' %}">Alterar Partida</a>
                     </div>
-                </div>
+                    {% endif %}
+                    <a href="{% url 'logout' %}"><img src="{% static 'icons/logout.svg' %}" alt="Logout" class="icon"></a>
+                {% else %}
+                    <span>Não logado</span>
+                    <a href="{% url 'home' %}"><img src="{% static 'icons/home.svg' %}" alt="Home" class="icon_home"></a>
+                    <a href="{% url 'info' %}"><img src="{% static 'icons/info.svg' %}" alt="Informações" class="icon"></a>
                 {% endif %}
-                <a href="{% url 'campeonatos' %}">Campeonatos</a>
-                <a href="{% url 'show_teams' %}">Times</a>
-                <a href="{% url 'palpitar' %}">Palpitar</a>
-                <a href="{% url 'groups' %}">Grupos</a>
-                <div class="dropdown"><span>Perfil</span>
-                    <div class="dropdown-content">
-                        <a class="nav-link" href="{% url 'userView' id=user.id %}">Visualizar Perfil</a>
-                        <a class="nav-link" href="{% url 'editUserView' id=user.id %}">Editar Perfil</a>
-                        <a class="nav-link" href="{% url 'change_password' %}">Mudar Senha</a>
-                        <button class="theme-toggle" type="button">
-                            {% if user.dark %}
-                                <img src="{% static 'icons/moon.svg' %}" alt="moon">
-                            {% else %}
-                                <img src="{% static 'icons/sun.svg' %}" alt="sun">
-                            {% endif %}
-                        </button>
-                        <a class="nav-link" href="{% url 'logout' %}">Sair</a>
-                    </div>
-                </div>
-            </div>
-            <div id="celBar">
-                <a href="{% url 'home' %}"><img src="{% static 'icons/home.svg' %}" alt="Home" class="icon_home"></a>
-                <a href="{% url 'about' %}"><img src="{% static 'icons/info.svg' %}" alt="Informações" class="icon"></a>
-                {% if user.is_staff %}
-                <input type="checkbox" id="openAdm" name="openAdm" onchange="mudarIcone('Admin',checked)">
-                <label for="openAdm">
-                    <img src="{% static 'icons/gear.svg' %}" alt="Administração" class="abrirAdmin icon">
-                    <img src="{% static 'icons/close-x.svg' %}" alt="Fechar-Usuários" class="fecharAdmin icon">
-                </label>
-                <div class="dropdown-adm">
-                    <a href="../../admin/">Admin Page</a>
-                    <a href="{% url 'register_tournament' %}">Registrar Campeonato</a>
-                    <a href="{% url 'register_team' %}">Registrar Time</a>
-                    <a href="{% url 'register_match' %}">Registrar Partida</a>
-                    <a href="{% url 'register_matches' %}">Registrar por Json</a>
-                    <a href="{% url 'change_match' %}">Alterar Partida</a>
-                </div>
-                {% endif %}
-                <a href="{% url 'logout' %}"><img src="{% static 'icons/logout.svg' %}" alt="Logout" class="icon"></a>
-            </div>
-        {% else %}
-            <span>Não logado</span>
-            <div id="pcBar">
-                <a href="{% url 'home' %}"><img src="{% static 'icons/home.svg' %}" alt="Home" class="icon_home"></a>
-                <a href="{% url 'about' %}">Informações</a>
-                <a class="nav-link" href="{% url 'login' %}">Entrar</a>
-                <a class="nav-link" href="{% url 'register' %}">Registrar</a>
-            </div>
-            <div id="celBar">
-                <a href="{% url 'home' %}"><img src="{% static 'icons/home.svg' %}" alt="Home" class="icon_home"></a>
-                <a href="{% url 'about' %}"><img src="{% static 'icons/info.svg' %}" alt="Informações" class="icon"></a>
-            </div>
+            </nav>
         {% endif %}
-        </nav>
-        {% block body %}{% endblock %}
-        <div class="aux"></div>
-        <footer>
-            {% if user.is_authenticated %}
-                <a href="{% url 'palpitar' %}"><img src="{% static 'icons/football.svg' %}" alt="Palpitar" class="icon"></a>
-                <a href="{% url 'campeonatos' %}"><img src="{% static 'icons/trophy.svg' %}" alt="Campeonatos" class="icon"></a>
-                <a href="{% url 'show_teams' %}"><img src="{% static 'icons/shirt.svg' %}" alt="Times" class="icon"></a>
-                <a href="{% url 'groups' %}"><img src="{% static 'icons/group.svg' %}" alt="Grupos" class="icon"></a>
-                <label for="openPerfil">
-                    <img src="{% static 'icons/id-card.svg' %}" alt="Usuários" class="abrirUser icon">
-                    <img src="{% static 'icons/close-x.svg' %}" alt="Fechar-Usuários" class="fecharUser icon">
-                </label>
-                <input type="checkbox" id="openPerfil" name="openPerfil" onchange="mudarIcone('User',checked)">
-                    <div class="dropdown-perfil">
-                        <a class="nav-link" href="{% url 'userView' id=user.id %}">Visualizar Perfil</a>
-                        <a class="nav-link" href="{% url 'editUserView' id=user.id %}">Editar Perfil</a>
-                        <a class="nav-link" href="{% url 'change_password' %}">Mudar Senha</a>
-                        <button class="theme-toggle" type="button">
-                            {% if user.dark %}
-                                <img src="{% static 'icons/moon.svg' %}" alt="moon">
-                            {% else %}
-                                <img src="{% static 'icons/sun.svg' %}" alt="sun">
-                            {% endif %}
-                        </button>
-                    </div>
-            {% else %}
-                <a href="{% url 'campeonatos' %}"><img src="{% static 'icons/trophy.svg' %}" alt="Campeonatos" class="icon"></a>
-                <a href="{% url 'show_teams' %}"><img src="{% static 'icons/shirt.svg' %}" alt="Times" class="icon"></a>
-                <a href="{% url 'login' %}"><img src="{% static 'icons/login.svg' %}" alt="Login" class="icon"></a>
-            {% endif %}
-        </footer>
-        <script>
-            function mudarIcone(palavra,value){
-                aux1 = 'abrir' + palavra
-                aux2 = 'fechar' + palavra
-                if (value){
-                    document.getElementsByClassName(aux1)[0].style.display = 'none'
-                    document.getElementsByClassName(aux2)[0].style.display = 'block'
-                }
-                else{
-                    document.getElementsByClassName(aux1)[0].style.display = 'block'
-                    document.getElementsByClassName(aux2)[0].style.display = 'none'
-                }
-            } 
-            </script>
+
+        {% if request|is_mobile %}
+            <div class="container">{% block bodyMobile %}{% endblock %}</div>
+        {% else %}
+            <div class="container">{% block bodyPC %}{% endblock %}</div>
+        {% endif %}
+
+        {% if request|is_mobile %}
+            <footer>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'palpitar' %}"><img src="{% static 'icons/football.svg' %}" alt="Palpitar" class="icon"></a>
+                    <a href="{% url 'campeonatos' %}"><img src="{% static 'icons/trophy.svg' %}" alt="Campeonatos" class="icon"></a>
+                    <a href="{% url 'show_teams' %}"><img src="{% static 'icons/shirt.svg' %}" alt="Times" class="icon"></a>
+                    <a href="{% url 'groups' %}"><img src="{% static 'icons/group.svg' %}" alt="Grupos" class="icon"></a>
+                    <label for="openPerfil">
+                        <img src="{% static 'icons/id-card.svg' %}" alt="Usuários" class="abrirUser icon">
+                        <img src="{% static 'icons/close-x.svg' %}" alt="Fechar-Usuários" class="fecharUser icon">
+                    </label>
+                    <input type="checkbox" id="openPerfil" name="openPerfil" onchange="mudarIcone('User',checked)">
+                        <div class="dropdown-perfil">
+                            <a class="nav-link" href="{% url 'userView' id=user.id %}">Visualizar Perfil</a>
+                            <a class="nav-link" href="{% url 'editUserView' id=user.id %}">Editar Perfil</a>
+                            <a class="nav-link" href="{% url 'change_password' %}">Mudar Senha</a>
+                            <button class="theme-toggle" type="button">
+                                {% if user.dark %}
+                                    <img src="{% static 'icons/moon.svg' %}" alt="moon">
+                                {% else %}
+                                    <img src="{% static 'icons/sun.svg' %}" alt="sun">
+                                {% endif %}
+                            </button>
+                        </div>
+                {% else %}
+                    <a href="{% url 'campeonatos' %}"><img src="{% static 'icons/trophy.svg' %}" alt="Campeonatos" class="icon"></a>
+                    <a href="{% url 'show_teams' %}"><img src="{% static 'icons/shirt.svg' %}" alt="Times" class="icon"></a>
+                    <a href="{% url 'login' %}"><img src="{% static 'icons/login.svg' %}" alt="Login" class="icon"></a>
+                {% endif %}
+            </footer>
+        {% endif %}
     </body>
 </html>

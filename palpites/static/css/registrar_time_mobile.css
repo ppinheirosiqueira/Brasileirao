@@ -1,0 +1,115 @@
+body:not(.darkTheme) .formularios a {
+  color: red;
+}
+
+h3, h2 {
+  text-align: center;
+}
+
+.adicionar_time {
+  text-align: center;
+}
+.adicionar_time form {
+  text-align: left;
+  width: 90%;
+  margin: 2em auto;
+}
+.adicionar_time form input[type=text] {
+  color: var(--fc);
+  background-color: var(--bg);
+  height: 100%;
+  font-size: 2em;
+  width: 100%;
+  text-align: center;
+  border: 1px solid var(--border);
+}
+.adicionar_time form input[type=submit] {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: var(--bg);
+  color: var(--fc);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 1em;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+.adicionar_time form input[type=submit]:hover {
+  background-color: var(--hover);
+}
+
+.formularios {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.formularios a {
+  color: lightblue;
+}
+.formularios input[type=checkbox] {
+  display: none;
+}
+.formularios label {
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+}
+.formularios .indicator {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-left: 2px solid;
+  border-bottom: 2px solid;
+  transform: rotate(-45deg);
+  transition: transform 0.3s ease;
+  margin-left: 2em;
+}
+.formularios form {
+  width: 90%;
+  margin: 2em auto;
+}
+.formularios .container {
+  text-align: center;
+  border: 1px solid var(--border);
+  padding: 0.5em 1em;
+  margin: 0.5em;
+}
+.formularios .content-spoiler {
+  height: 0;
+  width: 100%;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+.formularios .checkbox-spoiler:checked ~ .content-spoiler {
+  height: auto;
+  margin-top: 1em;
+}
+.formularios .checkbox-spoiler:checked + label .indicator {
+  transform: rotate(-225deg);
+}
+.formularios .times_checkbox {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5em;
+}
+.formularios .times_checkbox input[type=checkbox] {
+  display: block;
+}
+.formularios input[type=submit] {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: var(--bg);
+  color: var(--fc);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 1em;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+.formularios input[type=submit]:hover {
+  background-color: var(--hover);
+}
+
+/*# sourceMappingURL=registrar_time_mobile.css.map */

@@ -1,0 +1,187 @@
+.home {
+  display: flex;
+  flex-direction: row;
+  font-size: 1rem;
+}
+.home .rankingContainer {
+  min-height: 75dvh;
+  flex-grow: 0.8;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+.home .rankingContainer h1 {
+  text-align: center;
+}
+.home .rankingContainer .filtro {
+  margin: 0 20%;
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.5em;
+  align-items: center;
+}
+.home .rankingContainer .filtro select {
+  color: var(--fc);
+  background-color: var(--bg);
+  border: none;
+  font-size: 0.8em;
+  border-width: 2px;
+  border-style: outset;
+  border-color: var(--border);
+  padding: 0.5em;
+}
+.home .rankingContainer .ranking {
+  margin: 0 15%;
+  width: 70%;
+  border-collapse: collapse;
+}
+.home .rankingContainer .ranking th, .home .rankingContainer .ranking td {
+  padding: 8px;
+  text-align: center;
+}
+.home .rankingContainer .ranking th {
+  border-bottom: 1px solid var(--border);
+  font-size: 1.5em;
+}
+.home .rankingContainer .ranking tr {
+  height: 2em;
+}
+.home .rankingContainer .ranking tr:nth-child(even) {
+  background: var(--hover);
+}
+.home .rankingContainer .ranking td span {
+  width: 1.5em;
+  height: 1.5em;
+  color: black;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+.home .rankingContainer .ranking .ouro {
+  background-color: gold;
+}
+.home .rankingContainer .ranking .prata {
+  background-color: silver;
+}
+.home .rankingContainer .ranking .bronze {
+  background-color: #CD7F32;
+}
+.home .rankingContainer .ranking a {
+  font-size: 1.5em;
+  text-decoration: none;
+  color: var(--fc);
+  font-weight: bold;
+}
+.home .rankingContainer .ranking .pontos {
+  font-size: 1.5em;
+  justify-content: center;
+  width: 1.5em;
+  height: 1.5em;
+  display: flex;
+  align-items: center;
+  margin: 0.5em 0 0 0;
+}
+.home .rankingContainer .ranking .erro {
+  padding: 2em 0;
+  font-size: 1.5em;
+}
+.home .jogos {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 20%;
+}
+.home .jogos .pagination {
+  margin-bottom: 0.5em;
+}
+.home .jogos .pagination button {
+  background-color: var(--bg);
+  color: var(--fc);
+  margin: 0 0.5em;
+  padding: 0.2em 0.8em;
+  border-width: 2px;
+  border-style: outset;
+  border-color: var(--border);
+  cursor: pointer;
+}
+.home .jogos .pagination span {
+  color: var(--fc);
+}
+.home .jogos .container-partidas {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.5em;
+  width: 100%;
+}
+.home .jogos .container-partidas .partida a {
+  display: grid;
+  align-items: center;
+  text-align: center;
+  justify-items: center;
+  text-decoration: none;
+  grid-template-columns: auto auto auto;
+  color: inherit;
+  border: 1px solid var(--border);
+  border-radius: 1em;
+  padding: 0.5em;
+}
+.home .jogos .container-partidas .partida a .escudo {
+  width: 2em;
+  margin: 0 auto;
+}
+.home .jogos .container-partidas .partida a .nomeCampeonato {
+  grid-column-start: 1;
+  grid-column-end: 4;
+}
+.home .jogos .container-partidas .partida a .texto {
+  display: flex;
+  justify-content: space-evenly;
+  margin: auto 0;
+  font-size: 1em;
+}
+
+.graficoContainer {
+  padding: 0 10%;
+  margin-top: 2em;
+}
+.graficoContainer .seletores {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 2fr 1fr 1fr 1fr 1fr;
+  align-items: center;
+}
+.graficoContainer .seletores select {
+  width: 7em;
+  height: 2.5em;
+  border-width: 2px;
+  border-style: outset;
+  border-color: var(--border);
+  padding: 5px;
+  font-size: 1em;
+  margin: auto 0;
+  color: var(--fc);
+  background-color: var(--bg);
+}
+.graficoContainer .seletores #campeonato {
+  width: 90%;
+}
+.graficoContainer .checkbox-container, .graficoContainer .radio-container {
+  margin-top: 1em;
+  display: none;
+}
+.graficoContainer .checkbox-container label, .graficoContainer .radio-container label {
+  margin-bottom: 1em;
+  margin-right: 1em;
+}
+.graficoContainer .checkbox-container span {
+  vertical-align: middle;
+}
+.graficoContainer .checkbox-container input[type=checkbox] {
+  width: 1em;
+  height: 1em;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+/*# sourceMappingURL=home_pc.css.map */

@@ -1,3 +1,4 @@
+import json
 from django.views.decorators.http import require_POST
 from django.shortcuts import render, redirect
 from django.db import IntegrityError
@@ -5,7 +6,6 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.http import JsonResponse
-import json
 from datetime import datetime, timezone, timedelta
 from django.core.paginator import Paginator
 from django.core import serializers
@@ -14,26 +14,11 @@ from collections import defaultdict
 from django.db.models.functions import Lower
 from unidecode import unidecode
 from django.utils import timezone
+from django_user_agents.utils import get_user_agent
 
 from .models import User, Time, Partida, Palpite_Partida, Campeonato, EdicaoCampeonato, Rodada, Grupo, Palpite_Campeonato
+from . import forms
 from . import funcoes
-
-from django import forms
-
-class ProfileUpdateForm(forms.ModelForm):
-    class Meta:
-        model = User
-        fields = ['profile_image']
-
-class TimeFavoritoForm(forms.Form):
-    time_favorito = forms.ModelChoiceField(queryset=Time.objects.all(), empty_label="Selecione um time")
-
-    def __init__(self, *args, **kwargs):
-        user = kwargs.pop('user', None)
-        super(TimeFavoritoForm, self).__init__(*args, **kwargs)
-        self.fields['time_favorito'].empty_label = "Selecione um time"
-        if user:
-            self.fields['time_favorito'].initial = user.favorite_team
 
 # Visão Principal
 def home(request):
@@ -59,7 +44,7 @@ def home(request):
     })
 
 # Views de Administração de Usuario
-def login_view(request):
+def verLogin(request):
     if request.method == "POST":
 
         # Attempt to sign user in
@@ -117,7 +102,7 @@ def register(request):
         })
 
 # Views padrões
-def palpitar(request):
+def verPagPalpitar(request):
     if request.method == "POST":
         for key, value in request.POST.items():
             if value != '':
@@ -131,12 +116,7 @@ def palpitar(request):
                 if key.startswith('vis_'):
                     team_id, partida_id = key.split('_')
                     aux.golsVisitante = int(value)
-                    if aux.golsMandante == aux.golsVisitante:
-                        aux.vencedor = 0
-                    elif aux.golsMandante > aux.golsVisitante:
-                        aux.vencedor = 1
-                    else:
-                        aux.vencedor = 2
+                    aux.vencedor = funcoes.definirVencedor(aux.golsMandante,aux.golsVisitante)
                     aux.save()
     faltantes = Partida.objects.filter(dia__gt=timezone.now())
     feitas = Palpite_Partida.objects.filter(usuario=request.user.id, partida__dia__gt=timezone.now())
@@ -149,7 +129,7 @@ def palpitar(request):
                 "partidas_faltantes": faltantes
     })
 
-def show_match(request,id,time=None):
+def verPartida(request,id,time=None):
     partida = Partida.objects.get(id=id)
     if not time:
         partidas = list(Partida.objects.all())
@@ -167,7 +147,7 @@ def show_match(request,id,time=None):
     
     zipado = zip(palpites,resultados)
     
-    return render(request, "palpites/show_match.html", {
+    return render(request, "palpites/partida.html", {
                 "title": partida,
                 "partida": partida,
                 "palpites": zipado,
@@ -175,14 +155,15 @@ def show_match(request,id,time=None):
                 "proxima": proximo,
                 "tamanho_palpites": len(palpites),
                 "time": time,
+                "jogoComecou": timezone.now() >= partida.dia,
     })
 
-def userView(request,id):
+def verUsuario(request,id):
     usuario = User.objects.get(id=id)
     aGm, aGv, aR, aT = funcoes.accuracy_user(id)
     media = funcoes.rankingTimesNoPerfil(id)
 
-    return render(request, "palpites/show_user.html", {
+    return render(request, "palpites/usuario.html", {
         "title": f"Perfil do Usuário - {usuario.username}",
         "usuario": usuario,
         "average_points_pepe": funcoes.average_pepe(id),
@@ -194,29 +175,29 @@ def userView(request,id):
         "media": media,
     })
 
-def editUserView(request,id):
+def editarUsuario(request,id):
     if request.user.id != id:
         return HttpResponseRedirect(reverse("home"))
 
-    form = ProfileUpdateForm(instance=request.user if request.user.is_authenticated else None)
-    form2 = TimeFavoritoForm(user=request.user if request.user.is_authenticated else None)
+    form = forms.ProfileUpdateForm(instance=request.user if request.user.is_authenticated else None)
+    form2 = forms.TimeFavoritoForm(user=request.user if request.user.is_authenticated else None)
     usuario = User.objects.get(id=id)
 
-    return render(request, "palpites/edit_user.html", {
+    return render(request, "palpites/usuario_editar.html", {
         "title": f"Editar perfil do Usuário - {usuario.username}",
         "usuario": usuario,
         "form": form,
         "form2": form2,
     })
 
-def show_teams(request):
+def verTimes(request):
     times = Time.objects.all().order_by("Nome")
     return render(request, "palpites/times.html",{
         "title": "Times",
         "times": sorted(times, key=lambda time: unidecode(time.Nome)),
     })
 
-def show_team(request,id):
+def verTime(request,id):
     time = Time.objects.get(id=id)
     fas = User.objects.filter(favorite_team=id)
     jogos = Partida.objects.filter(Mandante=id) | Partida.objects.filter(Visitante=id)
@@ -244,7 +225,7 @@ def show_team(request,id):
         "acertos": acertos,
     })
 
-def groups(request):
+def verGrupos(request):
 
     
 
@@ -252,10 +233,10 @@ def groups(request):
 
     })
 
-def about(request):
-    return render(request, "palpites/about.html")
+def verInfo(request):
+    return render(request, "palpites/info.html")
 
-def campeonatos(request):
+def verCampeonatos(request):
     edicoes = EdicaoCampeonato.objects.all()
     edicoes_por_campeonato = defaultdict(list)
     for edicao in edicoes:
@@ -267,18 +248,23 @@ def campeonatos(request):
         'campeonatos': edicoes_por_campeonato,
     })
 
-def campeonato(request,campeonato):
+def verCampeonato(request,campeonato):
     return render(request, "palpites/campeonato.html", {
         'title': Campeonato.objects.get(id=campeonato).nome,
         'edicoes': EdicaoCampeonato.objects.filter(campeonato=campeonato),
     })
 
-def edicao(request,campeonato,edicao):
+def verEdicaoCampeonato(request,campeonato,edicao):
+    user_agent = get_user_agent(request)
+
     edicao = EdicaoCampeonato.objects.get(campeonato=campeonato,num_edicao=edicao)
-    classificacao = funcoes.classificacao(edicao,1,38,0)
     ordem = list(range(1, 21))
 
     if edicao.campeonato.pontosCorridos:
+        # Pegar classificação se for Pontos Corridos
+        classificacao = funcoes.classificacao(edicao,1,38,0)
+        classificacao = zip(ordem,classificacao)
+        # Os jogos serão pegos por rodada
         paginator = Paginator(Partida.objects.filter(Rodada__edicao_campeonato=edicao).order_by('Rodada'), 10)
         primeiro_jogo_nao_ocorrido = Partida.objects.filter(Rodada__edicao_campeonato=edicao).order_by('Rodada').first()
         if primeiro_jogo_nao_ocorrido:
@@ -287,7 +273,19 @@ def edicao(request,campeonato,edicao):
         else:
             pagina_atual = paginator.num_pages
         page = paginator.get_page(pagina_atual)
+
+        # Checando se existem palpites
+        palpites = Palpite_Campeonato.objects.filter(edicao_campeonato=edicao).order_by("usuario", "posicao_prevista")
+
+        # Agrupando os palpites por usuário
+        palpites_agrupados = {}
+        for palpite in palpites:
+            if palpite.usuario.username not in palpites_agrupados:
+                palpites_agrupados[palpite.usuario.username] = []
+            palpites_agrupados[palpite.usuario.username].append(palpite)
+        temPalpite = palpites.exists()
     else:
+        # Os jogos serão pegos pelo dia
         paginator = Paginator(Partida.objects.filter(Rodada__edicao_campeonato=edicao).order_by('dia'), 10)
         primeiro_jogo_nao_ocorrido = Partida.objects.filter(Rodada__edicao_campeonato=edicao).order_by('dia').first()
         if primeiro_jogo_nao_ocorrido:
@@ -297,36 +295,45 @@ def edicao(request,campeonato,edicao):
             pagina_atual = paginator.num_pages
         page = paginator.get_page(pagina_atual)
 
+    # Independente do tipo, se acabou, ver quem venceu nos palpites
     if edicao.terminou:
-        ranking = funcoes.ranking(edicao.id,0)
         topPepe = [(id, pontosP) for _, _, id, pontosP, _ in list(funcoes.ranking(edicao.id,0))[:3]]
         campeaoPepe = [{'id': usuario[0],'imagem': User.objects.get(id=usuario[0]).profile_image, 'pontos': usuario[1]} for usuario in topPepe]
     else:
         ranking = None
         campeaoPepe = None
 
+    # Independente do tipo, se já começou, mostrar o ranking
+    if edicao.comecou:
+        ranking = funcoes.ranking(edicao.id,0)
+
     edicoes = EdicaoCampeonato.objects.filter(campeonato=edicao.campeonato)
 
-    palpites = Palpite_Campeonato.objects.filter(usuario=request.user, edicao_campeonato=edicao).order_by("posicao_prevista")
-    if palpites.exists():
-        classificacao = zip(palpites,ordem,classificacao)
-        temPalpite = True
+    if edicao.campeonato.pontosCorridos:
+        return render(request, "palpites/campeonato_edicao.html", {
+            'edicao': edicao,
+            'temPalpite': temPalpite,
+            'palpites': palpites_agrupados,
+            'ordem': ordem,
+            'classificacao': classificacao,
+            'rodadas': Rodada.objects.filter(edicao_campeonato=edicao).order_by("num"),
+            'campeaoPepe': campeaoPepe,
+            'ranking': ranking,
+            "page": page,
+            "edicoes": edicoes,
+        })
     else:
-        classificacao = zip(ordem,classificacao)
-        temPalpite = False
+        return render(request, "palpites/campeonato_edicao.html", {
+            'edicao': edicao,
+            'temPalpite': False,
+            'rodadas': Rodada.objects.filter(edicao_campeonato=edicao).order_by("num"),
+            'campeaoPepe': campeaoPepe,
+            'ranking': ranking,
+            "page": page,
+            "edicoes": edicoes,
+        })
 
-    return render(request, "palpites/edicao.html", {
-        'edicao': edicao,
-        'temPalpite': temPalpite,
-        'classificacao': classificacao,
-        'rodadas': Rodada.objects.filter(edicao_campeonato=edicao).order_by("num"),
-        'campeaoPepe': campeaoPepe,
-        'ranking': ranking,
-        "page": page,
-        "edicoes": edicoes,
-    })
-
-def palpitarEdicao(request,edicao):
+def verPalpitarEdicao(request,edicao):
     edicao = EdicaoCampeonato.objects.get(id=edicao)
     if not edicao.comecou:
         times = edicao.times.all()
@@ -338,7 +345,7 @@ def palpitarEdicao(request,edicao):
         })
     return HttpResponseRedirect(reverse("home"))
 
-def rodada(request,campeonato,edicao,rodada):
+def verRodada(request,campeonato,edicao,rodada):
     edicao = EdicaoCampeonato.objects.get(campeonato=campeonato,num_edicao=edicao)
     rodadaAtual = Rodada.objects.get(edicao_campeonato=edicao,num=rodada)
     try:
@@ -369,7 +376,7 @@ def register_team(request):
     return render(request, "palpites/register_team.html", {
         "title": "Registrar Time",
         "message": message,
-        "edicoes": EdicaoCampeonato.objects.filter(comecou=False),
+        "edicoes": EdicaoCampeonato.objects.filter(terminou=False),
         "times": Time.objects.all().order_by('Nome'),
     })
 
@@ -524,7 +531,7 @@ def att_rodadas(request,edicao):
     data = serializers.serialize('json', Rodada.objects.filter(edicao_campeonato__id=edicao).order_by('num'))
     return JsonResponse(data, safe=False)
 
-def userResult(request,usuarios,campeonato,rod_Ini,rod_Fin):
+def attGrafico(request,usuarios,campeonato,rod_Ini,rod_Fin):
     palpites = Palpite_Partida.objects.filter(partida__Rodada__edicao_campeonato=campeonato,partida__Rodada__num__gte=rod_Ini, partida__Rodada__num__lte=rod_Fin)
     usernames = []
     if usuarios == "todos":
@@ -575,7 +582,7 @@ def userResult(request,usuarios,campeonato,rod_Ini,rod_Fin):
 
 def profile(request,id):
     if request.method == 'POST':
-        form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user)
+        form = forms.ProfileUpdateForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
             form.save()
     url = reverse('userView', args=(id,))
@@ -583,7 +590,7 @@ def profile(request,id):
 
 def alterar_time_favorito(request,id):
     if request.method == 'POST':
-        form = TimeFavoritoForm(request.POST)
+        form = forms.TimeFavoritoForm(request.POST)
         if form.is_valid():
             user = request.user
             user.favorite_team = Time.objects.get(Nome=form.cleaned_data['time_favorito'])
@@ -657,7 +664,7 @@ def get_partidas_edicao(request, edicao, pagina):
     
     return JsonResponse(data)
 
-def classificacao(request, edicao, rodada_inicial, rodada_final, tipoClassificacao):
+def classificacaoTimesEdicao(request, edicao, rodada_inicial, rodada_final, tipoClassificacao):
     classificacao = funcoes.classificacao(EdicaoCampeonato.objects.get(id=edicao), rodada_inicial, rodada_final, tipoClassificacao)
     try:
         json_string = json.dumps(classificacao)
@@ -714,3 +721,42 @@ def registroPalpiteEdicao(request, edicao, posicao, time, pc):
         sucesso = "Falhou"
 
     return JsonResponse({'mensagem': sucesso})
+
+def attResultado(request, idPartida, golsMandante, golsVisitante):
+    partida = Partida.objects.get(id=idPartida)
+    if timezone.now() > partida.dia:
+        user = request.user
+        if user.is_superuser:
+            partida.golsMandante = golsMandante
+            partida.golsVisitante = golsVisitante
+            partida.vencedor = funcoes.definirVencedor(golsMandante,golsVisitante)
+            partida.save()
+            return JsonResponse({'mensagem': "Resultado Atualizado"})
+
+    return JsonResponse({'mensagem': "Resultado Não Atualizado"})
+
+def attPalpite(request, idPartida, golsMandante, golsVisitante):
+    partida = Partida.objects.get(id=idPartida)
+    if timezone.now() < partida.dia:
+        user = request.user
+
+        palpite, criado = Palpite_Partida.objects.get_or_create(usuario=user, 
+                                                                partida=partida,
+                                                                defaults={
+                                                                    'golsMandante': golsMandante, 
+                                                                    'golsVisitante': golsVisitante,
+                                                                    'vencedor': funcoes.definirVencedor(golsMandante,golsVisitante)
+                                                                })
+
+        if not criado:
+            palpite.golsMandante = golsMandante
+            palpite.golsVisitante = golsVisitante
+            palpite.save()
+            sucesso = "Sucesso - Palpite Alterado"
+        else:
+            sucesso = "Sucesso - Novo palpite criado"
+
+        return JsonResponse({'mensagem': sucesso})
+
+    return JsonResponse({'mensagem': "Falha ao Palpitar"})
+

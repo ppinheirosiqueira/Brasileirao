@@ -164,7 +164,7 @@
   height: 2em;
 }
 .container .ranking tr:nth-child(even) {
-  background: linear-gradient(to right, var(--bg), var(--hover), var(--bg));
+  background: var(--hover);
 }
 
 /*# sourceMappingURL=time.css.map */

@@ -243,3 +243,10 @@ def partida_to_json(partida):
         'golsVisitante': partida.golsVisitante,
         'Rodada': f'{partida.Rodada.edicao_campeonato.campeonato} - {partida.Rodada.nome}',
     }
+
+def definirVencedor(golsMandante, golsVisitante):
+    if golsMandante > golsVisitante:
+        return 1
+    elif golsMandante < golsVisitante:
+        return 2
+    return 0

@@ -1,10 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const themeButton1 = document.getElementsByClassName('theme-toggle')[0]
-    const themeButton2 = document.getElementsByClassName('theme-toggle')[1]
+    const themeButton = document.getElementsByClassName('theme-toggle')[0]
 
     if (document.getElementsByClassName('theme-toggle').length > 0) {
-        themeButton1.addEventListener('click', () => changeTheme(themeButton1))
-        themeButton2.addEventListener('click', () => changeTheme(themeButton2))
+        themeButton.addEventListener('click', () => changeTheme(themeButton))
     }
 })
 
@@ -20,7 +18,7 @@ function changeTheme(themeButton){
         url = `${baseUrl}/alterar_tema/0`;  // Concatena o caminho desejado à URL base
     }
     fetch(url)
-    if (window.location.pathname === '/'){
+    if (window.location.pathname === '/' && isPc == "True"){
         attGrafico()
     }
 }

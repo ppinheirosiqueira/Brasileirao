@@ -10,41 +10,72 @@
     <script type="text/javascript" src="{% static 'scripts/buscarTimeCampeonato.js' %}?v=1.0"></script>
 {% endblock %}
 
-{% block body %}
-
-    <div class="container">
-        {% if message %}
-            <h3>{{ message | safe }}</h3>
-        {% endif %}
-        <div class="partidas">
-            <h1>Registrar Partida</h2>
-            <form action="{% url 'register_match' %}" method="post">
-                {% csrf_token %}
-                <label for="campeonato">Campeonato:</label><br>
-                <select name="campeonato" id="campeonato">
-                    <option value=""></option>
-                    {% for campeonato in campeonatos %}
-                        <option value="{{ campeonato.id }}">{{ campeonato }}</option>
-                    {% endfor %}
-                </select><br><br>
-                <label for="mandante">Time Mandante:</label><br>
-                <select id="mandante" name="mandante">
-                </select><br><br>
-                <label for="visitante">Time Visitante:</label><br>
-                <select id="visitante" name="visitante">
-                </select><br><br>
-                <label for="date">Dia e Hora do Jogo:</label><br>
-                <input type="datetime-local" id="date" name="date"><br><br>
-                <label for="rodada">Rodada:</label><br>
-                <select id="rodada" name="rodada" onchange="checkRodada(value)">
-                </select><br><br>
-                <label for="numRodada" id="labelNumRodada" style="display: none;">Número da Rodada:</label><br>
-                <input type="number" name="numRodada" id="numRodada" style="display: none;"><br><br>
-                <label for="nomeRodada" id="labelNomeRodada" style="display: none;">Nome da Rodada:</label><br>
-                <input type="text" name="nomeRodada" id="nomeRodada" style="display: none;"><br><br>        
-                <input type="submit" value="Register">     
-            </form>
-        </div>
+{% block bodyPC %}
+    {% if message %}
+        <h3>{{ message | safe }}</h3>
+    {% endif %}
+    <div class="partidas">
+        <h1>Registrar Partida</h2>
+        <form action="{% url 'register_match' %}" method="post">
+            {% csrf_token %}
+            <label for="campeonato">Campeonato:</label><br>
+            <select name="campeonato" id="campeonato">
+                <option value=""></option>
+                {% for campeonato in campeonatos %}
+                    <option value="{{ campeonato.id }}">{{ campeonato }}</option>
+                {% endfor %}
+            </select><br><br>
+            <label for="mandante">Time Mandante:</label><br>
+            <select id="mandante" name="mandante">
+            </select><br><br>
+            <label for="visitante">Time Visitante:</label><br>
+            <select id="visitante" name="visitante">
+            </select><br><br>
+            <label for="date">Dia e Hora do Jogo:</label><br>
+            <input type="datetime-local" id="date" name="date"><br><br>
+            <label for="rodada">Rodada:</label><br>
+            <select id="rodada" name="rodada" onchange="checkRodada(value)">
+            </select><br><br>
+            <label for="numRodada" id="labelNumRodada" style="display: none;">Número da Rodada:</label><br>
+            <input type="number" name="numRodada" id="numRodada" style="display: none;"><br><br>
+            <label for="nomeRodada" id="labelNomeRodada" style="display: none;">Nome da Rodada:</label><br>
+            <input type="text" name="nomeRodada" id="nomeRodada" style="display: none;"><br><br>        
+            <input type="submit" value="Register">     
+        </form>
     </div>
+{% endblock %}
 
+{% block bodyMobile %}
+    {% if message %}
+        <h3>{{ message | safe }}</h3>
+    {% endif %}
+    <div class="partidas">
+        <h1>Registrar Partida</h2>
+        <form action="{% url 'register_match' %}" method="post">
+            {% csrf_token %}
+            <label for="campeonato">Campeonato:</label><br>
+            <select name="campeonato" id="campeonato">
+                <option value=""></option>
+                {% for campeonato in campeonatos %}
+                    <option value="{{ campeonato.id }}">{{ campeonato }}</option>
+                {% endfor %}
+            </select><br><br>
+            <label for="mandante">Time Mandante:</label><br>
+            <select id="mandante" name="mandante">
+            </select><br><br>
+            <label for="visitante">Time Visitante:</label><br>
+            <select id="visitante" name="visitante">
+            </select><br><br>
+            <label for="date">Dia e Hora do Jogo:</label><br>
+            <input type="datetime-local" id="date" name="date"><br><br>
+            <label for="rodada">Rodada:</label><br>
+            <select id="rodada" name="rodada" onchange="checkRodada(value)">
+            </select><br><br>
+            <label for="numRodada" id="labelNumRodada" style="display: none;">Número da Rodada:</label><br>
+            <input type="number" name="numRodada" id="numRodada" style="display: none;"><br><br>
+            <label for="nomeRodada" id="labelNomeRodada" style="display: none;">Nome da Rodada:</label><br>
+            <input type="text" name="nomeRodada" id="nomeRodada" style="display: none;"><br><br>        
+            <input type="submit" value="Register">     
+        </form>
+    </div>
 {% endblock %}

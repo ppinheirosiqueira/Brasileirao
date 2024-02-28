@@ -1,15 +1,20 @@
 {% extends "palpites/layout.html" %}
 {% load static %}
+{% load user_agents %}
 
 {% block title %}
     {{ rodada }}
 {% endblock %}
 
 {% block style %}
-    <link rel="stylesheet" href="{% static 'styles/rodada.css' %}?v=1.0">
+    {% if request|is_pc %}
+        <link rel="stylesheet" href="{% static 'css/rodada_pc.css' %}?v=1.0">
+    {% else %}
+        <link rel="stylesheet" href="{% static 'css/rodada_mobile.css' %}?v=1.0">
+    {% endif %}
 {% endblock %}
 
-{% block body %}
+{% block bodyPC %}
     <div class="header">
     {% if anterior != None %}
         <a href="{% url 'rodada' campeonato=anterior.edicao_campeonato.campeonato.id edicao=anterior.edicao_campeonato.id rodada=anterior.num %}"><button type="button" class="arrow-button left-arrow">&#8592;</button></a>
@@ -17,6 +22,44 @@
         <span></span>
     {% endif %}
         <h1><a href="{% url 'edicao' campeonato=rodada.edicao_campeonato.campeonato.id edicao=rodada.edicao_campeonato.id %}">{{ rodada.edicao_campeonato }}</a> - {{ rodada.nome }}</h1>
+    {% if proxima != None %}
+        <a href="{% url 'rodada' campeonato=proxima.edicao_campeonato.campeonato.id edicao=proxima.edicao_campeonato.id rodada=proxima.num %}"><button type="button" class="arrow-button right-arrow">&#8594;</button></a>
+    {% else %}
+        <span></span>
+    {% endif %}   
+    </div>
+    {% for partida in partidas %}
+        <div class="partida">
+            <a href="{% url 'show_team' id=partida.Mandante.id %}">    
+                <img class="escudo" src="/{{ partida.Mandante.escudo }}" alt="escudo mandante">
+            </a>
+            {% if partida.golsMandante != -1 %}
+                <span class="texto">{{ partida.golsMandante }}</span>
+            {% else %}
+                <span></span>
+            {% endif %}
+            <span class="texto">X</span>
+            {% if partida.golsVisitante != -1 %}
+                <span class="texto">{{ partida.golsVisitante }}</span>
+            {% else %}
+                <span></span>
+            {% endif %}
+            <a href="{% url 'show_team' id=partida.Visitante.id %}">    
+                <img class="escudo" src="/{{ partida.Visitante.escudo }}" alt="escudo visitante">
+            </a>
+            <div class="date">{{ partida.dia|date:"d/m/Y H:i:s" }}</div>
+        </div>
+    {% endfor %}
+{% endblock %}
+
+{% block bodyMobile %}
+    <div class="header">
+    {% if anterior != None %}
+        <a href="{% url 'rodada' campeonato=anterior.edicao_campeonato.campeonato.id edicao=anterior.edicao_campeonato.id rodada=anterior.num %}"><button type="button" class="arrow-button left-arrow">&#8592;</button></a>
+    {% else %}
+        <span></span>
+    {% endif %}
+        <h2><a href="{% url 'edicao' campeonato=rodada.edicao_campeonato.campeonato.id edicao=rodada.edicao_campeonato.id %}">{{ rodada.edicao_campeonato }}</a> - {{ rodada.nome }}</h2>
     {% if proxima != None %}
         <a href="{% url 'rodada' campeonato=proxima.edicao_campeonato.campeonato.id edicao=proxima.edicao_campeonato.id rodada=proxima.num %}"><button type="button" class="arrow-button right-arrow">&#8594;</button></a>
     {% else %}

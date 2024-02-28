@@ -1,4 +1,10 @@
 var tipo = 0
+if(isPc == "False"){
+    isPc = false
+}
+else{
+    isPc = true
+}
 
 window.addEventListener('load', function() {
 
@@ -54,48 +60,81 @@ function attClassificacao(valor) {
 }
 
 function cabecalho(){
-    return`<table class="tabelaClassificacao">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Time</th>
-                    <th>P</th>
-                    <th>J</th>
-                    <th>V</th>
-                    <th>E</th>
-                    <th>D</th>
-                    <th>GP</th>
-                    <th>GC</th>
-                    <th>SG</th>
-                    <th>Aproveitamento</th>
-                </tr>
-            </thead>
-            <tbody>
-            `
+    if (isPc){
+        return`
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Time</th>
+                <th>P</th>
+                <th>J</th>
+                <th>V</th>
+                <th>E</th>
+                <th>D</th>
+                <th>GP</th>
+                <th>GC</th>
+                <th>SG</th>
+                <th>Aproveitamento</th>
+            </tr>
+        </thead>
+        <tbody>
+        `
+    }
+    return`
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Time</th>
+            <th>P</th>
+            <th>J</th>
+            <th>V</th>
+            <th>E</th>
+            <th>D</th>
+            <th>SG</th>
+        </tr>
+    </thead>
+    <tbody>
+    `
+
 }
 
 function exibirDados(data){
-    var classificacaoDiv = document.getElementsByClassName('classificacao')[0]
+    var classificacaoDiv = document.getElementsByClassName('tabelaClassificacao')[0]
     var aux = 1
     if (data.length){
         texto = cabecalho()
-        data.forEach(function(time){
-            texto += "<tr>"
-            texto += '<td>' + aux + '</td>'
-            texto += '<td class="nome">' + time.time + '</td>'
-            texto += "<td>" + time.pontos + "</td>"
-            texto += "<td>" + time.jogos + "</td>"
-            texto += "<td>" + time.vitorias + "</td>"
-            texto += "<td>" + time.empates + "</td>"
-            texto += "<td>" + time.derrotas + "</td>"
-            texto += "<td>" + time.gols_pro + "</td>"
-            texto += "<td>" + time.gols_contra + "</td>"
-            texto += "<td>" + time.saldo_gols + "</td>"
-            texto += "<td>" + time.aproveitamento.toFixed(2) + "%</td>"
-            aux += 1
-        })
-        texto += `</tbody>
-        </table>`
+        if(isPc){
+            data.forEach(function(time){
+                texto += "<tr>"
+                texto += '<td>' + aux + '</td>'
+                texto += '<td class="nome">' + time.time + '</td>'
+                texto += "<td>" + time.pontos + "</td>"
+                texto += "<td>" + time.jogos + "</td>"
+                texto += "<td>" + time.vitorias + "</td>"
+                texto += "<td>" + time.empates + "</td>"
+                texto += "<td>" + time.derrotas + "</td>"
+                texto += "<td>" + time.gols_pro + "</td>"
+                texto += "<td>" + time.gols_contra + "</td>"
+                texto += "<td>" + time.saldo_gols + "</td>"
+                texto += "<td>" + time.aproveitamento.toFixed(2) + "%</td>"
+                aux += 1
+            })
+        }
+        else{
+            data.forEach(function(time){
+                texto += "<tr>"
+                texto += '<td>' + aux + '</td>'
+                texto += '<td class="nome">' + time.time + '</td>'
+                texto += "<td>" + time.pontos + "</td>"
+                texto += "<td>" + time.jogos + "</td>"
+                texto += "<td>" + time.vitorias + "</td>"
+                texto += "<td>" + time.empates + "</td>"
+                texto += "<td>" + time.derrotas + "</td>"
+                texto += "<td>" + time.saldo_gols + "</td>"
+                aux += 1
+            })
+        }
+        texto += `</tbody>`
     }
     classificacaoDiv.innerHTML = texto
 }

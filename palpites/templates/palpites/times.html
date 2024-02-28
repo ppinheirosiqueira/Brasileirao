@@ -9,7 +9,21 @@
     <link rel="stylesheet" href="{% static 'css/times.css' %}?v=1.0">
 {% endblock %}
 
-{% block body %}
+{% block bodyPC %}
+    <h2>Lista de Times</h2>
+    <div class="times">
+        {% for time in times %}
+            <a href="{% url 'show_team' id=time.id %}">
+                <img src="{{ time.escudo }}" alt="escudo" class="escudo">
+                <span class="nome">{{ time.Nome }}</span>
+            </a>
+        {% empty %}
+            <span>Nenhum time Registrado</span>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block bodyMobile %}
     <h2>Lista de Times</h2>
     <div class="times">
         {% for time in times %}

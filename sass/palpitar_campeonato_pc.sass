@@ -1,0 +1,44 @@
+@use 'mixins'
+
+h1
+    text-align: center
+
+button
+    background-color: var(--bg)
+    color: var(--fc)
+    font-size: 1em
+    padding: 0.5em 1.5em
+    border-width: 2px
+    border-style: outset
+    border-color: var(--border)
+    cursor: pointer
+    width: 10em
+    margin: 0 calc(50% - 5em)
+
+.palpite
+    border-collapse: collapse
+    margin: 1em auto
+    width: 100%
+
+    th
+        font-size: x-large
+
+    th, td
+        border: 2px solid var(--fc)
+        width: 25%
+        height: 40px
+        text-align: center
+
+    .escudo
+        height: 35px
+        width: 35px
+        cursor: grab
+
+    .dragged-item 
+        opacity: 0.5
+        border: 3px dashed red !important
+
+    .drop-highlight 
+        background-color: #3498db
+        color: #fff
+        border: 2px solid #fff

@@ -1,0 +1,152 @@
+@use 'variables'
+@use 'mixins'
+
+*
+    padding: 0
+    margin: 0
+    box-sizing: border-box
+
+:root
+    --bg: #{variables.$bg-color} 
+    --fc: #{variables.$font-color}
+    --hover: #{variables.$hover}
+    --filter: #{variables.$filter}
+    --border: #{variables.$border} 
+    --selecionado: #{variables.$selecionado}
+
+.darkTheme
+    --bg: #{variables.$bg-color-dark} 
+    --fc: #{variables.$font-color-dark}
+    --hover: #{variables.$hover-dark}
+    --filter: #{variables.$filter-dark}
+    --border: #{variables.$border-dark} 
+    --selecionado: #{variables.$selecionado-dark}
+
+body 
+    background: var(--bg)
+    color: var(--fc)
+
+nav
+    height: 4em
+    width: 100%
+
+    position: fixed
+    top: 0
+    background-color: var(--bg)
+
+    display: flex
+    align-items: center
+    text-align: center
+    justify-content: space-around
+
+    z-index: 999
+
+    border-bottom: 1px solid var(--border)
+
+    a,label
+        @include mixins.flex-center
+        @include mixins.link
+
+        img
+            width: 2.5em
+            filter: var(--filter)
+
+        &:hover
+            background: var(--hover)
+
+    input[type=checkbox]
+        display: none
+
+    img
+        width: 2.5em
+        filter: var(--filter)
+
+    input[type=checkbox]
+            display: none
+
+    .fecharAdmin
+        display: none
+
+    #openAdm:checked ~ .dropdown-adm
+        display: flex
+        flex-direction: column
+        text-align: left
+        gap: 8px
+
+    .dropdown-adm
+        display: none
+        position: fixed
+        top: 4.5em
+        left: 1em
+        right: 1em
+        padding: 1em
+        background: var(--bg)
+        border: 2px solid var(--border)
+        border-radius: 2em
+        padding: 2em
+
+        a
+            @include mixins.link
+                
+
+footer
+    height: 4em
+    width: 100%
+
+    position: fixed
+    background: var(--bg)
+    bottom: 0
+    z-index: 999
+
+    display: flex
+    align-items: center
+    text-align: center
+    justify-content: space-evenly
+
+    border-top: 1px solid var(--border)
+
+    img
+        width: 2.5em
+        filter: var(--filter)
+
+    input[type=checkbox]
+            display: none
+
+    .fecharUser
+        display: none
+
+    #openPerfil:checked ~ .dropdown-perfil
+        display: flex
+        flex-direction: column
+        text-align: left
+        gap: 8px
+
+    .dropdown-perfil
+        display: none
+        position: fixed
+        top: 4.5em
+        width: 90%
+        padding: 1em
+        background: var(--bg)
+        border: 2px solid var(--border)
+        border-radius: 2em
+        padding: 2em
+
+        a
+            text-decoration: none
+            color: var(--fc)
+
+        button
+            background-color: transparent
+            width: 100%
+            border: none
+            height: 3em
+            cursor: pointer
+            display: block
+            text-align: left
+
+            img
+                height: 100%
+
+.container
+    margin: 5.5em 0

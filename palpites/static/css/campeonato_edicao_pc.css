@@ -1,0 +1,364 @@
+.nomeCampeonato {
+  font-size: xx-large;
+  margin: 2em 10%;
+}
+.nomeCampeonato select {
+  width: 7em;
+  border-width: 2px;
+  border-style: outset;
+  border-color: var(--border);
+  padding: 4px;
+  font-size: 0.6em;
+  margin: auto 0;
+  color: var(--fc);
+  background-color: var(--bg);
+}
+
+.campeonato {
+  display: flex;
+}
+.campeonato .left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  min-width: 70%;
+  max-width: 80%;
+}
+.campeonato .left #destaque {
+  display: flex;
+  justify-content: space-evenly;
+  gap: 1em;
+}
+.campeonato .left #destaque .palpitarClassificacao {
+  margin: 1em auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.campeonato .left #destaque .palpitarClassificacao a {
+  color: #000000;
+  background-color: #99ff33;
+  border-width: 2px;
+  border-style: outset;
+  border-color: #333333;
+  text-decoration: none;
+  padding: 8px;
+}
+.campeonato .left #destaque .podium {
+  max-width: 50%;
+  width: 100%;
+  height: 96%;
+  margin: 2% 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 2fr 2fr 2fr 2fr;
+  grid-template-areas: "nome nome nome" "imagem2 imagem1 imagem3" "imagem2 primeiro imagem3" "segundo primeiro imagem3" "segundo primeiro terceiro";
+}
+.campeonato .left #destaque .podium .tituloPodio {
+  grid-area: nome;
+  text-align: center;
+}
+.campeonato .left #destaque .podium .imagem1 {
+  grid-area: imagem1;
+  bottom: 0;
+  position: relative;
+  align-self: end;
+  margin: auto;
+  margin-bottom: 1em;
+}
+.campeonato .left #destaque .podium .imagem2 {
+  grid-area: imagem2;
+  bottom: 0;
+  position: relative;
+  align-self: end;
+  margin: auto;
+  margin-bottom: 1em;
+}
+.campeonato .left #destaque .podium .imagem3 {
+  grid-area: imagem3;
+  bottom: 0;
+  position: relative;
+  align-self: end;
+  margin: auto;
+  margin-bottom: 1em;
+}
+.campeonato .left #destaque .podium img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+.campeonato .left #destaque .podium .first-place {
+  grid-area: primeiro;
+  background-color: gold;
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.campeonato .left #destaque .podium .second-place {
+  grid-area: segundo;
+  background-color: silver;
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.campeonato .left #destaque .podium .third-place {
+  grid-area: terceiro;
+  background-color: #cd7f32;
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.campeonato .left #classificacao .filtro {
+  margin: 2% 10%;
+  display: flex;
+}
+.campeonato .left #classificacao .filtro input[type=radio] {
+  display: none;
+}
+.campeonato .left #classificacao .filtro input[type=radio] + label {
+  background-color: var(--bg);
+  color: var(--fc);
+  font-size: 1em;
+  margin: 0 0.5em;
+  padding: 0.2em 0.8em;
+  border-width: 2px;
+  border-style: outset;
+  border-color: var(--border);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.campeonato .left #classificacao .filtro input[type=radio]:checked + label {
+  background-color: var(--fc);
+  color: var(--bg);
+  border-color: var(--bg);
+  cursor: pointer;
+}
+.campeonato .left #classificacao .filtro .selecao {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.campeonato .left #classificacao .filtro .rodadas {
+  display: flex;
+  width: 100%;
+  margin: 0 10%;
+  align-items: center;
+  justify-content: space-between;
+}
+.campeonato .left #classificacao .filtro .rodadas select {
+  width: 20%;
+  border-width: 2px;
+  border-style: outset;
+  border-color: var(--border);
+  padding: 5px;
+  margin: auto 0;
+  color: var(--fc);
+  background-color: var(--bg);
+}
+.campeonato .left #classificacao .classificacao {
+  margin: 0 2.5%;
+  width: 95%;
+}
+.campeonato .left #classificacao .classificacao .tabelaClassificacao {
+  width: 100%;
+  border-collapse: collapse;
+}
+.campeonato .left #classificacao .classificacao .tabelaClassificacao .nome {
+  text-align: left;
+}
+.campeonato .left #classificacao .classificacao .tabelaClassificacao th, .campeonato .left #classificacao .classificacao .tabelaClassificacao td {
+  padding: 8px;
+  text-align: center;
+}
+.campeonato .left #classificacao .classificacao .tabelaClassificacao th {
+  border-bottom: 1px solid var(--border);
+  font-size: 2em;
+}
+.campeonato .left #classificacao .classificacao .tabelaClassificacao td:nth-child(1), .campeonato .left #classificacao .classificacao .tabelaClassificacao th:nth-child(1) {
+  width: 5%;
+}
+.campeonato .left #classificacao .classificacao .tabelaClassificacao td:nth-child(2), .campeonato .left #classificacao .classificacao .tabelaClassificacao th:nth-child(2) {
+  width: 15%;
+}
+.campeonato .left #classificacao .classificacao .tabelaClassificacao td:nth-child(3), .campeonato .left #classificacao .classificacao .tabelaClassificacao th:nth-child(3) {
+  width: 5%;
+}
+.campeonato .left #classificacao .classificacao .tabelaClassificacao td:nth-child(4), .campeonato .left #classificacao .classificacao .tabelaClassificacao th:nth-child(4) {
+  width: 6.25%;
+}
+.campeonato .left #classificacao .classificacao .tabelaClassificacao td:nth-child(5), .campeonato .left #classificacao .classificacao .tabelaClassificacao th:nth-child(5) {
+  width: 6.25%;
+}
+.campeonato .left #classificacao .classificacao .tabelaClassificacao td:nth-child(6), .campeonato .left #classificacao .classificacao .tabelaClassificacao th:nth-child(6) {
+  width: 6.25%;
+}
+.campeonato .left #classificacao .classificacao .tabelaClassificacao td:nth-child(7), .campeonato .left #classificacao .classificacao .tabelaClassificacao th:nth-child(7) {
+  width: 6.25%;
+}
+.campeonato .left #classificacao .classificacao .tabelaClassificacao td:nth-child(8), .campeonato .left #classificacao .classificacao .tabelaClassificacao th:nth-child(8) {
+  width: 6.25%;
+}
+.campeonato .left #classificacao .classificacao .tabelaClassificacao td:nth-child(9), .campeonato .left #classificacao .classificacao .tabelaClassificacao th:nth-child(9) {
+  width: 6.25%;
+}
+.campeonato .left #classificacao .classificacao .tabelaClassificacao td:nth-child(10), .campeonato .left #classificacao .classificacao .tabelaClassificacao th:nth-child(10) {
+  width: 6.25%;
+}
+.campeonato .left #classificacao .classificacao .tabelaClassificacao td:nth-child(11), .campeonato .left #classificacao .classificacao .tabelaClassificacao th:nth-child(11) {
+  width: 6.25%;
+}
+.campeonato .left #classificacao .classificacao .tabelaClassificacao td:nth-child(12), .campeonato .left #classificacao .classificacao .tabelaClassificacao th:nth-child(12) {
+  width: 15%;
+}
+.campeonato .left #classificacao .classificacao .tabelaClassificacao tr:nth-child(even) {
+  background: var(--hover);
+}
+.campeonato .left #palpites {
+  display: flex;
+  justify-content: space-evenly;
+  overflow-x: auto;
+}
+.campeonato .left #palpites .palpites {
+  border-collapse: collapse;
+}
+.campeonato .left #palpites .palpites th, .campeonato .left #palpites .palpites td {
+  padding: 8px;
+  text-align: center;
+}
+.campeonato .left #palpites .palpites th {
+  border-bottom: 1px solid var(--border);
+  font-size: 1.5em;
+}
+.campeonato .left #palpites .palpites td .escudo {
+  width: 3em;
+}
+.campeonato .left #palpites .palpites tr {
+  height: 3em;
+}
+.campeonato .left #palpites .palpites tr:nth-child(even) {
+  background: var(--hover);
+}
+.campeonato .left #palpites .palpites .posicao {
+  position: sticky;
+  z-index: 2;
+  left: 0;
+  background: var(--bg);
+}
+.campeonato .right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+.campeonato .right #ranking {
+  margin: 0 5%;
+  width: 90%;
+  border-collapse: collapse;
+}
+.campeonato .right #ranking th, .campeonato .right #ranking td {
+  padding: 8px;
+  text-align: center;
+}
+.campeonato .right #ranking th {
+  border-bottom: 1px solid var(--border);
+  font-size: 1.5em;
+}
+.campeonato .right #ranking tr {
+  height: 2em;
+}
+.campeonato .right #ranking tr:nth-child(even) {
+  background: var(--hover);
+}
+.campeonato .right #ranking td span {
+  width: 1.5em;
+  height: 1.5em;
+  color: black;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+.campeonato .right #ranking .ouro {
+  background-color: gold;
+}
+.campeonato .right #ranking .prata {
+  background-color: silver;
+}
+.campeonato .right #ranking .bronze {
+  background-color: #CD7F32;
+}
+.campeonato .right #ranking a {
+  font-size: 1.5em;
+  text-decoration: none;
+  color: var(--fc);
+  font-weight: bold;
+}
+.campeonato .right #jogos {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 90%;
+  margin: 1em 5%;
+}
+.campeonato .right #jogos .pagination {
+  margin-bottom: 0.5em;
+}
+.campeonato .right #jogos .pagination button {
+  background-color: var(--bg);
+  color: var(--fc);
+  margin: 0 0.5em;
+  padding: 0.2em 0.8em;
+  border-width: 2px;
+  border-style: outset;
+  border-color: var(--border);
+  cursor: pointer;
+}
+.campeonato .right #jogos .pagination span {
+  color: var(--fc);
+}
+.campeonato .right #jogos .container-partidas {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  row-gap: 0.5em;
+  width: 100%;
+}
+.campeonato .right #jogos .container-partidas .partida a {
+  display: grid;
+  align-items: center;
+  text-align: center;
+  justify-items: center;
+  text-decoration: none;
+  grid-template-columns: auto auto auto;
+  color: inherit;
+  border: 1px solid var(--border);
+  border-radius: 1em;
+  padding: 0.5em;
+}
+.campeonato .right #jogos .container-partidas .partida a .escudo {
+  width: 2em;
+  margin: 0 auto;
+}
+.campeonato .right #jogos .container-partidas .partida a .nomeCampeonato {
+  grid-column-start: 1;
+  grid-column-end: 4;
+}
+.campeonato .right #jogos .container-partidas .partida a .texto {
+  display: flex;
+  justify-content: space-evenly;
+  margin: auto 0;
+  font-size: 1em;
+}
+.campeonato .right #estatisticas {
+  display: none;
+}
+
+/*# sourceMappingURL=campeonato_edicao_pc.css.map */

@@ -9,11 +9,16 @@
     <link rel="stylesheet" href="{% static 'css/campeonato.css' %}?v=1.0">
 {% endblock %}
 
-{% block body %}
-    <div class="container">
-        <h1>Edições do {{ title }}</h1>
-        {% for edicao in edicoes %}
-            <a href="{% url 'edicao' campeonato=edicao.campeonato.id edicao=edicao.num_edicao %}">{{ edicao }}</a><br>
-        {% endfor %}
-    </div>
+{% block bodyPC %}
+    <h1>Edições do {{ title }}</h1>
+    {% for edicao in edicoes %}
+        <a href="{% url 'edicao' campeonato=edicao.campeonato.id edicao=edicao.num_edicao %}">{{ edicao }}</a><br>
+    {% endfor %}
+{% endblock %}
+
+{% block bodyMobile %}
+    <h1>Edições do {{ title }}</h1>
+    {% for edicao in edicoes %}
+        <a href="{% url 'edicao' campeonato=edicao.campeonato.id edicao=edicao.num_edicao %}">{{ edicao }}</a><br>
+    {% endfor %}
 {% endblock %}

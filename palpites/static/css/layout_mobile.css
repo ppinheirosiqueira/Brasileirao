@@ -1,0 +1,155 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #ffffff;
+  --fc: #1a1a1a;
+  --hover: #DDDDDD;
+  --filter: none;
+  --border: #cccccc;
+  --selecionado: #333333;
+}
+
+.darkTheme {
+  --bg: #1a1a1a;
+  --fc: #ffffff;
+  --hover: #222;
+  --filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%);
+  --border: #333333;
+  --selecionado: #cccccc;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fc);
+}
+
+nav {
+  height: 4em;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  background-color: var(--bg);
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: space-around;
+  z-index: 999;
+  border-bottom: 1px solid var(--border);
+}
+nav a, nav label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  text-decoration: none;
+  color: var(--fc);
+}
+nav a img, nav label img {
+  width: 2.5em;
+  filter: var(--filter);
+}
+nav a:hover, nav label:hover {
+  background: var(--hover);
+}
+nav input[type=checkbox] {
+  display: none;
+}
+nav img {
+  width: 2.5em;
+  filter: var(--filter);
+}
+nav input[type=checkbox] {
+  display: none;
+}
+nav .fecharAdmin {
+  display: none;
+}
+nav #openAdm:checked ~ .dropdown-adm {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  gap: 8px;
+}
+nav .dropdown-adm {
+  display: none;
+  position: fixed;
+  top: 4.5em;
+  left: 1em;
+  right: 1em;
+  padding: 1em;
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: 2em;
+  padding: 2em;
+}
+nav .dropdown-adm a {
+  text-decoration: none;
+  color: var(--fc);
+}
+
+footer {
+  height: 4em;
+  width: 100%;
+  position: fixed;
+  background: var(--bg);
+  bottom: 0;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: space-evenly;
+  border-top: 1px solid var(--border);
+}
+footer img {
+  width: 2.5em;
+  filter: var(--filter);
+}
+footer input[type=checkbox] {
+  display: none;
+}
+footer .fecharUser {
+  display: none;
+}
+footer #openPerfil:checked ~ .dropdown-perfil {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  gap: 8px;
+}
+footer .dropdown-perfil {
+  display: none;
+  position: fixed;
+  top: 4.5em;
+  width: 90%;
+  padding: 1em;
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: 2em;
+  padding: 2em;
+}
+footer .dropdown-perfil a {
+  text-decoration: none;
+  color: var(--fc);
+}
+footer .dropdown-perfil button {
+  background-color: transparent;
+  width: 100%;
+  border: none;
+  height: 3em;
+  cursor: pointer;
+  display: block;
+  text-align: left;
+}
+footer .dropdown-perfil button img {
+  height: 100%;
+}
+
+.container {
+  margin: 5.5em 0;
+}
+
+/*# sourceMappingURL=layout_mobile.css.map */

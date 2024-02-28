@@ -1,0 +1,50 @@
+{% extends "palpites/layout.html" %}
+{% load static %}
+
+{% block title %}
+    Sobre o site
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/about.css' %}?v=1.0">
+{% endblock %}
+
+{% block bodyPC %}
+<div class="info">
+    O site é administrado por um único usuário, seu código pode ser visto neste <a href="https://github.com/ppinheirosiqueira/Brasileirao">link</a>.
+    <br><br>
+    As pontuações que você vê em uma partida seguem a contagem Pontuação Pepe:
+    <br><br>
+    <h1>Pontuação Pepe:</h1>
+    Acertou o número de gols do mandante: 1 ponto<br>
+    Acertou o número de gols do visitante: 1 ponto<br>
+    Acertou quem venceu ou empatou: 1 ponto<br>
+    <br><br>
+    Essa pontuação pode acabar levando a empates, para o critério de desempate é levado em consideração a diferença de gols do palpite em relação ao resultado real.
+    <br><br>
+    Vamos imaginar um jogo que acabe 4x2, onde o primeiro usuário palpitou 3x1 e o segundo usuário palpitou 2x0.<br>
+    Os dois usuários fizeram 1 único ponto no Padrão, pois ambos só acertaram quem venceu o jogo.<br>
+    No entanto, é perceptível que o primeiro usuário chegou muito mais próximo do resultado real que o segundo usuário.<br>
+    Por isso, a diferença de gols é utilizado como critério de desempate, onde quem tiver a menor diferença de gols ficará a frente dos demais.
+</div>
+{% endblock %}
+
+{% block bodyMobile %}
+<div class="info">
+    O site é administrado por um único usuário, seu código pode ser visto neste <a href="https://github.com/ppinheirosiqueira/Brasileirao">link</a>.
+    <br><br>
+    As pontuações que você vê em uma partida seguem a contagem Pontuação Pepe:
+    <br><br>
+    <h1>Pontuação Pepe:</h1>
+    Acertou o número de gols do mandante: 1 ponto<br>
+    Acertou o número de gols do visitante: 1 ponto<br>
+    Acertou quem venceu ou empatou: 1 ponto<br>
+    <br><br>
+    Essa pontuação pode acabar levando a empates, para o critério de desempate é levado em consideração a diferença de gols do palpite em relação ao resultado real.
+    <br><br>
+    Vamos imaginar um jogo que acabe 4x2, onde o primeiro usuário palpitou 3x1 e o segundo usuário palpitou 2x0.<br>
+    Os dois usuários fizeram 1 único ponto no Padrão, pois ambos só acertaram quem venceu o jogo.<br>
+    No entanto, é perceptível que o primeiro usuário chegou muito mais próximo do resultado real que o segundo usuário.<br>
+    Por isso, a diferença de gols é utilizado como critério de desempate, onde quem tiver a menor diferença de gols ficará a frente dos demais.
+</div>
+{% endblock %}

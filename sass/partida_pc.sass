@@ -1,0 +1,264 @@
+@use 'mixins'
+
+.partida
+    position: relative
+    @include mixins.grid-center
+    border: 1px solid var(--border)
+    border-radius: 1em
+    margin: 2em
+    padding: 1em
+    height: 8em
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr
+
+    .escudo
+        width: 5em
+        margin: 0 auto
+    
+    span
+        margin: 0 auto
+    
+    .texto
+        font-size: 2em
+    
+    .arrow-button
+        background-color: var(--bg)
+        color: var(--fc)
+        border: none
+        padding: 10px
+        font-size: 2rem
+        cursor: pointer
+    
+        &:hover
+            background-color: var(--hover)
+            color: var(--fc)
+            cursor: pointer
+        
+    .round
+        position: absolute
+        top: -0.5em
+        font-size: 2rem
+        background-color: var(--bg)
+        padding: 0 0.5em
+
+        a
+            color: var(--fc)
+            text-decoration: none
+    
+    .date
+        position: absolute
+        bottom: -0.5em
+        font-size: 2rem
+        background-color: var(--bg)
+        padding: 0 0.5em
+
+    .editarPalpite
+        img
+            width: 4em
+            filter: var(--filter)
+            cursor: pointer
+
+    .editarResultado
+        img
+            width: 4em
+            filter: var(--filter)
+            cursor: pointer
+
+.palpites
+    display: flex
+    margin: 1em
+    flex-direction: column
+    gap: 2em
+
+    h1
+        text-align: center
+
+    .jogos
+        display: flex
+        flex-wrap: wrap
+        justify-content: space-evenly
+        gap: 2em
+        font-size: 1.5rem
+
+        .jogo
+            position: relative
+            flex-basis: 30%
+            border: 1px solid var(--border)
+            border-radius: 1em
+            @include mixins.grid-center
+            grid-template-columns: auto auto auto auto auto
+            padding: 1em 0
+
+            a
+                @include mixins.flex-center
+
+            .escudo
+                width: 1.5em
+                margin: auto
+            
+            .texto
+                margin: auto
+            
+            .player
+                position: absolute
+                top: -0.5em
+                left: 2em
+                font-size: 1em
+                background-color: var(--bg)
+                padding: 0 0.5em
+
+                a
+                    text-decoration: none
+                    color: var(--fc)
+
+            .resultado
+                position: absolute
+                bottom: -0.5em
+                font-size: 1em
+                background-color: var(--bg)
+                padding: 0 0.5em
+
+body:not(.darkTheme) .palpites .jogos .red_border
+    border: 2px solid #FF3333
+
+body:not(.darkTheme) .palpites .jogos .orange_border
+    border: 2px solid #FF9933
+
+body:not(.darkTheme) .palpites .jogos .yellow_border
+    border: 2px solid yellowgreen
+
+body:not(.darkTheme) .palpites .jogos .green_border
+    border: 2px solid #009933
+
+body .palpites .jogos .red_border
+    border: 2px solid red
+
+body .palpites .jogos .orange_border
+    border: 2px solid orange
+
+body .palpites .jogos .yellow_border
+    border: 2px solid yellow
+
+body .palpites .jogos .green_border
+    border: 2px solid green
+
+#palpite 
+    display: none
+    flex-direction: column
+    text-align: center
+    justify-content: center
+    align-items: center
+    gap: 1em
+    width: 50%
+    margin: 0 25%
+    position: fixed
+    top: 8em
+    border: 2px solid var(--fc)
+    background: var(--hover)
+    z-index: 2
+    padding: 3em
+    border-radius: 3em
+
+    .jogo
+        position: relative
+        border: 1px solid var(--border)
+        border-radius: 1em
+        @include mixins.grid-center
+        grid-template-columns: auto auto auto auto auto
+        padding: 1em 0
+        width: 80%
+
+        .escudo
+            width: 3em
+            margin: auto
+
+        input[type="number"]
+            color: var(--fc)
+            background-color: var(--bg)
+            height: 100%
+            font-size: 2em
+            width: 70%
+            margin: 0 auto
+            text-align: center
+            border: 1px solid var(--border)
+
+    button
+        color: var(--fc)
+        background-color: var(--bg)
+        border: none
+        font-size: 0.8em
+        border-width: 2px
+        border-style: outset
+        border-color: var(--border)
+        padding: 0.5em
+        width: 20%
+
+    .fechar
+        position: absolute
+        top: 1em
+        right: 1em
+        cursor: pointer
+
+        img
+            width: 3em
+            filter: var(--filter)
+
+#resultado 
+    display: none
+    flex-direction: column
+    text-align: center
+    justify-content: center
+    align-items: center
+    gap: 1em
+    width: 50%
+    position: fixed
+    top: 8em
+    border: 2px solid var(--fc)
+    background: var(--hover)
+    z-index: 2
+    padding: 3em
+    border-radius: 3em
+    margin: 0 25%
+
+    .jogo
+        position: relative
+        border: 1px solid var(--border)
+        border-radius: 1em
+        @include mixins.grid-center
+        grid-template-columns: auto auto auto auto auto
+        padding: 1em
+        width: 80%
+
+        input[type="number"]
+            color: var(--fc)
+            background-color: var(--bg)
+            height: 100%
+            font-size: 2em
+            width: 70%
+            margin: 0 auto
+            text-align: center
+            border: 1px solid var(--border)
+
+        .escudo
+            width: 5em
+            margin: auto
+        
+    button
+        color: var(--fc)
+        background-color: var(--bg)
+        border: none
+        font-size: 0.8em
+        border-width: 2px
+        border-style: outset
+        border-color: var(--border)
+        padding: 0.5em
+        width: 20%
+
+    .fechar
+        position: absolute
+        top: 1em
+        right: 1em
+        cursor: pointer
+
+        img
+            width: 3em
+            filter: var(--filter)

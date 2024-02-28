@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
   window.usuarios = "voce"
   var rodada_final = document.getElementById('rodada_final')
 
-  fetch('user_result/' + window.usuarios + '/' +  document.getElementById('campeonato').value + '/1/' + rodada_final.value)
+  fetch('attGrafico/' + window.usuarios + '/' +  document.getElementById('campeonato').value + '/1/' + rodada_final.value)
   .then(response => response.json())
   .then(data => {
       exibirGrafico(data)
@@ -125,7 +125,7 @@ function modificarUsuario(nome){
 }
 
 function chamarGrafico(usuarios,rod_ini,rod_fim){
-  fetch('user_result/' + usuarios + '/' + document.getElementById('campeonato').value + '/' + rod_ini + '/' + rod_fim)
+  fetch('attGrafico/' + usuarios + '/' + document.getElementById('campeonato').value + '/' + rod_ini + '/' + rod_fim)
   .then(response => response.json())
   .then(data => {
       exibirGrafico(data)
@@ -138,7 +138,7 @@ function chamarGrafico(usuarios,rod_ini,rod_fim){
 function chamarGrupo(grupo){
   var inicial = parseInt(document.getElementById('rodada_inicial').value)
   var final = parseInt(document.getElementById('rodada_final').value)
-  fetch('user_result/grupo+' + grupo + '/' + inicial + '/' + final)
+  fetch('attGrafico/grupo+' + grupo + '/' + inicial + '/' + final)
   .then(response => response.json())
   .then(data => {
       exibirGrafico(data);

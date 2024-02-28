@@ -1,0 +1,150 @@
+.rankingContainer {
+  min-height: 0;
+  margin-bottom: 1em;
+  flex-grow: 0.8;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+.rankingContainer h1 {
+  text-align: center;
+}
+.rankingContainer .filtro {
+  margin: 0 5%;
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.5em;
+  align-items: center;
+  flex-direction: column;
+  gap: 0.25em;
+}
+.rankingContainer .filtro select {
+  color: var(--fc);
+  background-color: var(--bg);
+  border: none;
+  font-size: 0.8em;
+  border-width: 2px;
+  border-style: outset;
+  border-color: var(--border);
+  padding: 0.5em;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.rankingContainer .ranking {
+  margin: 0;
+  width: 100%;
+  font-size: 0.8em;
+  border-collapse: collapse;
+}
+.rankingContainer .ranking th, .rankingContainer .ranking td {
+  padding: 8px;
+  text-align: center;
+}
+.rankingContainer .ranking th {
+  border-bottom: 1px solid var(--border);
+  font-size: 1.5em;
+}
+.rankingContainer .ranking tr {
+  height: 2em;
+}
+.rankingContainer .ranking tr:nth-child(even) {
+  background: var(--hover);
+}
+.rankingContainer .ranking td span {
+  width: 1.5em;
+  height: 1.5em;
+  color: black;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+.rankingContainer .ranking .ouro {
+  background-color: gold;
+}
+.rankingContainer .ranking .prata {
+  background-color: silver;
+}
+.rankingContainer .ranking .bronze {
+  background-color: #CD7F32;
+}
+.rankingContainer .ranking a {
+  font-size: 1.5em;
+  text-decoration: none;
+  color: var(--fc);
+  font-weight: bold;
+}
+.rankingContainer .ranking .pontos {
+  font-size: 1.5em;
+  justify-content: center;
+  width: 1.5em;
+  height: 1.5em;
+  display: flex;
+  align-items: center;
+  margin: 0.5em 0 0 0;
+}
+.rankingContainer .ranking .erro {
+  padding: 2em 0;
+  font-size: 1.5em;
+}
+
+.jogos {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 90%;
+  margin: 2% 5%;
+}
+.jogos .pagination {
+  margin-bottom: 0.5em;
+}
+.jogos .pagination button {
+  background-color: var(--bg);
+  color: var(--fc);
+  margin: 0 0.5em;
+  padding: 0.2em 0.8em;
+  border-width: 2px;
+  border-style: outset;
+  border-color: var(--border);
+  cursor: pointer;
+}
+.jogos .pagination span {
+  color: var(--fc);
+}
+.jogos .container-partidas {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.5em;
+  width: 100%;
+}
+.jogos .container-partidas .partida a {
+  display: grid;
+  align-items: center;
+  text-align: center;
+  justify-items: center;
+  text-decoration: none;
+  grid-template-columns: auto auto auto;
+  color: inherit;
+  border: 1px solid var(--border);
+  border-radius: 2em;
+  padding: 0.5em;
+}
+.jogos .container-partidas .partida a .escudo {
+  width: 3em;
+  margin: 0 auto;
+}
+.jogos .container-partidas .partida a .nomeCampeonato {
+  grid-column-start: 1;
+  grid-column-end: 4;
+}
+.jogos .container-partidas .partida a .texto {
+  display: flex;
+  justify-content: space-evenly;
+  margin: auto 0;
+  font-size: 1em;
+}
+
+/*# sourceMappingURL=home_mobile.css.map */
