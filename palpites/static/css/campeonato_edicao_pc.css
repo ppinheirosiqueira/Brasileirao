@@ -21,7 +21,6 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
   min-width: 70%;
   max-width: 80%;
 }
@@ -255,63 +254,19 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
 }
-.campeonato .right #ranking {
-  margin: 0 5%;
-  width: 90%;
-  border-collapse: collapse;
-}
-.campeonato .right #ranking th, .campeonato .right #ranking td {
-  padding: 8px;
-  text-align: center;
-}
-.campeonato .right #ranking th {
-  border-bottom: 1px solid var(--border);
-  font-size: 1.5em;
-}
-.campeonato .right #ranking tr {
-  height: 2em;
-}
-.campeonato .right #ranking tr:nth-child(even) {
-  background: var(--hover);
-}
-.campeonato .right #ranking td span {
-  width: 1.5em;
-  height: 1.5em;
-  color: black;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: auto;
-}
-.campeonato .right #ranking .ouro {
-  background-color: gold;
-}
-.campeonato .right #ranking .prata {
-  background-color: silver;
-}
-.campeonato .right #ranking .bronze {
-  background-color: #CD7F32;
-}
-.campeonato .right #ranking a {
-  font-size: 1.5em;
-  text-decoration: none;
-  color: var(--fc);
-  font-weight: bold;
-}
-.campeonato .right #jogos {
+
+#jogos {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 90%;
+  width: 30%;
   margin: 1em 5%;
 }
-.campeonato .right #jogos .pagination {
+#jogos .pagination {
   margin-bottom: 0.5em;
 }
-.campeonato .right #jogos .pagination button {
+#jogos .pagination button {
   background-color: var(--bg);
   color: var(--fc);
   margin: 0 0.5em;
@@ -321,17 +276,17 @@
   border-color: var(--border);
   cursor: pointer;
 }
-.campeonato .right #jogos .pagination span {
+#jogos .pagination span {
   color: var(--fc);
 }
-.campeonato .right #jogos .container-partidas {
+#jogos .container-partidas {
   display: flex;
   flex-direction: column;
   text-align: center;
   row-gap: 0.5em;
   width: 100%;
 }
-.campeonato .right #jogos .container-partidas .partida a {
+#jogos .container-partidas .partida a {
   display: grid;
   align-items: center;
   text-align: center;
@@ -343,22 +298,75 @@
   border-radius: 1em;
   padding: 0.5em;
 }
-.campeonato .right #jogos .container-partidas .partida a .escudo {
+#jogos .container-partidas .partida a .escudo {
   width: 2em;
   margin: 0 auto;
 }
-.campeonato .right #jogos .container-partidas .partida a .nomeCampeonato {
+#jogos .container-partidas .partida a .nomeCampeonato {
   grid-column-start: 1;
   grid-column-end: 4;
 }
-.campeonato .right #jogos .container-partidas .partida a .texto {
+#jogos .container-partidas .partida a .texto {
   display: flex;
   justify-content: space-evenly;
   margin: auto 0;
   font-size: 1em;
 }
-.campeonato .right #estatisticas {
-  display: none;
+
+.ranking {
+  margin: 0 5%;
+  width: 90%;
+  border-collapse: collapse;
+}
+.ranking th, .ranking td {
+  padding: 8px;
+  text-align: center;
+}
+.ranking th {
+  border-bottom: 1px solid var(--border);
+  font-size: 1.5em;
+}
+.ranking tr {
+  height: 2em;
+}
+.ranking tr:nth-child(even) {
+  background: var(--hover);
+}
+.ranking td span {
+  width: 1.5em;
+  height: 1.5em;
+  color: black;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+.ranking .ouro {
+  background-color: gold;
+}
+.ranking .prata {
+  background-color: silver;
+}
+.ranking .bronze {
+  background-color: #CD7F32;
+}
+.ranking a {
+  font-size: 1.5em;
+  text-decoration: none;
+  color: var(--fc);
+  font-weight: bold;
+}
+
+#estatisticas select {
+  width: 100%;
+  border-width: 2px;
+  border-style: outset;
+  border-color: var(--border);
+  padding: 4px;
+  margin: auto 0;
+  color: var(--fc);
+  background-color: var(--bg);
 }
 
 /*# sourceMappingURL=campeonato_edicao_pc.css.map */

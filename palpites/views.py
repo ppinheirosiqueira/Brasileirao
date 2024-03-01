@@ -14,7 +14,6 @@ from collections import defaultdict
 from django.db.models.functions import Lower
 from unidecode import unidecode
 from django.utils import timezone
-from django_user_agents.utils import get_user_agent
 
 from .models import User, Time, Partida, Palpite_Partida, Campeonato, EdicaoCampeonato, Rodada, Grupo, Palpite_Campeonato
 from . import forms
@@ -255,7 +254,6 @@ def verCampeonato(request,campeonato):
     })
 
 def verEdicaoCampeonato(request,campeonato,edicao):
-    user_agent = get_user_agent(request)
 
     edicao = EdicaoCampeonato.objects.get(campeonato=campeonato,num_edicao=edicao)
     ordem = list(range(1, 21))
@@ -308,6 +306,7 @@ def verEdicaoCampeonato(request,campeonato,edicao):
         ranking = funcoes.ranking(edicao.id,0)
 
     edicoes = EdicaoCampeonato.objects.filter(campeonato=edicao.campeonato)
+    cravadas = funcoes.cravadas(edicao)
 
     if edicao.campeonato.pontosCorridos:
         return render(request, "palpites/campeonato_edicao.html", {
@@ -321,6 +320,7 @@ def verEdicaoCampeonato(request,campeonato,edicao):
             'ranking': ranking,
             "page": page,
             "edicoes": edicoes,
+            "cravadas": cravadas,
         })
     else:
         return render(request, "palpites/campeonato_edicao.html", {
@@ -331,6 +331,7 @@ def verEdicaoCampeonato(request,campeonato,edicao):
             'ranking': ranking,
             "page": page,
             "edicoes": edicoes,
+            "cravadas": cravadas,
         })
 
 def verPalpitarEdicao(request,edicao):
@@ -760,3 +761,22 @@ def attPalpite(request, idPartida, golsMandante, golsVisitante):
 
     return JsonResponse({'mensagem': "Falha ao Palpitar"})
 
+def estatisticaCravada(request, idEdicao):
+    cravadas = funcoes.cravadas(EdicaoCampeonato.objects.get(id=idEdicao))
+    return JsonResponse(cravadas, safe=False)
+
+def estatisticaAvgPontos(request, idEdicao):
+    avgPontos = funcoes.avgPontos(idEdicao)
+    return JsonResponse(avgPontos, safe=False)
+
+def estatisticaModaPalpites(request, idEdicao):
+    modaPalpites = funcoes.modaPalpites(idEdicao)
+    return JsonResponse(modaPalpites, safe=False)
+
+def estatisticaModaResultados(request, idEdicao):
+    modaResultados = funcoes.modaResultados(idEdicao)
+    return JsonResponse(modaResultados, safe=False)
+
+def estatisticaRankingClassicacao(request, idEdicao):
+    rankingClassicacao = funcoes.rankingClassicacao(idEdicao)
+    return JsonResponse(rankingClassicacao, safe=False)

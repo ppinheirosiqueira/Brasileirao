@@ -22,7 +22,6 @@
         flex: 1
         display: flex
         flex-direction: column
-        justify-content: space-evenly
         min-width: 70%
         max-width: 80%
 
@@ -244,104 +243,112 @@
         flex: 1
         display: flex
         flex-direction: column
-        justify-content: space-evenly
 
-        #ranking
-            margin: 0 5%
-            width: 90%
-            border-collapse: collapse
+#jogos
+    @include mixins.flex-column
+    width: 30%
+    margin: 1em 5%
 
-            th, td
-                padding: 8px
-                text-align: center
+    .pagination
+        margin-bottom: 0.5em
 
-            th 
-                border-bottom: 1px solid var(--border)
-                font-size: 1.5em
-            
-            tr
-                height: 2em
+        button
+            background-color: var(--bg)
+            color: var(--fc)
+            margin: 0 0.5em
+            padding: 0.2em 0.8em
+            border-width: 2px
+            border-style: outset
+            border-color: var(--border)
+            cursor: pointer
 
-            tr:nth-child(even)
-                background: var(--hover)
+        span
+            color: var(--fc)
 
-            td
-                span
-                    width: 1.5em
-                    height: 1.5em
-                    color: black
-                    border-radius: 50%
-                    display: flex
-                    justify-content: center
-                    align-items: center
-                    margin: auto
+    .container-partidas
+        display: flex
+        flex-direction: column
+        text-align: center
+        row-gap: 0.5em
+        width: 100%
 
-            .ouro
-                background-color: gold
-
-            .prata
-                background-color: silver
-
-            .bronze
-                background-color: #CD7F32
-
+        .partida
             a
-                font-size: 1.5em
+                @include mixins.grid-center
                 text-decoration: none
-                color: var(--fc)
-                font-weight: bold
+                grid-template-columns: auto auto auto
+                color: inherit
+                border: 1px solid var(--border)
+                border-radius: 1em
+                padding: 0.5em            
+                
+                .escudo
+                    width: 2em
+                    margin: 0 auto
 
-        #jogos
-            @include mixins.flex-column
-            width: 90%
-            margin: 1em 5%
+                .nomeCampeonato
+                    grid-column-start: 1
+                    grid-column-end: 4
 
-            .pagination
-                margin-bottom: 0.5em
+                .texto
+                    display: flex
+                    justify-content: space-evenly
+                    margin: auto 0
+                    font-size: 1em
+            
+.ranking
+    margin: 0 5%
+    width: 90%
+    border-collapse: collapse
 
-                button
-                    background-color: var(--bg)
-                    color: var(--fc)
-                    margin: 0 0.5em
-                    padding: 0.2em 0.8em
-                    border-width: 2px
-                    border-style: outset
-                    border-color: var(--border)
-                    cursor: pointer
+    th, td
+        padding: 8px
+        text-align: center
 
-                span
-                    color: var(--fc)
+    th 
+        border-bottom: 1px solid var(--border)
+        font-size: 1.5em
+    
+    tr
+        height: 2em
 
-            .container-partidas
-                display: flex
-                flex-direction: column
-                text-align: center
-                row-gap: 0.5em
-                width: 100%
+    tr:nth-child(even)
+        background: var(--hover)
 
-                .partida
-                    a
-                        @include mixins.grid-center
-                        text-decoration: none
-                        grid-template-columns: auto auto auto
-                        color: inherit
-                        border: 1px solid var(--border)
-                        border-radius: 1em
-                        padding: 0.5em            
-                        
-                        .escudo
-                            width: 2em
-                            margin: 0 auto
+    td
+        span
+            width: 1.5em
+            height: 1.5em
+            color: black
+            border-radius: 50%
+            display: flex
+            justify-content: center
+            align-items: center
+            margin: auto
 
-                        .nomeCampeonato
-                            grid-column-start: 1
-                            grid-column-end: 4
+    .ouro
+        background-color: gold
 
-                        .texto
-                            display: flex
-                            justify-content: space-evenly
-                            margin: auto 0
-                            font-size: 1em
+    .prata
+        background-color: silver
 
-        #estatisticas
-            display: none
+    .bronze
+        background-color: #CD7F32
+
+    a
+        font-size: 1.5em
+        text-decoration: none
+        color: var(--fc)
+        font-weight: bold
+
+#estatisticas
+
+    select
+        width: 100%
+        border-width: 2px
+        border-style: outset
+        border-color: var(--border)   
+        padding: 4px
+        margin: auto 0
+        color: var(--fc)
+        background-color: var(--bg)

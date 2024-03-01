@@ -73,6 +73,11 @@ urlpatterns = [
     path("classificacao/<int:edicao>/<int:rodada_inicial>/<int:rodada_final>/<int:tipoClassificacao>", views.classificacaoTimesEdicao, name="classificacao"),
     path("registroPalpiteEdicao/<int:edicao>/<int:posicao>/<path:time>/<str:pc>", views.registroPalpiteEdicao, name="registroPalpiteEdicao"),
     path("timesCampeonato/<int:edicao>", views.timesCampeonato, name="timesCampeonato"),
+    path("estatistica/<int:idEdicao>/cravadas", views.estatisticaCravada, name="estatisticaCravada"),
+    path("estatistica/<int:idEdicao>/avgPontos", views.estatisticaAvgPontos, name="estatisticaAvgPontos"),
+    path("estatistica/<int:idEdicao>/modaResultados", views.estatisticaModaResultados, name="estatisticaModaResultados"),
+    path("estatistica/<int:idEdicao>/modaPalpites", views.estatisticaModaPalpites, name="estatisticaModaPalpites"),
+    path("estatistica/<int:idEdicao>/rankingClassicacao", views.estatisticaRankingClassicacao, name="estatisticaRankingClassicacao"),
 
     # ============== Partidas ==============
     path("registrar_rodada_feita", views.registrar_rodada_feita, name="registrar_rodada_feita"),

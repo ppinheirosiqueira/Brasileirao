@@ -332,7 +332,66 @@
 }
 
 #estatisticas {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
   display: none;
+}
+#estatisticas select {
+  width: 100%;
+  border-width: 2px;
+  border-style: outset;
+  border-color: var(--border);
+  padding: 5px;
+  margin: auto 0;
+  color: var(--fc);
+  background-color: var(--bg);
+}
+#estatisticas .ranking {
+  margin: 0 1%;
+  width: 98%;
+  border-collapse: collapse;
+  font-size: 0.8em;
+}
+#estatisticas .ranking th, #estatisticas .ranking td {
+  padding: 8px;
+  text-align: center;
+}
+#estatisticas .ranking th {
+  border-bottom: 1px solid var(--border);
+  font-size: 1.5em;
+}
+#estatisticas .ranking tr {
+  height: 2em;
+}
+#estatisticas .ranking tr:nth-child(even) {
+  background: var(--hover);
+}
+#estatisticas .ranking td span {
+  width: 1.5em;
+  height: 1.5em;
+  color: black;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+#estatisticas .ranking td .ouro {
+  background-color: gold;
+}
+#estatisticas .ranking td .prata {
+  background-color: silver;
+}
+#estatisticas .ranking td .bronze {
+  background-color: #CD7F32;
+}
+#estatisticas .ranking td a {
+  font-size: 1.5em;
+  text-decoration: none;
+  color: var(--fc);
+  font-weight: bold;
 }
 
 #palpites {

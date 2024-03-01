@@ -312,7 +312,66 @@
                     font-size: 1em
 
 #estatisticas
+    @include mixins.flex-column
+    width: 100%
     display: none
+
+    select
+        width: 100%
+        border-width: 2px
+        border-style: outset
+        border-color: var(--border)    
+        padding: 5px
+        margin: auto 0
+        color: var(--fc)
+        background-color: var(--bg)
+    
+    .ranking
+        margin: 0 1%
+        width: 98%
+        border-collapse: collapse
+        font-size: 0.8em
+
+        th, td
+            padding: 8px
+            text-align: center
+
+        th 
+            border-bottom: 1px solid var(--border)
+            font-size: 1.5em
+        
+        tr
+            height: 2em
+
+        tr:nth-child(even)
+            background: var(--hover)
+
+        td
+        
+            span
+                width: 1.5em
+                height: 1.5em
+                color: black
+                border-radius: 50%
+                display: flex
+                justify-content: center
+                align-items: center
+                margin: auto
+
+            .ouro
+                background-color: gold
+
+            .prata
+                background-color: silver
+
+            .bronze
+                background-color: #CD7F32
+
+            a
+                font-size: 1.5em
+                text-decoration: none
+                color: var(--fc)
+                font-weight: bold
 
 #palpites
     display: none
