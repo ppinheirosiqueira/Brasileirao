@@ -94,10 +94,10 @@
             </nav>
         {% endif %}
 
-        {% if request|is_mobile %}
-            <div class="container">{% block bodyMobile %}{% endblock %}</div>
-        {% else %}
+        {% if request|is_pc %}
             <div class="container">{% block bodyPC %}{% endblock %}</div>
+        {% else %}
+            <div class="container">{% block bodyMobile %}{% endblock %}</div>
         {% endif %}
 
         {% if request|is_mobile %}
