@@ -780,3 +780,10 @@ def estatisticaModaResultados(request, idEdicao):
 def estatisticaRankingClassicacao(request, idEdicao):
     rankingClassicacao = funcoes.rankingClassicacao(idEdicao)
     return JsonResponse(rankingClassicacao, safe=False)
+
+# Visões de Erro
+def pagina_404(request, exception):
+    return render(request, 'palpites/404.html', status=404)
+
+def pagina_500(request):
+    return render(request, 'palpites/500.html', status=500)

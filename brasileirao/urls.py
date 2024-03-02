@@ -19,6 +19,9 @@ from django.conf import settings
 from django.conf.urls import include
 from django.conf.urls.static import static
 
+handler404 = 'palpites.views.pagina_404'
+handler500 = 'palpites.views.pagina_500'
+
 urlpatterns = [
     path('admin/', admin.site.urls, name="admin"),
     path('', include("palpites.urls")),
