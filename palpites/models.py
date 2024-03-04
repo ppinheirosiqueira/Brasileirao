@@ -87,7 +87,6 @@ class Grupo(models.Model):
 class Partida(models.Model):
     id = models.AutoField(primary_key=True)
     dia = models.DateTimeField()
-    rodada = models.IntegerField(null=True)
     Rodada = models.ForeignKey("Rodada",null=True, blank=True, on_delete=models.SET_NULL)
     Mandante = models.ForeignKey("Time",on_delete=models.CASCADE, related_name='mandante')
     Visitante = models.ForeignKey("Time",on_delete=models.CASCADE, related_name='visitante')

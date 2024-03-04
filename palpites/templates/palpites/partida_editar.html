@@ -7,6 +7,8 @@
 
 {% block style %}
     <link rel="stylesheet" href="{% static 'css/att_partida.css' %}?v=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="{% static 'scripts/att_partida.js' %}?v=1.0"></script>
 {% endblock %}
 
 {% block bodyPC %}
@@ -16,7 +18,7 @@
     <div class="partidas">
         {% if partidas|length > 0 %}
             <h1>Lista de Partidas</h1>
-            <form action="{% url 'change_match' %}" method="post">
+            <form id="att_partida">
                 {% csrf_token %}
                 <label for="partida">Partida que deseja atualizar:</label><br>
                 <select id="partida" name="partida">
@@ -27,9 +29,9 @@
                     {% endfor %}
                 </select><br><br>
                 <label for="gMan">Gols do Time Mandante:</label><br>
-                <input type="number" name="gMan" min="0"><br><br>
+                <input type="number" id="gMan" name="gMan" min="0"><br><br>
                 <label for="gVis">Gols do Time Visitante:</label><br>
-                <input type="number" name="gVis" min="0"><br><br>
+                <input type="number" id="gVis" name="gVis" min="0"><br><br>
                 <label for="data">Data do Jogo:</label><br>
                 <input type="datetime-local" name="data" id="data"><br><br>
                 <input type="submit" value="Atualizar">
@@ -47,7 +49,7 @@
     <div class="partidas">
         {% if partidas|length > 0 %}
             <h1>Lista de Partidas</h1>
-            <form action="{% url 'change_match' %}" method="post">
+            <form id="att_partida">
                 {% csrf_token %}
                 <label for="partida">Partida que deseja atualizar:</label><br>
                 <select id="partida" name="partida">

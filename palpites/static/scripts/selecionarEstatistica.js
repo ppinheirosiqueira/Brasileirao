@@ -45,6 +45,7 @@ function cabecalho(valor){
                         <th>Posição</th>
                         <th>Usuário</th>
                         <th>Nº de Cravadas</th>
+                        <th>Nº de Zeradas</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -113,7 +114,10 @@ function cravada(vetor){
     var celula3 = document.createElement('td');
     celula3.textContent = vetor[3];
 
-    return [celula1, celula2, celula3]
+    var celula4 = document.createElement('td');
+    celula4.textContent = vetor[4];
+
+    return [celula1, celula2, celula3, celula4]
 }
 
 function avgPontos(vetor){

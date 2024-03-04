@@ -1,7 +1,9 @@
-from .models import User, Time, Partida, Palpite_Partida, Palpite_Campeonato, EdicaoCampeonato
+from .models import User, Time, Partida, Palpite_Partida, Palpite_Campeonato, EdicaoCampeonato, Rodada
 from django.db.models import F, Q, Sum, Count, Value, Func
 from django.db.models.functions import Coalesce
 from collections import defaultdict
+from django.db.models.functions import Lower
+from django.utils import timezone
 
 def check_pontuacao_pepe(palpites):
     mandante = palpites.filter(golsMandante=F('partida__golsMandante')).count()
@@ -53,11 +55,11 @@ def ranking(edicao, rodada):
 
     usernames, ids, pontosP, difGols = zip(*tuplas_ordenadas)
     posicao = []
-    for i, _ in enumerate(usernames, start=0):
+    for i, _ in enumerate(usernames, start=1):
         if i < len(usernames) and (pontosP[i] == pontosP[i - 1] and difGols[i] == difGols[i - 1]):
             posicao.append("-")
         else:
-            posicao.append(i+1)
+            posicao.append(i)
 
     return zip(posicao,usernames,ids,pontosP,difGols)
 
@@ -97,24 +99,51 @@ def rankingTimesNoPerfil(id):
 
     return sorted(zip(imagem,ids,porcentagemP,difGols,numJogos), key=lambda x: (-x[2], x[3]))
 
+def obter_dados_campeonato(id):
+    try:
+        campeonato = EdicaoCampeonato.objects.get(id=id)
+        
+        times = campeonato.times.all()
+        times_data = [{'id': time.id, 'nome': time.Nome} for time in times]
+
+        rodadas = Rodada.objects.filter(edicao_campeonato=campeonato)
+        rodadas_data = [{'id': rodada.id, 'nome': rodada.nome} for rodada in rodadas]
+
+        return times_data, rodadas_data
+    except EdicaoCampeonato.DoesNotExist:
+        raise Exception('Edição de campeonato não encontrada')
+    except Exception as e:
+        raise Exception(str(e))
+
 def cravadas(edicao):
-    palpites = Palpite_Partida.objects.filter(partida__Rodada__edicao_campeonato=edicao)
+    palpites = Palpite_Partida.objects.filter(partida__Rodada__edicao_campeonato__id=edicao)
     palpites_cravados = palpites.filter(
         golsMandante=F('partida__golsMandante'),
         golsVisitante=F('partida__golsVisitante'),
         vencedor=F('partida__vencedor')
     )
+    palpites_zerados = palpites.exclude(golsMandante=F('partida__golsMandante')).exclude(golsVisitante=F('partida__golsVisitante')).exclude(vencedor=F('partida__vencedor')).exclude(partida__golsMandante=-1)
 
-    cravadas_por_usuario = palpites_cravados.values('usuario__id', 'usuario__username').annotate(cravadas=Count('id')).order_by('-cravadas')
+    dados_por_usuario = palpites_cravados.values('usuario__id', 'usuario__username').annotate(cravadas=Count('id')).order_by('-cravadas')
+    
+    for item in dados_por_usuario:
+        usuario_id = item['usuario__id']
+        palpites_zerados_usuario = palpites_zerados.filter(usuario__id=usuario_id).count()
+        item['zerados'] = palpites_zerados_usuario
+    
+    dados_por_usuario = sorted(dados_por_usuario, key=lambda x: (-x['cravadas'], x['zerados']))
+    
     dados = []
     cravadas_anterior = None
-    for i, item in enumerate(cravadas_por_usuario,1):
-        if cravadas_anterior is not None and item['cravadas'] == cravadas_anterior:
-            cravadas_display = '-'
+    zeradas_anterior = None
+    for i, item in enumerate(dados_por_usuario, 1):
+        if cravadas_anterior is not None and item['cravadas'] == cravadas_anterior and item['zerados'] == zeradas_anterior:
+            ranking_display = '-'
         else:
-            cravadas_display = i
-        dados.append((cravadas_display, item['usuario__id'], item['usuario__username'], item['cravadas']))
+            ranking_display = i
+        dados.append((ranking_display, item['usuario__id'], item['usuario__username'], item['cravadas'], item['zerados']))
         cravadas_anterior = item['cravadas']
+        zeradas_anterior = item['zerados']
 
     return dados
 
@@ -243,6 +272,26 @@ def rankingClassicacao(edicao):
 
     return resultado_final
 
+def palpite_da_partida(partida):
+    palpites = Palpite_Partida.objects.filter(partida=partida).order_by(Lower("usuario__username"))
+    resultados = []
+    for palpite in palpites:
+        resultados.append(check_pontuacao_pepe_jogo(palpite))
+    
+    return zip(palpites,resultados), len(palpites)
+
+def get_anterior_proximo_partida(partida, time):
+    if not time:
+        partidas = list(Partida.objects.all())
+    else:
+        partidas = list(Partida.objects.filter(Q(Mandante__Nome=time) | Q(Visitante__Nome=time)).order_by('id'))
+
+    indice = partidas.index(partida)
+    anterior = partidas[indice - 1].id if indice - 1 >= 0 else None
+    proximo = partidas[indice + 1].id if indice + 1 < len(partidas) else None
+
+    return anterior, proximo
+
 # Função % acertos do jogador
 def accuracy_user(id_usuario):
     palpites = Palpite_Partida.objects.filter(usuario=id_usuario).exclude(partida__golsMandante=-1, partida__golsVisitante=-1)
@@ -367,3 +416,11 @@ def definirVencedor(golsMandante, golsVisitante):
     elif golsMandante < golsVisitante:
         return 2
     return 0
+
+def get_edicoes():
+    edicoes = list(EdicaoCampeonato.objects.annotate(num_partidas=Count('rodada__partida')).filter(num_partidas__gt=0).order_by('-id'))
+    ultimo_jogo_ocorrido = Partida.objects.exclude(dia__gt=timezone.now()).order_by('dia').last()
+    Edicao_ultimo_jogo = EdicaoCampeonato.objects.get(rodada__partida__id=ultimo_jogo_ocorrido.id)
+    edicoes.remove(Edicao_ultimo_jogo)
+    edicoes.insert(0, Edicao_ultimo_jogo)
+    return edicoes

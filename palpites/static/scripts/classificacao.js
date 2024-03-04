@@ -47,7 +47,7 @@ function fetchClassificacao(){
             return response.json();
         })
         .then(function(data) {
-            exibirDados(data)
+            exibirDadosClassificacao(data)
         })
         .catch(function(error) {
             console.log('Ocorreu um erro:', error);
@@ -59,7 +59,7 @@ function attClassificacao(valor) {
     fetchClassificacao()
 }
 
-function cabecalho(){
+function cabecalhoClassificacao(){
     if (isPc){
         return`
         <thead>
@@ -98,11 +98,11 @@ function cabecalho(){
 
 }
 
-function exibirDados(data){
+function exibirDadosClassificacao(data){
     var classificacaoDiv = document.getElementsByClassName('tabelaClassificacao')[0]
     var aux = 1
     if (data.length){
-        texto = cabecalho()
+        texto = cabecalhoClassificacao()
         if(isPc){
             data.forEach(function(time){
                 texto += "<tr>"

@@ -1,7 +1,7 @@
 from django import forms
 from .models import User, Time
 
-class ProfileUpdateForm(forms.ModelForm):
+class ProfileImageUpdateForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['profile_image']

@@ -64,21 +64,6 @@
                                     <div class="third-place">{{ campeaoPepe.2.pontos }}</div>
                                 {% endif %}
                             </div>
-                            {% if temPalpite %}
-                                <div class="podium">
-                                    <div class="tituloPodio"><h1>Campeão</h1></div>
-                                    <a class="imagem1" href="{%  url 'userView' id=campeaoCLassificacao.0.id %}"><img src="/media/{{ campeaoCLassificacao.0.imagem }}" alt="Primeiro Lugar"></a>
-                                    <div class="first-place">{{ campeaoCLassificacao.0.pontos }}</div>
-                                    {% if campeaoCLassificacao.1 %}
-                                        <a class="imagem2" href="{%  url 'userView' id=campeaoCLassificacao.1.id %}"><img src="/media/{{ campeaoCLassificacao.1.imagem }}" alt="Segundo Lugar"></a>
-                                        <div class="second-place">{{ campeaoCLassificacao.1.pontos }}</div>
-                                    {% endif %}
-                                    {% if campeaoCLassificacao.2 %}
-                                        <a class="imagem3" href="{%  url 'userView' id=campeaoCLassificacao.2.id %}"><img src="/media/{{ campeaoCLassificacao.2.imagem }}" alt="Terceiro Lugar"></a>
-                                        <div class="third-place">{{ campeaoCLassificacao.2.pontos }}</div>
-                                    {% endif %}
-                                </div>
-                            {% endif %}
                         {% endif %}
                     </div>
                 {% endif %}
@@ -250,10 +235,11 @@
                                     <th>Posição</th>
                                     <th>Usuário</th>
                                     <th>Nº de Cravadas</th>
+                                    <th>Nº de Zeradas</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for posicao, id, usuario, N_cravadas in cravadas %}
+                                {% for posicao, id, usuario, N_cravadas, N_zeradas in cravadas %}
                                     <tr>
                                         <td>
                                             {% if posicao == 1 or posicao == 2 or posicao == 3 %}
@@ -264,6 +250,7 @@
                                         </td>
                                         <td><a href="{%  url 'userView' id=id %}">{{ usuario }}</a></td>
                                         <td>{{ N_cravadas }}</td>
+                                        <td>{{ N_zeradas }}</td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
@@ -359,10 +346,11 @@
                                 <th>Posição</th>
                                 <th>Usuário</th>
                                 <th>Nº de Cravadas</th>
+                                <th>Nº de Zeradas</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for posicao, id, usuario, N_cravadas in cravadas %}
+                            {% for posicao, id, usuario, N_cravadas, N_zeradas in cravadas %}
                                 <tr>
                                     <td>
                                         {% if posicao == 1 or posicao == 2 or posicao == 3 %}
@@ -373,6 +361,7 @@
                                     </td>
                                     <td><a href="{%  url 'userView' id=id %}">{{ usuario }}</a></td>
                                     <td>{{ N_cravadas }}</td>
+                                    <td>{{ N_zeradas }}</td>
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -424,12 +413,18 @@
             {% if edicao.terminou %}
                 <div class="podium">
                     <div class="tituloPodio"><h1>Campeão</h1></div>
-                    <a class="imagem1" href="{%  url 'userView' id=campeaoPepe.0.id %}"><img src="/media/{{ campeaoPepe.0.imagem }}" alt="Primeiro Lugar"></a>
-                    <div class="first-place">{{ campeaoPepe.0.pontos }}</div>
-                    <a class="imagem2" href="{%  url 'userView' id=campeaoPepe.1.id %}"><img src="/media/{{ campeaoPepe.1.imagem }}" alt="Segundo Lugar"></a>
-                    <div class="second-place">{{ campeaoPepe.1.pontos }}</div>
-                    <a class="imagem3" href="{%  url 'userView' id=campeaoPepe.2.id %}"><img src="/media/{{ campeaoPepe.2.imagem }}" alt="Terceiro Lugar"></a>
-                    <div class="third-place">{{ campeaoPepe.2.pontos }}</div>
+                    {% if campeaoPepe.0 %}
+                        <a class="imagem1" href="{%  url 'userView' id=campeaoPepe.0.id %}"><img src="/media/{{ campeaoPepe.0.imagem }}" alt="Primeiro Lugar"></a>
+                        <div class="first-place">{{ campeaoPepe.0.pontos }}</div>
+                    {% endif %}
+                    {% if campeaoPepe.1 %}
+                        <a class="imagem2" href="{%  url 'userView' id=campeaoPepe.1.id %}"><img src="/media/{{ campeaoPepe.1.imagem }}" alt="Segundo Lugar"></a>
+                        <div class="second-place">{{ campeaoPepe.1.pontos }}</div>
+                    {% endif %}
+                    {% if campeaoPepe.2 %}
+                        <a class="imagem3" href="{%  url 'userView' id=campeaoPepe.2.id %}"><img src="/media/{{ campeaoPepe.2.imagem }}" alt="Terceiro Lugar"></a>
+                        <div class="third-place">{{ campeaoPepe.2.pontos }}</div>
+                    {% endif %}
                 </div>
             {% endif %}
         </div>

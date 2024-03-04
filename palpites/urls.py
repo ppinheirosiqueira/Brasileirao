@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views
+from . import views, api
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.views.generic.base import RedirectView
 from django.contrib.auth.views import PasswordChangeView
@@ -38,7 +38,7 @@ urlpatterns = [
     path("partida/<int:id>", views.verPartida, name="partida"),
     path("partida/<str:time>/<int:id>", views.verPartida, name="partida_time"),
     path("registrar_partida", views.register_match, name="register_match"),
-    path("atualizar_partida", views.change_match, name="change_match"),
+    path("atualizar_partida", views.editarPartida, name="change_match"),
     path("registrar_partidas", views.register_matches, name="register_matches"),
     
     # ============== Palpitar ==============
@@ -53,13 +53,13 @@ urlpatterns = [
 # =====================================================================================================================
 # =============================================== URL de APIs =========================================================
 # =====================================================================================================================
-    path("alterar_tema/<int:valor>", views.alterar_tema, name="alterar_tema"),
+    path("alterar_tema/<int:valor>", api.alterar_tema, name="alterar_tema"),
 
     # ============== Home ==============
-    path("attGrafico/<str:usuarios>/<int:campeonato>/<int:rod_Ini>/<int:rod_Fin>",views.attGrafico, name="attGrafico"),
-    path("attRodadas/<int:edicao>", views.att_rodadas, name="att_rodadas"),
-    path("ranking/<int:edicao>/<int:rodada>", views.ranking, name="ranking"),
-    path("attPagina/<int:pagina>", views.get_partidas, name="att_paginas"),
+    path("attGrafico/<str:usuarios>/<int:campeonato>/<int:rod_Ini>/<int:rod_Fin>", api.attGrafico, name="attGrafico"),
+    path("attRodadas/<int:edicao>", api.att_rodadas, name="att_rodadas"),
+    path("ranking/<int:edicao>/<int:rodada>", api.get_ranking, name="ranking"),
+    path("attPagina/<int:pagina>", api.get_partidas, name="att_paginas"),
 
     # ============== Usuario ==============
     path('accounts/password_change_done/', RedirectView.as_view(pattern_name='home'), name='password_change_done'),
@@ -69,18 +69,20 @@ urlpatterns = [
     path("profile/<int:id>", views.profile, name="profile"),
 
     # ============== Campeonatos ==============
-    path("attPaginaEdicao/<int:edicao>/<int:pagina>", views.get_partidas_edicao, name="att_paginas_edicao"),
-    path("classificacao/<int:edicao>/<int:rodada_inicial>/<int:rodada_final>/<int:tipoClassificacao>", views.classificacaoTimesEdicao, name="classificacao"),
-    path("registroPalpiteEdicao/<int:edicao>/<int:posicao>/<path:time>/<str:pc>", views.registroPalpiteEdicao, name="registroPalpiteEdicao"),
-    path("timesCampeonato/<int:edicao>", views.timesCampeonato, name="timesCampeonato"),
-    path("estatistica/<int:idEdicao>/cravadas", views.estatisticaCravada, name="estatisticaCravada"),
-    path("estatistica/<int:idEdicao>/avgPontos", views.estatisticaAvgPontos, name="estatisticaAvgPontos"),
-    path("estatistica/<int:idEdicao>/modaResultados", views.estatisticaModaResultados, name="estatisticaModaResultados"),
-    path("estatistica/<int:idEdicao>/modaPalpites", views.estatisticaModaPalpites, name="estatisticaModaPalpites"),
-    path("estatistica/<int:idEdicao>/rankingClassicacao", views.estatisticaRankingClassicacao, name="estatisticaRankingClassicacao"),
+    path("attPaginaEdicao/<int:edicao>/<int:pagina>", api.get_partidas_edicao, name="att_paginas_edicao"),
+    path("classificacao/<int:edicao>/<int:rodada_inicial>/<int:rodada_final>/<int:tipoClassificacao>", api.classificacaoTimesEdicao, name="classificacao"),
+    path("registroPalpiteEdicao/<int:edicao>/<int:posicao>/<path:time>/<str:pc>", api.registroPalpiteEdicao, name="registroPalpiteEdicao"),
+    path("timesCampeonato/<int:idEdicao>", api.timesCampeonato, name="timesCampeonato"),
+    path("estatistica/<int:idEdicao>/cravadas", api.estatisticaCravada, name="estatisticaCravada"),
+    path("estatistica/<int:idEdicao>/avgPontos", api.estatisticaAvgPontos, name="estatisticaAvgPontos"),
+    path("estatistica/<int:idEdicao>/modaResultados", api.estatisticaModaResultados, name="estatisticaModaResultados"),
+    path("estatistica/<int:idEdicao>/modaPalpites", api.estatisticaModaPalpites, name="estatisticaModaPalpites"),
+    path("estatistica/<int:idEdicao>/rankingClassicacao", api.estatisticaRankingClassicacao, name="estatisticaRankingClassicacao"),
 
     # ============== Partidas ==============
-    path("registrar_rodada_feita", views.registrar_rodada_feita, name="registrar_rodada_feita"),
-    path("attPalpite/<int:idPartida>/<int:golsMandante>/<int:golsVisitante>", views.attPalpite, name="attPalpite"),
-    path("attResultado/<int:idPartida>/<int:golsMandante>/<int:golsVisitante>", views.attResultado, name="attResultado"),
+    path("registrar_rodada_feita", api.registrar_rodada_feita, name="registrar_rodada_feita"),
+    path("attPalpite/<int:idPartida>/<int:golsMandante>/<int:golsVisitante>", api.attPalpite, name="attPalpite"),
+    path("attResultado/<int:idPartida>/<int:golsMandante>/<int:golsVisitante>", api.attResultado, name="attResultado"),
+    path("att_partida", api.att_partida, name="attPartida"),
+    path("att_data_partida", api.att_data_partida, name="attDataPartida"),
 ]
