@@ -167,7 +167,6 @@ function exibirGrafico(data){
   minimo = minimo - 5
   if (minimo < 0) minimo = 0
   maximo = maximo + 5
-  if (maximo > 30) maximo = 30
 
   var clrDark = getComputedStyle(document.body).getPropertyValue('--fc');
 
