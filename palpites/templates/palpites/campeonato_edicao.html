@@ -587,10 +587,11 @@
                         <th>Posição</th>
                         <th>Usuário</th>
                         <th>Nº de Cravadas</th>
+                        <th>Nº de Zeradas</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for posicao, id, usuario, N_cravadas in cravadas %}
+                    {% for posicao, id, usuario, N_cravadas, N_zeradas in cravadas %}
                         <tr>
                             <td>
                                 {% if posicao == 1 or posicao == 2 or posicao == 3 %}
@@ -601,6 +602,7 @@
                             </td>
                             <td><a href="{%  url 'userView' id=id %}">{{ usuario }}</a></td>
                             <td>{{ N_cravadas }}</td>
+                            <td>{{ N_zeradas }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>

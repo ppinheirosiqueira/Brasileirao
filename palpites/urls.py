@@ -17,6 +17,7 @@ urlpatterns = [
     path("logout", views.logout_view, name="logout"),
     path("registrar", views.register, name="register"),
     path("usuario/<int:id>", views.verUsuario, name="userView"),
+    path("usuario/tema", views.mudarTema, name="mudar_tema"),
     path("atualizar_senha", PasswordChangeView.as_view(), name="change_password"),
     path("usuario/edicao/<int:id>", views.editarUsuario, name="editUserView"),
 
@@ -63,10 +64,10 @@ urlpatterns = [
 
     # ============== Usuario ==============
     path('accounts/password_change_done/', RedirectView.as_view(pattern_name='home'), name='password_change_done'),
-    path("alterar_time_favorito/<int:id>", views.alterar_time_favorito, name="alterar_time_favorito"),
-    path("alterar_cor_clara/<int:id>", views.alterar_cor_clara, name="alterar_cor_clara"),
-    path("alterar_cor_escura/<int:id>", views.alterar_cor_escura, name="alterar_cor_escura"),
+    path("alterar_time_favorito", api.alterar_time_favorito, name="alterar_time_favorito"),
+    path("alterar_cor_grafico/<int:id>", views.alterar_cor_grafico, name="alterar_cor_grafico"),
     path("profile/<int:id>", views.profile, name="profile"),
+    path("alterar_tema", api.alterar_tema, name="alterar_tema"),
 
     # ============== Campeonatos ==============
     path("attPaginaEdicao/<int:edicao>/<int:pagina>", api.get_partidas_edicao, name="att_paginas_edicao"),

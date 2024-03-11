@@ -1,0 +1,61 @@
+#tema
+    border-left: 2px solid var(--border)
+    grid-template-columns: 1fr 1fr
+    max-width: 100%
+    padding: 5%
+
+    input[type="radio"]
+        display: none
+
+    label
+        width: 90%
+        cursor: pointer
+        display: flex
+        flex-direction: column
+        align-items: center
+        margin: 0 5%
+
+        span
+            text-align: center
+            padding: 0.5em 0
+            font-size: large
+
+        img
+            width: 50%
+
+    input[type="checkbox"]
+        display: none
+
+    .indicator 
+        display: inline-block
+        width: 20px
+        height: 10px
+        border-left: 2px solid
+        border-bottom: 2px solid
+        transform: rotate(-45deg)
+        transition: transform 0.3s ease
+        margin-left: 2em
+
+    .forms
+        border: 1px solid lightgray
+        margin: 2em
+        grid-column-start: 1
+        grid-column-end: 3
+
+    .content-tema
+        max-height: 0
+        overflow: hidden
+        transition: max-height 0.3s ease
+        display: flex
+        flex-direction: column
+
+        label
+            display: block
+
+    .checkbox-tema:checked ~ .content-tema
+        max-height: 500px
+        padding: 2%
+        gap: 5px
+
+    .checkbox-tema:checked + label .indicator
+        transform: rotate(-225deg)

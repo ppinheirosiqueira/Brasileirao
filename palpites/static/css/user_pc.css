@@ -1,0 +1,231 @@
+.divisor {
+  display: grid;
+  grid-template-columns: 3fr 7fr;
+  position: relative;
+}
+.divisor .seletorDiv {
+  display: flex;
+  flex-direction: column;
+  gap: 3em;
+  width: 80%;
+  margin: 20% 0 20% 20%;
+  height: fit-content;
+}
+.divisor .seletorDiv input[type=radio] {
+  display: none;
+}
+.divisor .seletorDiv input[type=radio] + label {
+  color: var(--fc);
+  font-size: 1em;
+  padding: 1em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-radius-left: 2em;
+}
+.divisor .seletorDiv input[type=radio]:checked + label {
+  cursor: pointer;
+  background-color: var(--border);
+  border-radius: 2em 0 0 2em;
+}
+
+#principal {
+  display: block;
+  border-left: 2px solid var(--border);
+}
+#principal .profile {
+  text-align: center;
+  font-size: 1rem;
+  margin-bottom: 1em;
+}
+#principal .profile h1 {
+  font-size: 2em;
+  margin-bottom: 20px;
+}
+#principal .profile .profile-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+@media (max-width: 1000px) {
+  #principal .profile .profile-info {
+    flex-direction: column;
+  }
+}
+#principal .profile .profile-info .profile-image {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 20px;
+}
+@media (max-width: 1000px) {
+  #principal .profile .profile-info .profile-image {
+    width: 250px;
+    height: 250px;
+  }
+}
+#principal .profile .profile-info .user-info h2 {
+  font-size: 1.5em;
+  margin-bottom: 1.5em;
+}
+#principal .profile .profile-info .user-info p {
+  font-size: 1em;
+  margin-bottom: 1em;
+}
+#principal hr {
+  margin: auto;
+}
+#principal h1 {
+  text-align: center;
+  margin: 1em 0;
+}
+#principal .aproveitamento {
+  margin: 2em auto;
+  border-collapse: collapse;
+  width: 80%;
+}
+#principal .aproveitamento th, #principal .aproveitamento td {
+  padding: 8px;
+  text-align: center;
+}
+#principal .aproveitamento td {
+  width: 25%;
+}
+#principal .aproveitamento td .escudo {
+  width: 2em;
+}
+#principal .aproveitamento th {
+  border-bottom: 1px solid var(--fc);
+  font-size: 1.5em;
+}
+#principal .aproveitamento tr {
+  height: 2em;
+}
+#principal .aproveitamento tr:nth-child(even) {
+  background: var(--hover);
+}
+
+#tema {
+  display: none;
+  border-left: 2px solid var(--border);
+  grid-template-columns: 1fr 1fr;
+  max-width: 100%;
+  padding: 5%;
+}
+#tema input[type=radio] {
+  display: none;
+}
+#tema label {
+  width: 90%;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+#tema label span {
+  text-align: center;
+  padding: 0.5em 0;
+  font-size: large;
+}
+#tema label img {
+  width: 100%;
+}
+#tema label img:hover {
+  transform: scale(1.5);
+  transform-origin: top;
+}
+#tema input[type=checkbox] {
+  display: none;
+}
+#tema .indicator {
+  display: inline-block;
+  width: 20px;
+  height: 10px;
+  border-left: 2px solid;
+  border-bottom: 2px solid;
+  transform: rotate(-45deg);
+  transition: transform 0.3s ease;
+  margin-left: 2em;
+}
+#tema .forms {
+  border: 1px solid lightgray;
+  margin: 2em;
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
+#tema .content-tema {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+#tema .content-tema input[type=range] {
+  width: 70%;
+}
+#tema .checkbox-tema:checked ~ .content-tema {
+  max-height: 300px;
+  padding: 2%;
+  gap: 5px;
+}
+#tema .checkbox-tema:checked + label .indicator {
+  transform: rotate(-225deg);
+}
+
+#edicao {
+  display: none;
+  border-left: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 2em;
+}
+#edicao a {
+  color: lightblue;
+}
+#edicao input[type=checkbox] {
+  display: none;
+}
+#edicao label {
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+}
+#edicao .indicator {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-left: 2px solid;
+  border-bottom: 2px solid;
+  transform: rotate(-45deg);
+  transition: transform 0.3s ease;
+  margin-left: 2em;
+}
+#edicao .forms {
+  text-align: center;
+  border: 1px solid lightgray;
+  padding: 1em 2em 1em 2em;
+  width: 50%;
+}
+@media (max-width: 1000px) {
+  #edicao .forms {
+    width: 90%;
+  }
+}
+#edicao .content-imagem, #edicao .content-time, #edicao .content-cor, #edicao .content-cor-2 {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+#edicao .checkbox-imagem:checked ~ .content-imagem, #edicao .checkbox-time:checked ~ .content-time, #edicao .checkbox-cor:checked ~ .content-cor, #edicao .checkbox-cor-2:checked ~ .content-cor-2 {
+  max-height: 300px;
+  padding: 1em 0;
+}
+#edicao .checkbox-imagem:checked + label .indicator, #edicao .checkbox-time:checked ~ label .indicator, #edicao .checkbox-cor:checked ~ label .indicator, #edicao .checkbox-cor-2:checked ~ label .indicator {
+  transform: rotate(-225deg);
+}
+
+/*# sourceMappingURL=user_pc.css.map */

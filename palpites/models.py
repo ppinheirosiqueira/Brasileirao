@@ -18,21 +18,6 @@ def gerar_cor_clara():
 
     return cor_hex
 
-def gerar_cor_escura():
-    # Gerar um valor de cor aleatório em tons escuros
-    # Você pode ajustar os valores de mínimo e máximo para controlar a gama de cores escuras geradas
-    h = random.uniform(0.0, 1.0)  # Matiz
-    s = random.uniform(0.3, 0.7)  # Saturação
-    v = random.uniform(0.0, 0.3)  # Valor (mais próximo de zero para tons escuros)
-
-    # Converter a cor de HSV para RGB
-    r, g, b = colorsys.hsv_to_rgb(h, s, v)
-
-    # Converter os valores de RGB para hexadecimal
-    cor_hex = "#{:02x}{:02x}{:02x}".format(int(r * 255), int(g * 255), int(b * 255))
-
-    return cor_hex
-
 # Create your models here.
 class Time(models.Model):
     id = models.AutoField(primary_key=True)
@@ -71,12 +56,35 @@ class Rodada(models.Model):
 class User(AbstractUser):
     favorite_team = models.ForeignKey(Time, on_delete=models.SET_NULL, null=True, blank=True)
     profile_image = models.ImageField(upload_to='profile_images', default='profile_images/imagem_inexistente.png')
-    corClara = models.CharField(max_length=7, default=gerar_cor_clara())
-    corEscura = models.CharField(max_length=7, default=gerar_cor_escura())
-    dark = models.BooleanField(default=True)
+    corGrafico = models.CharField(max_length=7, default=gerar_cor_clara())
+    corPersonalizada = models.BooleanField(default=False)
+    corFundo = models.CharField(max_length=7, null=True, blank=True)
+    corFonte = models.CharField(max_length=7, null=True, blank=True)
+    corHover = models.CharField(max_length=7, null=True, blank=True)
+    corBorda = models.CharField(max_length=7, null=True, blank=True)
+    corSelecionado = models.CharField(max_length=7, null=True, blank=True)
+    corPontos0 = models.CharField(max_length=7, null=True, blank=True)
+    corPontos1 = models.CharField(max_length=7, null=True, blank=True)
+    corPontos2 = models.CharField(max_length=7, null=True, blank=True)
+    corPontos3 = models.CharField(max_length=7, null=True, blank=True)
+    corFiltro = models.CharField(max_length=128, null=True, blank=True)
 
     def __str__(self):
         return self.username
+    
+    def colors(self):
+        return {
+            "--bg": self.corFundo,
+            "--fc": self.corFonte,
+            "--hover": self.corHover,
+            "--filter": self.corFiltro,
+            "--border": self.corBorda,
+            "--selecionado": self.corSelecionado,
+            "--pontos-0": self.corPontos0,
+            "--pontos-1": self.corPontos1,
+            "--pontos-2": self.corPontos2,
+            "--pontos-3": self.corPontos3,
+        }
     
 class Grupo(models.Model):
     id = models.AutoField(primary_key=True)

@@ -1,101 +1,169 @@
 {% extends "palpites/layout.html" %}
 {% load static %}
+{% load user_agents %}
 
 {% block title %}
     Perfil do Usuário - {{ usuario.username }}
 {% endblock %}
 
 {% block style %}
-    <link rel="stylesheet" href="{% static 'css/user.css' %}?v=1.0">
+    {% if request|is_pc %}
+        <link rel="stylesheet" href="{% static 'css/user_pc.css' %}">
+        {% if user.id == usuario.id %}    
+            <script type="text/javascript" src="{% static 'scripts/selecionarDiv.js' %}?v=1.0"></script>
+            <script type="text/javascript" src="{% static 'scripts/att_timeFavorito.js' %}?v=1.0"></script>
+            <script src="{% static 'scripts/changeTheme.js' %}?v=1.0"></script>
+        {% endif %}
+    {% else %}
+        <link rel="stylesheet" href="{% static 'css/user.css' %}?v=1.0">
+    {% endif %}
 {% endblock %}
 
 {% block bodyPC %}
-    <div class="profile">
-        <h1>Perfil do Usuário</h1>
-        <div class="profile-info">
-            <img src="{{ usuario.profile_image.url }}" alt="Imagem de Perfil" class="profile-image">
-            <div class="user-info">
-                <h2>{{ usuario.username }}</h2>
-                <p>Time Favorito: {{ usuario.favorite_team.Nome }}</p>
-                <p>Média de Pontos Pepe: {{ average_points_pepe|floatformat:2 }}</p>
-                <p>Jogos Palpitados: {{ total_predictions }}</p>
-                <p>% de Acerto do Resultado: {{ accuracy_result|floatformat:2 }}%</p>
-                <p>% de Acerto dos Gols do Mandante: {{ accuracy_goals_mandante|floatformat:2 }}%</p>
-                <p>% de Acerto dos Gols do Visitante: {{ accuracy_goals_visitante|floatformat:2 }}%</p>
-                <p>% de Cravadas: {{ accuracy_total|floatformat:2 }}%</p>
+    {% if user.id == usuario.id %}    
+    <div class="divisor">
+        <div class="seletorDiv">
+            <input type="radio" name="seletorDiv" id="principalSeletor" checked data-display="block"><label for="principalSeletor">Principal</label>
+            <input type="radio" name="seletorDiv" id="temaSeletor" data-display="flex"><label for="temaSeletor">Mudar Tema</label>
+            <input type="radio" name="seletorDiv" id="edicaoSeletor" data-display="inline-block"><label for="edicaoSeletor">Edição Preferências</label>
+        </div>
+        <div id="principal" class="divConteudo" data-display="block">
+            {% include "palpites/blocos_auxiliares/auxiliar_user.html" %}
+        </div>
+        <div id="tema" class="divConteudo" data-display="grid">
+            {% csrf_token %}
+            <label for="default"><input type="radio" name="tema" id="default" onChange="mudarTema('default')">
+                <span>Padrão - Escuro</span><img src="../media/temas/pc_default.png" alt="Default">
+            </label>
+            <label for="tema_cinza_escuro"><input type="radio" name="tema" id="tema_cinza_escuro" onChange="mudarTema('tema_cinza_escuro')">
+                <span>Cinza Escuro</span><img src="../media/temas/pc_cinza_escuro.png" alt="Tema Cinza Escura">
+            </label>
+            <label for="tema_cinza"><input type="radio" name="tema" id="tema_cinza" onChange="mudarTema('tema_cinza')">
+                <span>Tema Cinza</span><img src="../media/temas/pc_cinza.png" alt="Tema Cinza">
+            </label>
+            <label for="tema_cinza_medio"><input type="radio" name="tema" id="tema_cinza_medio" onChange="mudarTema('tema_cinza_medio')">
+                <span>Meio Cinza</span><img src="../media/temas/pc_cinza_medio.png" alt="Tema Cinza Médio">
+            </label>
+            <label for="tema_branco_gelo"><input type="radio" name="tema" id="tema_branco_gelo" onChange="mudarTema('tema_branco_gelo')">
+                <span>Branco Gelo</span><img src="../media/temas/pc_branco_gelo.png" alt="Tema Branco Gelo">
+            </label>
+            <label for="tema_claro"><input type="radio" name="tema" id="tema_claro" onChange="mudarTema('tema_claro')">
+                <span>Tema Claro</span><img src="../media/temas/pc_claro.png" alt="Tema Claro">
+            </label>
+            <label for="tema_vermelho"><input type="radio" name="tema" id="tema_vermelho" onChange="mudarTema('tema_vermelho_escuro')">
+                <span>Vemelho Escuro</span><img src="../media/temas/pc_vermelho_escuro.png" alt="Tema Vermelho">
+            </label>
+            <label for="tema_vermelho_pastel"><input type="radio" name="tema" id="tema_vermelho_pastel" onChange="mudarTema('tema_vermelho_pastel')">
+                <span>Vermelho Pastel</span><img src="../media/temas/pc_vermelho_pastel.png" alt="Tema Vermelho Pastel">
+            </label>
+            <label for="tema_azul"><input type="radio" name="tema" id="tema_azul" onChange="mudarTema('tema_azul_escuro')">
+                <span>Azul Escuro</span><img src="../media/temas/pc_azul_escuro.png" alt="Tema Azul">
+            </label>
+            <label for="tema_azul_pastel"><input type="radio" name="tema" id="tema_azul_pastel" onChange="mudarTema('tema_azul_pastel')">
+                <span>Azul Pastel</span><img src="../media/temas/pc_azul_pastel.png" alt="Tema Azul Pastel">
+            </label>
+            <label for="tema_amarelo_escuro"><input type="radio" name="tema" id="tema_amarelo_escuro" onChange="mudarTema('tema_amarelo_escuro')">
+                <span>Amarelo Escuro</span><img src="../media/temas/pc_amarelo_escuro.png" alt="Tema Amarelo Escuro">
+            </label>
+            <label for="tema_amarelo_pastel"><input type="radio" name="tema" id="tema_amarelo_pastel" onChange="mudarTema('tema_amarelo_pastel')">
+                <span>Amarelo Pastel</span><img src="../media/temas/pc_amarelo_pastel.png" alt="Tema Amarelo Pastel">
+            </label>
+            <label for="tema_roxo"><input type="radio" name="tema" id="tema_roxo" onChange="mudarTema('tema_roxo')">
+                <span>Tema Roxo</span><img src="../media/temas/pc_roxo.png" alt="Tema Roxo">
+            </label>
+            <label for="tema_roxo_pastel"><input type="radio" name="tema" id="tema_roxo_pastel" onChange="mudarTema('tema_roxo_pastel')">
+                <span>Roxo Pastel</span><img src="../media/temas/pc_roxo_pastel.png" alt="Tema Roxo Pastel">
+            </label>
+            <label for="tema_verde"><input type="radio" name="tema" id="tema_verde" onChange="mudarTema('tema_verde')">
+                <span>Tema Verde</span><img src="../media/temas/pc_verde.png" alt="Tema Verde">
+            </label>
+            <label for="tema_verde_pastel"><input type="radio" name="tema" id="tema_verde_pastel" onChange="mudarTema('tema_verde_pastel')">
+                <span>Verde Pastel</span><img src="../media/temas/pc_verde_pastel.png" alt="Tema Verde Pastel">
+            </label>
+            <label for="tema_bege"><input type="radio" name="tema" id="tema_bege" onChange="mudarTema('tema_bege')">
+                <span>Tema Bege</span><img src="../media/temas/pc_bege.png" alt="Tema Bege">
+            </label>
+            <label for="tema_amadeirado"><input type="radio" name="tema" id="tema_marrom" onChange="mudarTema('tema_marrom')">
+                <span>Tema Marrom</span><img src="../media/temas/pc_marrom.png" alt="Tema Marrom">
+            </label>
+            <div class="forms">
+                <input type="checkbox" id="checkbox-tema" class="checkbox-tema">
+                <label for="checkbox-tema">
+                <span>Customizado<span class="indicator"></span>
+                </label>
+                <div class="content-tema">
+                    {% for chave, valor in tema.items %}
+                        {% if chave == '--bg' %}
+                            <label for="corFundo">Background:</label>
+                            <input type="color" id="corFundo" name="corFundo" value="{{ valor }}" onChange="mudarAgora('--bg',value)">
+                        {% endif %}
+                        {% if chave == '--fc' %}
+                            <label for="corFonte">Fonte:</label>
+                            <input type="color" id="corFonte" name="corFonte" value="{{ valor }}" onChange="mudarAgora('--fc',value)">
+                        {% endif %}
+                        {% if chave == '--hover' %}
+                            <label for="corHover">Hover:</label>
+                            <input type="color" id="corHover" name="corHover" value="{{ valor }}" onChange="mudarAgora('--hover',value)">
+                        {% endif %}
+                        {% if chave == '--border' %}
+                            <label for="corBorda">Borda:</label>
+                            <input type="color" id="corBorda" name="corBorda" value="{{ valor }}" onChange="mudarAgora('--border',value)">
+                        {% endif %}
+                        {% if chave == '--selecionado' %}
+                            <label for="corSelecionado">Item Selecionado:</label>
+                            <input type="color" id="corSelecionado" name="corSelecionado" value="{{ valor }}" onChange="mudarAgora('--selecionado',value)">
+                        {% endif %}
+                        {% if chave == '--pontos-0' %}
+                            <label for="cor0">0 pontos na partida:</label>
+                            <input type="color" id="cor0" name="cor0" value="{{ valor }}" onChange="mudarAgora('--pontos-0',value)">
+                        {% endif %}
+                        {% if chave == '--pontos-1' %}
+                            <label for="cor1">1 ponto na partida:</label>
+                            <input type="color" id="cor1" name="cor1" value="{{ valor }}" onChange="mudarAgora('--pontos-1',value)">
+                        {% endif %}
+                        {% if chave == '--pontos-2' %}
+                            <label for="cor2">2 pontos na partida:</label>
+                            <input type="color" id="cor2" name="cor2" value="{{ valor }}" onChange="mudarAgora('--pontos-2',value)">
+                        {% endif %}
+                        {% if chave == '--pontos-3' %}
+                            <label for="cor3">3 pontos na partida:</label>
+                            <input type="color" id="cor3" name="cor3" value="{{ valor }}" onChange="mudarAgora('--pontos-3',value)">
+                        {% endif %}
+                    {% endfor %}
+                    <span></span>
+                    <span></span>
+                    <label for="invert">Invert:</label>
+                    <input type="range" id="invert" name="invert" min="0" max="100" onChange="updateFilter()">
+
+                    <label for="sepia">Sepia:</label>
+                    <input type="range" id="sepia" name="sepia" min="0" max="100"  onChange="updateFilter()">
+
+                    <label for="saturate">Saturate:</label>
+                    <input type="range" id="saturate" name="saturate" min="0" max="500000"  onChange="updateFilter()">
+
+                    <label for="hue-rotate">Hue-Rotate:</label>
+                    <input type="range" id="hue-rotate" name="hue-rotate" min="0" max="360"  onChange="updateFilter()">
+
+                    <label for="brightness">Brightness:</label>
+                    <input type="range" id="brightness" name="brightness" min="0" max="500000"  onChange="updateFilter()">
+
+                    <label for="contrast">Contrast:</label>
+                    <input type="range" id="contrast" name="contrast" min="0" max="500000"  onChange="updateFilter()">
+                    <button onClick="temaCustomizado()">Salvar</button>
+                </div>
             </div>
         </div>
+        <div id="edicao" class="divConteudo" data-display="flex">
+        {% include "palpites/blocos_auxiliares/auxiliar_user_edit.html" %}
+        </div>
     </div>
-    {% if media != None %}
-        <hr width="80%">
-        <h1>Ranking Média por clube</h1>
-        <table class="aproveitamento">
-            <thead>
-                <tr>
-                    <th>Time</th>
-                    <th>% Pepe</th>
-                    <th>Média Dif. Gols</th>
-                    <th>Número de Jogos Palpitados</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for imagem,ids,pontosP,difGols,numJogos in media %}
-                    <tr>
-                        <td><a href="{% url 'show_team' id=ids %}">
-                            <img src="../{{ imagem }}" alt="escudo" class="escudo">
-                        </a></td>
-                        <td>{{ pontosP|floatformat:2 }}</td>
-                        <td>{{ difGols|floatformat:2 }}</td>
-                        <td>{{ numJogos }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
     {% endif %}
+    <div id="principal" class="divConteudo" data-display="block">
+        {% include "palpites/blocos_auxiliares/auxiliar_user.html" %}
+    </div>
 {% endblock %}
 
 
 {% block bodyMobile %}
-    <div class="profile">
-        <h1>Perfil do Usuário</h1>
-        <div class="profile-info">
-            <img src="{{ usuario.profile_image.url }}" alt="Imagem de Perfil" class="profile-image">
-            <div class="user-info">
-                <h2>{{ usuario.username }}</h2>
-                <p>Time Favorito: {{ usuario.favorite_team.Nome }}</p>
-                <p>Média de Pontos Pepe: {{ average_points_pepe|floatformat:2 }}</p>
-                <p>Jogos Palpitados: {{ total_predictions }}</p>
-                <p>% de Acerto do Resultado: {{ accuracy_result|floatformat:2 }}%</p>
-                <p>% de Acerto dos Gols do Mandante: {{ accuracy_goals_mandante|floatformat:2 }}%</p>
-                <p>% de Acerto dos Gols do Visitante: {{ accuracy_goals_visitante|floatformat:2 }}%</p>
-                <p>% de Cravadas: {{ accuracy_total|floatformat:2 }}%</p>
-            </div>
-        </div>
-    </div>
-    {% if media != None %}
-        <hr width="80%">
-        <h1>Ranking Média por clube</h1>
-        <table class="aproveitamento">
-            <thead>
-                <tr>
-                    <th>Time</th>
-                    <th>% Pepe</th>
-                    <th>Média Dif. Gols</th>
-                    <th>Número de Jogos Palpitados</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for imagem,ids,pontosP,difGols,numJogos in media %}
-                    <tr>
-                        <td><a href="{% url 'show_team' id=ids %}">
-                            <img src="../{{ imagem }}" alt="escudo" class="escudo">
-                        </a></td>
-                        <td>{{ pontosP|floatformat:2 }}</td>
-                        <td>{{ difGols|floatformat:2 }}</td>
-                        <td>{{ numJogos }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% endif %}
+    {% include "palpites/blocos_auxiliares/auxiliar_user.html" %}
 {% endblock %}

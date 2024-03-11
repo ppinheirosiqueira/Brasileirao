@@ -1,0 +1,218 @@
+@use 'mixins'
+
+.divisor
+    display: grid
+    grid-template-columns: 3fr 7fr
+    position: relative
+
+    .seletorDiv
+        display: flex
+        flex-direction: column
+        gap: 3em
+        width: 80%
+        margin: 20% 0 20% 20%
+        height: fit-content
+
+        input[type=radio]
+            display: none
+
+        input[type=radio] + label
+            color: var(--fc)
+            font-size: 1em
+            padding: 1em
+            cursor: pointer
+            @include mixins.flex-center
+            border-radius-left: 2em
+
+        input[type=radio]:checked + label
+            cursor: pointer
+            background-color: var(--border)
+            border-radius: 2em 0 0 2em
+
+#principal
+    display: block
+    border-left: 2px solid var(--border)
+
+    .profile
+        text-align: center
+        font-size: 1rem
+        margin-bottom: 1em
+
+        h1
+            font-size: 2em
+            margin-bottom: 20px
+
+        .profile-info 
+            @include mixins.flex-center
+
+            @include mixins.mobile
+                flex-direction: column
+
+            .profile-image 
+                width: 150px
+                height: 150px
+                border-radius: 50%
+                object-fit: cover
+                margin-right: 20px
+
+                @include mixins.mobile
+                    width: 250px
+                    height: 250px
+
+            .user-info 
+                h2 
+                    font-size: 1.5em
+                    margin-bottom: 1.5em
+
+                p 
+                    font-size: 1em
+                    margin-bottom: 1em
+
+    hr
+        margin: auto
+
+    h1
+        text-align: center
+        margin: 1em 0
+
+    .aproveitamento
+        margin: 2em auto
+        border-collapse: collapse
+        width: 80%
+
+        th, td
+            padding: 8px
+            text-align: center
+
+        td
+            width: 25%
+            .escudo
+                width: 2em
+
+        th 
+            border-bottom: 1px solid var(--fc)
+            font-size: 1.5em
+        
+        tr
+            height: 2em
+
+        tr:nth-child(even)
+            background: var(--hover)
+
+#tema
+    display: none
+    border-left: 2px solid var(--border)
+    grid-template-columns: 1fr 1fr
+    max-width: 100%
+    padding: 5%
+
+    input[type="radio"]
+        display: none
+
+    label
+        width: 90%
+        cursor: pointer
+        display: flex
+        flex-direction: column
+
+        span
+            text-align: center
+            padding: 0.5em 0
+            font-size: large
+
+        img
+            width: 100%
+
+            &:hover
+                transform: scale(1.5)
+                transform-origin: top
+
+    input[type="checkbox"]
+        display: none
+
+    .indicator 
+        display: inline-block
+        width: 20px
+        height: 10px
+        border-left: 2px solid
+        border-bottom: 2px solid
+        transform: rotate(-45deg)
+        transition: transform 0.3s ease
+        margin-left: 2em
+
+    .forms
+        border: 1px solid lightgray
+        margin: 2em
+        grid-column-start: 1
+        grid-column-end: 3
+
+    .content-tema
+        max-height: 0
+        overflow: hidden
+        transition: max-height 0.3s ease
+        display: grid
+        grid-template-columns: 1fr 1fr 1fr 1fr
+
+        input[type="range"]
+            width: 70%
+
+    .checkbox-tema:checked ~ .content-tema
+        max-height: 300px
+        padding: 2%
+        gap: 5px
+
+    .checkbox-tema:checked + label .indicator
+        transform: rotate(-225deg)
+
+#edicao
+    display: none
+    border-left: 2px solid var(--border)
+    display: flex
+    align-items: center
+    flex-direction: column
+    padding-top: 2em
+
+    a
+        color: lightblue
+
+    input[type="checkbox"]
+        display: none
+
+    label 
+        cursor: pointer
+        display: flex
+        flex-direction: row
+
+    .indicator 
+        display: inline-block
+        width: 10px
+        height: 10px
+        border-left: 2px solid
+        border-bottom: 2px solid
+        transform: rotate(-45deg)
+        transition: transform 0.3s ease
+        margin-left: 2em
+
+    .forms
+        text-align: center
+        border: 1px solid lightgray
+        padding: 1em 2em 1em 2em
+        width: 50%
+
+        @include mixins.mobile
+            width: 90%
+
+    .content-imagem, .content-time, .content-cor, .content-cor-2 
+        max-height: 0
+        overflow: hidden
+        transition: max-height 0.3s ease
+
+    .checkbox-imagem:checked ~ .content-imagem, .checkbox-time:checked ~ .content-time, .checkbox-cor:checked ~ .content-cor, .checkbox-cor-2:checked ~ .content-cor-2 
+        max-height: 300px
+        padding: 1em 0
+
+    .checkbox-imagem:checked + label .indicator, .checkbox-time:checked ~ label .indicator, .checkbox-cor:checked ~ label .indicator, .checkbox-cor-2:checked ~ label .indicator
+        transform: rotate(-225deg)
+
+
+

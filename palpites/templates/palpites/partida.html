@@ -25,41 +25,7 @@
 {% endblock %}
 
 {% block bodyPC %}
-    {% if jogoComecou %}
-        <div id="resultado">
-            <h1>Modificar Resultado</h1>
-            <div class="jogo">
-                <a href="{% url 'show_team' id=partida.Mandante.id %}">
-                    <img class="escudo" src="/{{ partida.Mandante.escudo }}" alt="escudo mandante">
-                </a>
-                <input type="number" name="golsMandante" id="golsMandante" min=0>
-                <span class="texto">X</span>
-                <input type="number" name="golsVisitante" id="golsVisitante" min=0>
-                <a href="{% url 'show_team' id=partida.Visitante.id %}">    
-                    <img class="escudo" src="/{{ partida.Visitante.escudo }}" alt="escudo visitante">
-                </a>
-            </div>
-            <button type="submit" onclick="modificarResultado()">Modificar Resultado</button>
-            <div class="fechar"><img src="{% static 'icons/close-x.svg' %}" alt="Fechar-Usuários"></div>
-        </div>
-    {% else %}
-        <div id="palpite">
-            <h1>Modificar Palpite</h1>
-            <div class="jogo">
-                <a href="{% url 'show_team' id=partida.Mandante.id %}">
-                    <img class="escudo" src="/{{ partida.Mandante.escudo }}" alt="escudo mandante">
-                </a>
-                <input type="number" name="golsMandante" id="golsMandante" min=0>
-                <span class="texto">X</span>
-                <input type="number" name="golsVisitante" id="golsVisitante" min=0>
-                <a href="{% url 'show_team' id=partida.Visitante.id %}">    
-                    <img class="escudo" src="/{{ partida.Visitante.escudo }}" alt="escudo visitante">
-                </a>
-            </div>
-            <button type="submit" onclick="modificarPalpite()">Palpitar</button>
-            <div class="fechar"><img src="{% static 'icons/close-x.svg' %}" alt="Fechar-Usuários"></div>
-        </div>
-    {% endif %}
+    {% include "palpites/blocos_auxiliares/auxiliar_modificar_palpite_partida.html" %}
     <div class="partida">
         {% if anterior != None %}
             {% if time %}
@@ -111,68 +77,11 @@
         {% endif %}
         <div class="date">{{ partida.dia|date:"d/m/Y H:i:s" }}</div>
     </div>
-    <div class="palpites">
-        {% if tamanho_palpites > 0 %}
-            <h1>Palpites</h1>
-            <div class="jogos">
-                {% for palpite, resultado in palpites %}
-                    <div class="{% if resultado == 0 %}red_border{% elif resultado == 1 %}orange_border{% elif resultado == 2 %}yellow_border{% elif resultado == 3 %}green_border{% endif %} jogo">
-                        <div class="player"><a href="{%  url 'userView' id=palpite.usuario.id %}">{{ palpite.usuario }}</a></div>
-                        <a href="{% url 'show_team' id=partida.Mandante.id %}">
-                            <img class="escudo" src="/{{ partida.Mandante.escudo }}" alt="escudo mandante">
-                        </a>
-                        <span class="texto">{{ palpite.golsMandante }}</span>
-                        <span class="texto">X</span>
-                        <span class="texto">{{ palpite.golsVisitante }}</span>
-                        <a href="{% url 'show_team' id=partida.Visitante.id %}">    
-                            <img class="escudo" src="/{{ partida.Visitante.escudo }}" alt="escudo visitante">
-                        </a>
-                        <div class="resultado">{{  resultado }}</div>
-                    </div>
-                {% endfor %}
-            </div>
-        {% else %}
-            Não houve palpites dessa partida
-        {% endif %}
-    </div>
+    {% include "palpites/blocos_auxiliares/auxiliar_palpites_partida.html" %}
 {% endblock %}
 
 {% block bodyMobile %}
-    {% if jogoComecou %}
-        <div id="resultado">
-            <h1>Modificar Resultado</h1>
-            <div class="jogo">
-                <a href="{% url 'show_team' id=partida.Mandante.id %}">
-                    <img class="escudo" src="/{{ partida.Mandante.escudo }}" alt="escudo mandante">
-                </a>
-                <input type="number" name="golsMandante" id="golsMandante" min=0>
-                <span class="texto">X</span>
-                <input type="number" name="golsVisitante" id="golsVisitante" min=0>
-                <a href="{% url 'show_team' id=partida.Visitante.id %}">    
-                    <img class="escudo" src="/{{ partida.Visitante.escudo }}" alt="escudo visitante">
-                </a>
-            </div>
-            <button type="submit" onclick="modificarResultado()">Modificar Resultado</button>
-            <div class="fechar"><img src="{% static 'icons/close-x.svg' %}" alt="Fechar-Usuários"></div>
-        </div>
-    {% else %}
-        <div id="palpite">
-            <h1>Modificar Palpite</h1>
-            <div class="jogo">
-                <a href="{% url 'show_team' id=partida.Mandante.id %}">
-                    <img class="escudo" src="/{{ partida.Mandante.escudo }}" alt="escudo mandante">
-                </a>
-                <input type="number" name="golsMandante" id="golsMandante" min=0>
-                <span class="texto">X</span>
-                <input type="number" name="golsVisitante" id="golsVisitante" min=0>
-                <a href="{% url 'show_team' id=partida.Visitante.id %}">    
-                    <img class="escudo" src="/{{ partida.Visitante.escudo }}" alt="escudo visitante">
-                </a>
-            </div>
-            <button type="submit" onclick="modificarPalpite()">Palpitar</button>
-            <div class="fechar"><img src="{% static 'icons/close-x.svg' %}" alt="Fechar-Usuários"></div>
-        </div>
-    {% endif %}
+    {% include "palpites/blocos_auxiliares/auxiliar_modificar_palpite_partida.html" %}
     <div class="partida">
         <div class="round">
             <a href="{% url 'edicao' campeonato=partida.Rodada.edicao_campeonato.campeonato.id edicao=partida.Rodada.edicao_campeonato.num_edicao %}">{{ partida.Rodada.edicao_campeonato }}</a>
@@ -206,28 +115,5 @@
         </a>
         <div class="date">{{ partida.dia|date:"d/m/Y H:i:s" }}</div>
     </div>
-    <div class="palpites">
-        {% if tamanho_palpites > 0 %}
-            <h1>Palpites</h1>
-            <div class="jogos">
-                {% for palpite, resultado in palpites %}
-                    <div class="{% if resultado == 0 %}red_border{% elif resultado == 1 %}orange_border{% elif resultado == 2 %}yellow_border{% elif resultado == 3 %}green_border{% endif %} jogo">
-                        <div class="player"><a href="{%  url 'userView' id=palpite.usuario.id %}">{{ palpite.usuario }}</a></div>
-                        <a href="{% url 'show_team' id=partida.Mandante.id %}">
-                            <img class="escudo" src="/{{ partida.Mandante.escudo }}" alt="escudo mandante">
-                        </a>
-                        <span class="texto">{{ palpite.golsMandante }}</span>
-                        <span class="texto">X</span>
-                        <span class="texto">{{ palpite.golsVisitante }}</span>
-                        <a href="{% url 'show_team' id=partida.Visitante.id %}">    
-                            <img class="escudo" src="/{{ partida.Visitante.escudo }}" alt="escudo visitante">
-                        </a>
-                        <div class="resultado">{{  resultado }}</div>
-                    </div>
-                {% endfor %}
-            </div>
-        {% else %}
-            Não houve palpites dessa partida
-        {% endif %}
-    </div>
+    {% include "palpites/blocos_auxiliares/auxiliar_palpites_partida.html" %}
 {% endblock %}

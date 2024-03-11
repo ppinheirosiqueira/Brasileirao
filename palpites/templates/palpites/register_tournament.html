@@ -1,46 +1,23 @@
 {% extends "palpites/layout.html" %}
 {% load static %}
+{% load user_agents %}
 
 {% block title %}
     {{title}}
 {% endblock %}
 
 {% block style %}
-    <link rel="stylesheet" href="{% static 'styles/registrar_time.css' %}?v=1.0">
+    {% if request|is_pc %}
+        <link rel="stylesheet" href="{% static 'css/registrar_time_pc.css' %}?v=1.2">
+    {% else %}
+        <link rel="stylesheet" href="{% static 'css/registrar_time_mobile.css' %}?v=1.2">
+    {% endif %}
 {% endblock %}
 
 {% block bodyPC %}
-    {% if message %}
-    <h3>{{ message | safe }}</h3>
-    {% endif %}
-    <div class="adicionar_time">
-        <h2>Registrar Campeonato</h2>
-        <form action="{% url 'register_tournament' %}" method="post">
-            {% csrf_token %}
-            <label for="campeonato">Nome do Campeonato:</label><br>
-            <input autofocus type="text" name="campeonato" placeholder="Nome do Campeonato"><br><br>
-            <label for="edicao">Nome da Edição:</label><br>
-            <input type="text" name="edicao" placeholder="Edição do Campeonato"><br><br>
-            <input type="checkbox" name="pontosCorridos" checked><label for="pontosCorridos">Pontos Corridos</label><br><br>
-            <input type="submit" value="Registrar">
-        </form>
-    </div>
+    {% include "palpites/blocos_auxiliares/auxiliar_campeonato_registro.html" %}
 {% endblock %}
 
 {% block bodyMobile %}
-    {% if message %}
-    <h3>{{ message | safe }}</h3>
-    {% endif %}
-    <div class="adicionar_time">
-        <h2>Registrar Campeonato</h2>
-        <form action="{% url 'register_tournament' %}" method="post">
-            {% csrf_token %}
-            <label for="campeonato">Nome do Campeonato:</label><br>
-            <input autofocus type="text" name="campeonato" placeholder="Nome do Campeonato"><br><br>
-            <label for="edicao">Nome da Edição:</label><br>
-            <input type="text" name="edicao" placeholder="Edição do Campeonato"><br><br>
-            <input type="checkbox" name="pontosCorridos" checked><label for="pontosCorridos">Pontos Corridos</label><br><br>
-            <input type="submit" value="Registrar">
-        </form>
-    </div>
+    {% include "palpites/blocos_auxiliares/auxiliar_campeonato_registro.html" %}
 {% endblock %}

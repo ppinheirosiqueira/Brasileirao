@@ -21,7 +21,7 @@ document.addEventListener('touchend', function(e) {
         if (diffX > 0) {
             if (anterior != "None"){
                 if (time != "None"){
-                    window.location.href = `../partida/${time}/${anterior}`
+                    window.location.href = `../../partida/${time}/${anterior}`
                 }
                 else{
                     window.location.href = `../partida/${anterior}`
@@ -30,7 +30,7 @@ document.addEventListener('touchend', function(e) {
         } else {
             if (proxima != "None"){
                 if (time != "None"){
-                    window.location.href = `../partida/${time}/${proxima}`
+                    window.location.href = `../../partida/${time}/${proxima}`
                 }
                 else{
                     window.location.href = `../partida/${proxima}`

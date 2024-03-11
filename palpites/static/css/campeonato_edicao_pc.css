@@ -134,8 +134,7 @@
   text-align: center;
 }
 .campeonato .left #classificacao .filtro input[type=radio]:checked + label {
-  background-color: var(--fc);
-  color: var(--bg);
+  background-color: var(--selecionado);
   border-color: var(--bg);
   cursor: pointer;
 }

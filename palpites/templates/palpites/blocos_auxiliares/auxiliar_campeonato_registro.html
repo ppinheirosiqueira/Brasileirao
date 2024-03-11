@@ -1,0 +1,15 @@
+{% if message %}
+<h3>{{ message | safe }}</h3>
+{% endif %}
+<div class="adicionar_time">
+    <h2>Registrar Campeonato</h2>
+    <form action="{% url 'register_tournament' %}" method="post">
+        {% csrf_token %}
+        <label for="campeonato">Nome do Campeonato:</label><br>
+        <input autofocus type="text" name="campeonato" placeholder="Nome do Campeonato"><br><br>
+        <label for="edicao">Nome da Edição:</label><br>
+        <input type="text" name="edicao" placeholder="Edição do Campeonato"><br><br>
+        <input type="checkbox" name="pontosCorridos" checked><label for="pontosCorridos">Pontos Corridos</label><br><br>
+        <input type="submit" value="Registrar">
+    </form>
+</div>

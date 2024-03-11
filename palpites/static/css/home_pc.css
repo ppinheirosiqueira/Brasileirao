@@ -1,4 +1,5 @@
 .home {
+  padding-top: 1em;
   display: flex;
   flex-direction: row;
   font-size: 1rem;
@@ -21,14 +22,8 @@
   align-items: center;
 }
 .home .rankingContainer .filtro select {
-  color: var(--fc);
-  background-color: var(--bg);
-  border: none;
   font-size: 0.8em;
-  border-width: 2px;
-  border-style: outset;
-  border-color: var(--border);
-  padding: 0.5em;
+  width: 12em;
 }
 .home .rankingContainer .ranking {
   margin: 0 15%;
@@ -96,16 +91,6 @@
 .home .jogos .pagination {
   margin-bottom: 0.5em;
 }
-.home .jogos .pagination button {
-  background-color: var(--bg);
-  color: var(--fc);
-  margin: 0 0.5em;
-  padding: 0.2em 0.8em;
-  border-width: 2px;
-  border-style: outset;
-  border-color: var(--border);
-  cursor: pointer;
-}
 .home .jogos .pagination span {
   color: var(--fc);
 }
@@ -150,18 +135,6 @@
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 2fr 1fr 1fr 1fr 1fr;
   align-items: center;
-}
-.graficoContainer .seletores select {
-  width: 7em;
-  height: 2.5em;
-  border-width: 2px;
-  border-style: outset;
-  border-color: var(--border);
-  padding: 5px;
-  font-size: 1em;
-  margin: auto 0;
-  color: var(--fc);
-  background-color: var(--bg);
 }
 .graficoContainer .seletores #campeonato {
   width: 90%;

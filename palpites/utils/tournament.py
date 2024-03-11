@@ -1,119 +1,17 @@
-from .models import User, Time, Partida, Palpite_Partida, Palpite_Campeonato, EdicaoCampeonato, Rodada
-from django.db.models import F, Q, Sum, Count, Value, Func
+from ..models import Palpite_Partida, User, Partida, Palpite_Campeonato, EdicaoCampeonato, Rodada
+from django.db.models import F, Count, Sum, Q, Value
 from django.db.models.functions import Coalesce
+from .score import check_pontuacao_pepe, check_diferenca_gols
 from collections import defaultdict
-from django.db.models.functions import Lower
 from django.utils import timezone
 
-def check_pontuacao_pepe(palpites):
-    mandante = palpites.filter(golsMandante=F('partida__golsMandante')).count()
-    visitante = palpites.filter(golsVisitante=F('partida__golsVisitante')).count()
-    vencedor = palpites.filter(vencedor=F('partida__vencedor')).count()
-    return mandante+visitante+vencedor
-
-def check_pontuacao_pepe_jogo(palpite):
-    mandante = 1 if palpite.golsMandante == palpite.partida.golsMandante else 0
-    visitante = 1 if palpite.golsVisitante == palpite.partida.golsVisitante else 0
-    vencedor = 1 if palpite.vencedor == palpite.partida.vencedor else 0
-    return mandante + visitante + vencedor
-
-def check_diferenca_gols(palpites):
-    pontuacao_usuario = palpites.annotate(
-        diferenca_mandante=F('golsMandante') - F('partida__golsMandante'),
-        diferenca_visitante=F('golsVisitante') - F('partida__golsVisitante')
-    ).annotate(
-        diferenca_mandante_abs=Func(F('diferenca_mandante'), function='ABS'),
-        diferenca_visitante_abs=Func(F('diferenca_visitante'), function='ABS')
-    ).annotate(
-        diferenca_total=F('diferenca_mandante_abs') + F('diferenca_visitante_abs')
-    ).aggregate(
-        pontuacao_total=Sum('diferenca_total')
-    )['pontuacao_total']
-
-    return pontuacao_usuario or 0
-
-# Função de ranking
-def ranking(edicao, rodada):
-    
-    if edicao == 0 and rodada == 0:
-        palpites = Palpite_Partida.objects.all() # Pega o ranking de tudo
-    elif edicao != 0 and rodada == 0:
-        palpites = Palpite_Partida.objects.filter(partida__Rodada__edicao_campeonato__id=edicao)
-    elif edicao != 0 and rodada != 0:
-        palpites = Palpite_Partida.objects.filter(partida__Rodada__edicao_campeonato__id=edicao,partida__Rodada__num=rodada)
-
-    pessoas = list(User.objects.order_by('id').filter(id__in=palpites.values_list("usuario", flat=True).distinct()))
-    usernames = [pessoa.username for pessoa in pessoas]
-    ids = [pessoa.id for pessoa in pessoas]
-    pontosP = [check_pontuacao_pepe(palpites.filter(usuario=pessoa)) for pessoa in ids]
-    difGols = [check_diferenca_gols(palpites.filter(usuario=pessoa).exclude(partida__golsMandante=-1, partida__golsVisitante=-1)) for pessoa in ids]
-
-    if (len(usernames) == 0):
-        return None
-    tuplas = zip(usernames,ids,pontosP,difGols)
-    tuplas_ordenadas = sorted(tuplas, key=lambda x: (-x[2], x[3]))
-
-    usernames, ids, pontosP, difGols = zip(*tuplas_ordenadas)
-    posicao = []
-    for i, _ in enumerate(usernames, start=1):
-        if i < len(usernames) and (pontosP[i] == pontosP[i - 1] and difGols[i] == difGols[i - 1]):
-            posicao.append("-")
-        else:
-            posicao.append(i)
-
-    return zip(posicao,usernames,ids,pontosP,difGols)
-
-def rankingUsuariosNoTime(jogos):
-    palpites = Palpite_Partida.objects.filter(partida__in=jogos).exclude(partida__golsMandante=-1, partida__golsVisitante=-1)
-    usuariosAux = list(set(palpites.values_list("usuario", flat=True)))
-    usuarios = User.objects.filter(id__in=usuariosAux)
-    porcentagemP = [100*check_pontuacao_pepe(palpites.filter(usuario=usuario))/(3*palpites.filter(usuario=usuario).count()) for usuario in usuarios]
-    difGols = [check_diferenca_gols(palpites.filter(usuario=usuario).exclude(partida__golsMandante=-1, partida__golsVisitante=-1))/palpites.filter(usuario=usuario).exclude(partida__golsMandante=-1, partida__golsVisitante=-1).count() for usuario in usuarios]
-    usernames = [usuario.username for usuario in usuarios]
-    ids = [usuario.id for usuario in usuarios]
-    numJogos = [palpites.filter(usuario=usuario).count() for usuario in usuarios]
-
-    return sorted(zip(usernames,ids,porcentagemP,difGols, numJogos), key=lambda x: (-x[2],x[3]))
-
-def rankingTimesNoPerfil(id):
-    palpites = Palpite_Partida.objects.filter(usuario=id).exclude(partida__golsMandante=-1, partida__golsVisitante=-1)
-    if not palpites:
-        return None
-    times = Time.objects.filter(id__in=(list(palpites.values_list('partida__Mandante', flat=True).distinct().order_by("partida__Mandante__Nome")) + list(palpites.values_list('partida__Visitante', flat=True).distinct().order_by("partida__Visitante__Nome"))))
-    porcentagemP = []
-    difGols = []
-    numJogos = []
-
-    for time in times:
-        palpites_time = palpites.filter(
-            Q(partida__Mandante=time) | Q(partida__Visitante=time)
-        )
-        pontuacaoP = check_pontuacao_pepe(palpites_time)
-        total = 3*palpites_time.count()
-        porcentagemP.append(100*pontuacaoP/total)
-        difGols.append(check_diferenca_gols(palpites_time)/palpites_time.count())
-        numJogos.append(palpites_time.count())
-
-    imagem = [time.escudo for time in times]
-    ids = [time.id for time in times]
-
-    return sorted(zip(imagem,ids,porcentagemP,difGols,numJogos), key=lambda x: (-x[2], x[3]))
-
-def obter_dados_campeonato(id):
-    try:
-        campeonato = EdicaoCampeonato.objects.get(id=id)
-        
-        times = campeonato.times.all()
-        times_data = [{'id': time.id, 'nome': time.Nome} for time in times]
-
-        rodadas = Rodada.objects.filter(edicao_campeonato=campeonato)
-        rodadas_data = [{'id': rodada.id, 'nome': rodada.nome} for rodada in rodadas]
-
-        return times_data, rodadas_data
-    except EdicaoCampeonato.DoesNotExist:
-        raise Exception('Edição de campeonato não encontrada')
-    except Exception as e:
-        raise Exception(str(e))
+def get_edicoes() -> list:
+    edicoes = list(EdicaoCampeonato.objects.annotate(num_partidas=Count('rodada__partida')).filter(num_partidas__gt=0).order_by('-id'))
+    ultimo_jogo_ocorrido = Partida.objects.exclude(dia__gt=timezone.now()).order_by('dia').last()
+    Edicao_ultimo_jogo = EdicaoCampeonato.objects.get(rodada__partida__id=ultimo_jogo_ocorrido.id)
+    edicoes.remove(Edicao_ultimo_jogo)
+    edicoes.insert(0, Edicao_ultimo_jogo)
+    return edicoes
 
 def cravadas(edicao):
     palpites = Palpite_Partida.objects.filter(partida__Rodada__edicao_campeonato__id=edicao)
@@ -148,12 +46,12 @@ def cravadas(edicao):
     return dados
 
 def avgPontos(edicao):
-    palpites = Palpite_Partida.objects.filter(partida__Rodada__edicao_campeonato__id=edicao)
+    palpites = Palpite_Partida.objects.filter(partida__Rodada__edicao_campeonato__id=edicao).exclude(partida__golsMandante=-1, partida__golsVisitante=-1)
     pessoas = list(User.objects.order_by('id').filter(id__in=palpites.values_list("usuario", flat=True).distinct()))
     usernames = [pessoa.username for pessoa in pessoas]
     ids = [pessoa.id for pessoa in pessoas]
     pontosP = [check_pontuacao_pepe(palpites.filter(usuario=pessoa))/palpites.filter(usuario=pessoa).count() for pessoa in ids]
-    difGols = [check_diferenca_gols(palpites.filter(usuario=pessoa).exclude(partida__golsMandante=-1, partida__golsVisitante=-1))/palpites.filter(usuario=pessoa).exclude(partida__golsMandante=-1, partida__golsVisitante=-1).count() if palpites.filter(usuario=pessoa).exclude(partida__golsMandante=-1, partida__golsVisitante=-1).count() != 0 else 0 for pessoa in ids]
+    difGols = [check_diferenca_gols(palpites.filter(usuario=pessoa))/palpites.filter(usuario=pessoa).count() for pessoa in ids]
 
     if (len(usernames) == 0):
         return None
@@ -173,24 +71,14 @@ def avgPontos(edicao):
 def modaPalpites(edicao):
     jogos = Palpite_Partida.objects.filter(partida__Rodada__edicao_campeonato__id=edicao)
     resultados_mais_comuns = jogos.values('golsMandante', 'golsVisitante').annotate(ocorrencias=Count('id')).order_by('-ocorrencias')
-    # for resultado in resultados_mais_comuns:
-    #     gols_mandante = resultado['golsMandante']
-    #     gols_visitante = resultado['golsVisitante']
-    #     ocorrencias = resultado['ocorrencias']
-    #     print(f"Resultado: {gols_mandante} - {gols_visitante}, Ocorrências: {ocorrencias}")
     return [[item['ocorrencias'] ,item['golsMandante'], item['golsVisitante']] for item in resultados_mais_comuns]
 
 def modaResultados(edicao):
     jogos = Partida.objects.filter(Rodada__edicao_campeonato__id=edicao).exclude(golsMandante=-1)
     resultados_mais_comuns = jogos.values('golsMandante', 'golsVisitante').annotate(ocorrencias=Count('id')).order_by('-ocorrencias')
-    # for resultado in resultados_mais_comuns:
-    #     gols_mandante = resultado['golsMandante']
-    #     gols_visitante = resultado['golsVisitante']
-    #     ocorrencias = resultado['ocorrencias']
-    #     print(f"Resultado: {gols_mandante} - {gols_visitante}, Ocorrências: {ocorrencias}")
     return [[item['ocorrencias'] ,item['golsMandante'], item['golsVisitante']] for item in resultados_mais_comuns]
 
-def classificacaoSimplificadaPalpite(edicao):
+def auxRankingClassificacao(edicao):
     partidas = Partida.objects.filter(Rodada__edicao_campeonato=edicao).exclude(golsMandante=-1)
 
     times = edicao.times.all()
@@ -237,7 +125,7 @@ def classificacaoSimplificadaPalpite(edicao):
     return estatisticas_times
 
 def rankingClassicacao(edicao):
-    classificaoTimes = classificacaoSimplificadaPalpite(EdicaoCampeonato.objects.get(id=edicao))
+    classificaoTimes = auxRankingClassificacao(EdicaoCampeonato.objects.get(id=edicao))
     palpites = Palpite_Campeonato.objects.filter(edicao_campeonato__id=edicao)
     pontuacao_usuarios = defaultdict(lambda: {'pontuacao_total': 0, 'pontuacao_especifica': 0})
 
@@ -272,50 +160,6 @@ def rankingClassicacao(edicao):
 
     return resultado_final
 
-def palpite_da_partida(partida):
-    palpites = Palpite_Partida.objects.filter(partida=partida).order_by(Lower("usuario__username"))
-    resultados = []
-    for palpite in palpites:
-        resultados.append(check_pontuacao_pepe_jogo(palpite))
-    
-    return zip(palpites,resultados), len(palpites)
-
-def get_anterior_proximo_partida(partida, time):
-    if not time:
-        partidas = list(Partida.objects.all())
-    else:
-        partidas = list(Partida.objects.filter(Q(Mandante__Nome=time) | Q(Visitante__Nome=time)).order_by('id'))
-
-    indice = partidas.index(partida)
-    anterior = partidas[indice - 1].id if indice - 1 >= 0 else None
-    proximo = partidas[indice + 1].id if indice + 1 < len(partidas) else None
-
-    return anterior, proximo
-
-# Função % acertos do jogador
-def accuracy_user(id_usuario):
-    palpites = Palpite_Partida.objects.filter(usuario=id_usuario).exclude(partida__golsMandante=-1, partida__golsVisitante=-1)
-    if len(palpites) == 0:
-        return 0, 0, 0, 0
-    aGm = 100*palpites.filter(golsMandante=F('partida__golsMandante')).count()/len(palpites)
-    aGv = 100*palpites.filter(golsVisitante=F('partida__golsVisitante')).count()/len(palpites)
-    aR = 100*palpites.filter(vencedor=F('partida__vencedor')).count()/len(palpites)
-    aT = 100 * palpites.filter(
-        golsMandante=F('partida__golsMandante'),
-        golsVisitante=F('partida__golsVisitante'),
-        vencedor=F('partida__vencedor')
-    ).count() / len(palpites)    
-    return aGm, aGv, aR, aT
-
-# Função Média de Pontos Pepe
-def average_pepe(id_usuario):
-    palpites = Palpite_Partida.objects.filter(usuario=id_usuario).exclude(partida__golsMandante=-1, partida__golsVisitante=-1)
-    if len(palpites) == 0:
-        return 0
-    soma = check_pontuacao_pepe(palpites)
-    return soma/(len(palpites))
-
-# Função Classificação Pontos Corridos
 def classificacao(edicao, rodada_inicial, rodada_final, tipoClassificacao):
     partidas = Partida.objects.filter(
         Rodada__edicao_campeonato=edicao,
@@ -400,27 +244,18 @@ def classificacao(edicao, rodada_inicial, rodada_final, tipoClassificacao):
 
     return estatisticas_times
 
-def partida_to_json(partida):
-    return {
-        'pk': partida.pk,
-        'Mandante': partida.Mandante.id,
-        'Visitante': partida.Visitante.id,
-        'golsMandante': partida.golsMandante,
-        'golsVisitante': partida.golsVisitante,
-        'Rodada': f'{partida.Rodada.edicao_campeonato.campeonato} - {partida.Rodada.nome}',
-    }
+def obter_dados_campeonato(id):
+    try:
+        campeonato = EdicaoCampeonato.objects.get(id=id)
+        
+        times = campeonato.times.all()
+        times_data = [{'id': time.id, 'nome': time.Nome} for time in times]
 
-def definirVencedor(golsMandante, golsVisitante):
-    if golsMandante > golsVisitante:
-        return 1
-    elif golsMandante < golsVisitante:
-        return 2
-    return 0
+        rodadas = Rodada.objects.filter(edicao_campeonato=campeonato)
+        rodadas_data = [{'id': rodada.id, 'nome': rodada.nome} for rodada in rodadas]
 
-def get_edicoes():
-    edicoes = list(EdicaoCampeonato.objects.annotate(num_partidas=Count('rodada__partida')).filter(num_partidas__gt=0).order_by('-id'))
-    ultimo_jogo_ocorrido = Partida.objects.exclude(dia__gt=timezone.now()).order_by('dia').last()
-    Edicao_ultimo_jogo = EdicaoCampeonato.objects.get(rodada__partida__id=ultimo_jogo_ocorrido.id)
-    edicoes.remove(Edicao_ultimo_jogo)
-    edicoes.insert(0, Edicao_ultimo_jogo)
-    return edicoes
+        return times_data, rodadas_data
+    except EdicaoCampeonato.DoesNotExist:
+        raise Exception('Edição de campeonato não encontrada')
+    except Exception as e:
+        raise Exception(str(e))

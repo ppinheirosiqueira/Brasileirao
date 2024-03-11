@@ -7,9 +7,14 @@ from datetime import datetime, timedelta
 from django.db.models import Max
 from django.core import serializers
 from django.core.paginator import Paginator
+import os
+import importlib.util
 
-from .funcoes import cravadas, avgPontos, modaPalpites, modaResultados, ranking, rankingClassicacao, obter_dados_campeonato, definirVencedor, classificacao, partida_to_json, check_pontuacao_pepe
+from .utils import get_tema, cravadas, avgPontos, modaPalpites, modaResultados, ranking, rankingClassicacao, obter_dados_campeonato, definirVencedor, classificacao, partida_to_json, check_pontuacao_pepe
 from .models import Partida, Palpite_Partida, Campeonato, EdicaoCampeonato, Rodada, Time, Palpite_Campeonato, User
+
+def tema(request):
+    return {'tema': get_tema(request.user)}
 
 def timesCampeonato(request : HttpRequest, idEdicao : int) -> JsonResponse:
     try:
@@ -194,39 +199,20 @@ def attGrafico(request : HttpRequest, usuarios : str, campeonato : int, rod_Ini 
         "datasets":[]
     }
 
-    if not request.user.is_authenticated or request.user.dark == True: # Por pior que seja repetir o código, é melhor do que fazer essa comparação de fundo claro/escuro para cada usuário
-        for username in usernames:
-            pontosP = [check_pontuacao_pepe(palpites.filter(partida__Rodada__num=rodada, usuario__username=username)) for rodada in rodadas]
-            aux = {
-                "label": username,
-                "data": pontosP,
-                "borderColor": User.objects.get(username=username).corClara,
-                "fill":False,
-            }
-            grafico['datasets'].append(aux)
-    else:
-        for username in usernames:
-            pontosP = [check_pontuacao_pepe(palpites.filter(partida__Rodada__num=rodada, usuario__username=username)) for rodada in rodadas]
-            aux = {
-                "label": username,
-                "data": pontosP,
-                "borderColor": User.objects.get(username=username).corEscura,
-                "fill":False,
-            }
-            grafico['datasets'].append(aux)
+    for username in usernames:
+        pontosP = [check_pontuacao_pepe(palpites.filter(partida__Rodada__num=rodada, usuario__username=username)) for rodada in rodadas]
+        aux = {
+            "label": username,
+            "data": pontosP,
+            "borderColor": User.objects.get(username=username).corGrafico,
+            "fill":False,
+        }
+        grafico['datasets'].append(aux)
 
     json_string = dumps(grafico)
     json_data = loads(json_string)
 
     return JsonResponse(json_data, safe=False)
-
-def alterar_tema(request : HttpRequest, valor : int) -> JsonResponse:
-    if valor == 0:
-        request.user.dark = False
-    else:
-        request.user.dark = True
-    request.user.save()
-    return JsonResponse({"sucesso": "sim"}, safe=False)
 
 @require_POST
 def registrar_rodada_feita(request : HttpRequest) -> JsonResponse:
@@ -291,3 +277,54 @@ def att_data_partida(request):
         return JsonResponse({'mensagem': "Data Atualizada com Sucesso"}, safe=False)
     else:
         return JsonResponse({'mensagem': "How did you make this request?"}, safe=False)
+
+@require_POST
+def alterar_time_favorito(request : HttpRequest) -> JsonResponse:
+    user = request.user
+    user.favorite_team = Time.objects.get(id=request.POST["idTime"])
+    user.save()
+    return JsonResponse({'mensagem': "Time Favorito Atualizado"}, safe=False)
+
+@require_POST
+def alterar_tema(request : HttpRequest) -> JsonResponse:
+    user = request.user
+    if request.POST["tema"] == "default":
+        user.corPersonalizada = False    
+        user.save()
+        return JsonResponse({'mensagem': "Cor atualizada"}, safe=False)
+
+    if request.POST["tema"] == "customizado":
+        user.corPersonalizada = True
+        user.corFundo = request.POST["fundo"]
+        user.corFonte = request.POST["fonte"]
+        user.corHover = request.POST["hover"]
+        user.corBorda = request.POST["borda"]
+        user.corSelecionado = request.POST["selecionado"]
+        user.corPontos0 = request.POST["0pontos"]
+        user.corPontos1 = request.POST["1pontos"]
+        user.corPontos2 = request.POST["2pontos"]
+        user.corPontos3 = request.POST["3pontos"]
+        user.corFiltro = request.POST["filtro"]
+        user.corPersonalizada = True    
+        user.save()
+        return JsonResponse({'mensagem': "Cor atualizada"}, safe=False)
+    
+    current_dir = os.path.dirname(os.path.realpath(__file__))
+    padroes_path = os.path.join(current_dir, "padroes.py")
+    spec = importlib.util.spec_from_file_location("padroes", padroes_path)
+    padroes = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(padroes)
+    tema = getattr(padroes, request.POST["tema"])
+    user.corPersonalizada = True
+    user.corFundo = tema['bg-color']
+    user.corFonte = tema['font-color']
+    user.corHover = tema['hover-color']
+    user.corBorda = tema['border-color']
+    user.corSelecionado = tema['selecionado-color']
+    user.corPontos0 = tema['pontos-0-color']
+    user.corPontos1 = tema['pontos-1-color']
+    user.corPontos2 = tema['pontos-2-color']
+    user.corPontos3 = tema['pontos-3-color']
+    user.corFiltro = tema['filter-color']
+    user.save()
+    return JsonResponse({'mensagem': "Cor atualizada"}, safe=False)

@@ -1,0 +1,42 @@
+<div class="forms">
+    <input type="checkbox" id="checkbox-imagem" class="checkbox-imagem">
+    <label for="checkbox-imagem">
+        Atualizar Imagem de Perfil<span class="indicator"></span>
+    </label>
+    <div class="content-imagem">
+        <form action="{% url 'profile' id=usuario.id %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ formImage.as_table }}
+            <button type="submit">Atualizar Imagem</button>
+        </form>
+    </div>
+</div>
+<div class="forms">
+    <input type="checkbox" id="checkbox-time" class="checkbox-time">
+    <label for="checkbox-time">
+        Atualizar Time Favorito<span class="indicator"></span>
+    </label>
+    <div class="content-time">
+        {% csrf_token %}
+        <select name="timeFavorito" id="timeFavorito">
+            {% for time in times %}
+                <option value="{{ time.id }}">{{time.Nome}}</option>
+            {% endfor %}
+        </select>
+        <button id="submitTimeFavorito">Salvar</button>
+    </div>
+</div>
+<div class="forms">
+    <input type="checkbox" id="checkbox-cor" class="checkbox-cor">
+    <label for="checkbox-cor">
+        Atualizar Cor do Gráfico<span class="indicator"></span>
+    </label>
+    <div class="content-cor">
+        <form action="{% url 'alterar_cor_grafico' id=usuario.id %}" method="post">
+            {% csrf_token %}
+            <label for="cor">Selecione uma cor:</label>
+            <input type="color" id="cor" name="cor">
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,140 @@
+{% extends "palpites/layout.html" %}
+{% load static %}
+{% load user_agents %}
+
+{% block title %}
+    {{title}}
+{% endblock %}
+
+{% block style %}
+    <script src="{% static 'scripts/changeTheme.js' %}?v=1.0"></script>
+    <link rel="stylesheet" href="{% static 'css/mudar_tema.css' %}?v=1.0">
+{% endblock %}
+
+{% block bodyPC %}
+    <span>Como você chegou aqui?</span>
+{% endblock %}
+
+{% block bodyMobile %}
+    <div id="tema" class="divConteudo" data-display="grid">
+        {% csrf_token %}
+        <label for="default"><input type="radio" name="tema" id="default" onChange="mudarTema('default')">
+            <span>Padrão - Escuro</span><img src="../media/temas/mobile_default.jpg" alt="Default">
+        </label>
+        <label for="tema_cinza_escuro"><input type="radio" name="tema" id="tema_cinza_escuro" onChange="mudarTema('tema_cinza_escuro')">
+            <span>Cinza Escuro</span><img src="../media/temas/mobile_cinza_escuro.jpg" alt="Tema Cinza Escura">
+        </label>
+        <label for="tema_cinza"><input type="radio" name="tema" id="tema_cinza" onChange="mudarTema('tema_cinza')">
+            <span>Tema Cinza</span><img src="../media/temas/mobile_cinza.jpg" alt="Tema Cinza">
+        </label>
+        <label for="tema_cinza_medio"><input type="radio" name="tema" id="tema_cinza_medio" onChange="mudarTema('tema_cinza_medio')">
+            <span>Meio Cinza</span><img src="../media/temas/mobile_cinza_medio.jpg" alt="Tema Cinza Médio">
+        </label>
+        <label for="tema_branco_gelo"><input type="radio" name="tema" id="tema_branco_gelo" onChange="mudarTema('tema_branco_gelo')">
+            <span>Branco Gelo</span><img src="../media/temas/mobile_branco_gelo.jpg" alt="Tema Branco Gelo">
+        </label>
+        <label for="tema_claro"><input type="radio" name="tema" id="tema_claro" onChange="mudarTema('tema_claro')">
+            <span>Tema Claro</span><img src="../media/temas/mobile_claro.jpg" alt="Tema Claro">
+        </label>
+        <label for="tema_vermelho"><input type="radio" name="tema" id="tema_vermelho" onChange="mudarTema('tema_vermelho_escuro')">
+            <span>Vemelho Escuro</span><img src="../media/temas/mobile_vermelho_escuro.jpg" alt="Tema Vermelho">
+        </label>
+        <label for="tema_vermelho_pastel"><input type="radio" name="tema" id="tema_vermelho_pastel" onChange="mudarTema('tema_vermelho_pastel')">
+            <span>Vermelho Pastel</span><img src="../media/temas/mobile_vermelho_pastel.jpg" alt="Tema Vermelho Pastel">
+        </label>
+        <label for="tema_azul"><input type="radio" name="tema" id="tema_azul" onChange="mudarTema('tema_azul_escuro')">
+            <span>Azul Escuro</span><img src="../media/temas/mobile_azul_escuro.jpg" alt="Tema Azul">
+        </label>
+        <label for="tema_azul_pastel"><input type="radio" name="tema" id="tema_azul_pastel" onChange="mudarTema('tema_azul_pastel')">
+            <span>Azul Pastel</span><img src="../media/temas/mobile_azul_pastel.jpg" alt="Tema Azul Pastel">
+        </label>
+        <label for="tema_amarelo_escuro"><input type="radio" name="tema" id="tema_amarelo_escuro" onChange="mudarTema('tema_amarelo_escuro')">
+            <span>Amarelo Escuro</span><img src="../media/temas/mobile_amarelo_escuro.jpg" alt="Tema Amarelo Escuro">
+        </label>
+        <label for="tema_amarelo_pastel"><input type="radio" name="tema" id="tema_amarelo_pastel" onChange="mudarTema('tema_amarelo_pastel')">
+            <span>Amarelo Pastel</span><img src="../media/temas/mobile_amarelo_pastel.jpg" alt="Tema Amarelo Pastel">
+        </label>
+        <label for="tema_roxo"><input type="radio" name="tema" id="tema_roxo" onChange="mudarTema('tema_roxo')">
+            <span>Tema Roxo</span><img src="../media/temas/mobile_roxo.jpg" alt="Tema Roxo">
+        </label>
+        <label for="tema_roxo_pastel"><input type="radio" name="tema" id="tema_roxo_pastel" onChange="mudarTema('tema_roxo_pastel')">
+            <span>Roxo Pastel</span><img src="../media/temas/mobile_roxo_pastel.jpg" alt="Tema Roxo Pastel">
+        </label>
+        <label for="tema_verde"><input type="radio" name="tema" id="tema_verde" onChange="mudarTema('tema_verde')">
+            <span>Tema Verde</span><img src="../media/temas/mobile_verde.jpg" alt="Tema Verde">
+        </label>
+        <label for="tema_verde_pastel"><input type="radio" name="tema" id="tema_verde_pastel" onChange="mudarTema('tema_verde_pastel')">
+            <span>Verde Pastel</span><img src="../media/temas/mobile_verde_pastel.jpg" alt="Tema Verde Pastel">
+        </label>
+        <label for="tema_bege"><input type="radio" name="tema" id="tema_bege" onChange="mudarTema('tema_bege')">
+            <span>Tema Bege</span><img src="../media/temas/mobile_bege.jpg" alt="Tema Bege">
+        </label>
+        <label for="tema_marrom"><input type="radio" name="tema" id="tema_marrom" onChange="mudarTema('tema_marrom')">
+            <span>Tema Marrom</span><img src="../media/temas/mobile_marrom.jpg" alt="Tema Marrom">
+        </label>
+        <div class="forms">
+            <input type="checkbox" id="checkbox-tema" class="checkbox-tema">
+            <label for="checkbox-tema">
+            <span>Customizado<span class="indicator"></span>
+            </label>
+            <div class="content-tema">
+                {% for chave, valor in tema.items %}
+                    {% if chave == '--bg' %}
+                        <label for="cor">Background:
+                        <input type="color" id="cor" name="cor" value="{{ valor }}" onChange="mudarAgora('--bg',value)"></label>
+                    {% endif %}
+                    {% if chave == '--fc' %}
+                        <label for="cor">Fonte:
+                        <input type="color" id="cor" name="cor" value="{{ valor }}" onChange="mudarAgora('--fc',value)"></label>
+                    {% endif %}
+                    {% if chave == '--hover' %}
+                        <label for="cor">Hover:
+                        <input type="color" id="cor" name="cor" value="{{ valor }}" onChange="mudarAgora('--hover',value)"></label>
+                    {% endif %}
+                    {% if chave == '--border' %}
+                        <label for="cor">Borda:
+                        <input type="color" id="cor" name="cor" value="{{ valor }}" onChange="mudarAgora('--border',value)"></label>
+                    {% endif %}
+                    {% if chave == '--selecionado' %}
+                        <label for="cor">Item Selecionado:
+                        <input type="color" id="cor" name="cor" value="{{ valor }}" onChange="mudarAgora('--selecionado',value)"></label>
+                    {% endif %}
+                    {% if chave == '--pontos-0' %}
+                        <label for="cor">0 pontos na partida:
+                        <input type="color" id="cor" name="cor" value="{{ valor }}" onChange="mudarAgora('--pontos-0',value)"></label>
+                    {% endif %}
+                    {% if chave == '--pontos-1' %}
+                        <label for="cor">0 pontos na partida:
+                        <input type="color" id="cor" name="cor" value="{{ valor }}" onChange="mudarAgora('--pontos-1',value)"></label>
+                    {% endif %}
+                    {% if chave == '--pontos-2' %}
+                        <label for="cor">0 pontos na partida:
+                        <input type="color" id="cor" name="cor" value="{{ valor }}" onChange="mudarAgora('--pontos-2',value)"></label>
+                    {% endif %}
+                    {% if chave == '--pontos-3' %}
+                        <label for="cor">0 pontos na partida:
+                        <input type="color" id="cor" name="cor" value="{{ valor }}" onChange="mudarAgora('--pontos-3',value)"></label>
+                    {% endif %}
+                {% endfor %}
+                <label for="invert">Invert:
+                <input type="range" id="invert" name="invert" min="0" max="100" onChange="updateFilter()"></label>
+
+                <label for="sepia">Sepia:
+                <input type="range" id="sepia" name="sepia" min="0" max="100"  onChange="updateFilter()"></label>
+
+                <label for="saturate">Saturate:
+                <input type="range" id="saturate" name="saturate" min="0" max="500000"  onChange="updateFilter()"></label>
+
+                <label for="hue-rotate">Hue-Rotate:
+                <input type="range" id="hue-rotate" name="hue-rotate" min="0" max="360"  onChange="updateFilter()"></label>
+
+                <label for="brightness">Brightness:
+                <input type="range" id="brightness" name="brightness" min="0" max="500000"  onChange="updateFilter()"></label>
+
+                <label for="contrast">Contrast:
+                <input type="range" id="contrast" name="contrast" min="0" max="500000"  onChange="updateFilter()"></label>
+                <button onClick="temaCustomizado()">Salvar</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}

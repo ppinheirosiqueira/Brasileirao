@@ -1,6 +1,7 @@
 h2 {
   text-align: center;
   margin-bottom: 1em;
+  padding-top: 1em;
 }
 
 .times {
@@ -8,7 +9,7 @@ h2 {
   justify-content: space-evenly;
   flex-wrap: wrap;
   row-gap: 1em;
-  margin: 5% 10%;
+  margin: 2.5% 10% 5% 10%;
 }
 .times a {
   flex-basis: 30%;

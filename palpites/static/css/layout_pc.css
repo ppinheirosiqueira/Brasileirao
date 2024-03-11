@@ -5,26 +5,47 @@
 }
 
 :root {
-  --bg: #ffffff;
-  --fc: #1a1a1a;
-  --hover: #DDDDDD;
-  --filter: none;
-  --border: #cccccc;
-  --selecionado: #333333;
-}
-
-.darkTheme {
   --bg: #1a1a1a;
   --fc: #ffffff;
   --hover: #222;
   --filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%);
   --border: #333333;
   --selecionado: #cccccc;
+  --pontos-0: red;
+  --pontos-1: orange;
+  --pontos-2: yellow;
+  --pontos-3: green;
 }
 
 body {
   background: var(--bg);
   color: var(--fc);
+}
+body select {
+  width: 7em;
+  height: 2.5em;
+  border-width: 2px;
+  border-style: outset;
+  border-color: var(--border);
+  padding: 5px;
+  font-size: 1em;
+  margin: auto 0;
+  color: var(--fc);
+  background-color: var(--bg);
+}
+body select option {
+  background: var(--bg);
+  color: var(--fc);
+}
+body button {
+  background-color: var(--bg);
+  color: var(--fc);
+  margin: 0 0.5em;
+  padding: 0.2em 0.8em;
+  border-width: 2px;
+  border-style: outset;
+  border-color: var(--border);
+  cursor: pointer;
 }
 
 nav {
@@ -51,6 +72,7 @@ nav span {
 }
 nav span img {
   width: 2.5em;
+  height: 2.5em;
   border-radius: 50%;
   margin-right: 1em;
 }
@@ -73,7 +95,7 @@ nav a:hover {
 }
 nav .dropdown {
   position: relative;
-  background: inherit;
+  background: transparent;
   color: inherit;
   width: 8em;
   display: inline-block;
@@ -92,7 +114,6 @@ nav .dropdown span {
 nav .dropdown-content {
   display: none;
   position: absolute;
-  background-color: var(--bg);
   width: 100%;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
@@ -128,7 +149,7 @@ nav .dropdown-content button img {
 }
 
 .container {
-  margin-top: 6em;
+  margin-top: 4em;
 }
 
 /*# sourceMappingURL=layout_pc.css.map */

@@ -1,0 +1,42 @@
+<div class="profile">
+    <h1>Perfil do Usuário</h1>
+    <div class="profile-info">
+        <img src="{{ usuario.profile_image.url }}" alt="Imagem de Perfil" class="profile-image">
+        <div class="user-info">
+            <h2>{{ usuario.username }}</h2>
+            <p>Time Favorito: {{ usuario.favorite_team.Nome }}</p>
+            <p>Média de Pontos Pepe: {{ average_points_pepe|floatformat:2 }}</p>
+            <p>Jogos Palpitados: {{ total_predictions }}</p>
+            <p>% de Acerto do Resultado: {{ accuracy_result|floatformat:2 }}%</p>
+            <p>% de Acerto dos Gols do Mandante: {{ accuracy_goals_mandante|floatformat:2 }}%</p>
+            <p>% de Acerto dos Gols do Visitante: {{ accuracy_goals_visitante|floatformat:2 }}%</p>
+            <p>% de Cravadas: {{ accuracy_total|floatformat:2 }}%</p>
+        </div>
+    </div>
+</div>
+{% if media != None %}
+    <hr width="80%">
+    <h1>Ranking Média por clube</h1>
+    <table class="aproveitamento">
+        <thead>
+            <tr>
+                <th>Time</th>
+                <th>% Pepe</th>
+                <th>Média Dif. Gols</th>
+                <th>Número de Jogos Palpitados</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for imagem,ids,pontosP,difGols,numJogos in media %}
+                <tr>
+                    <td><a href="{% url 'show_team' id=ids %}">
+                        <img src="../{{ imagem }}" alt="escudo" class="escudo">
+                    </a></td>
+                    <td>{{ pontosP|floatformat:2 }}</td>
+                    <td>{{ difGols|floatformat:2 }}</td>
+                    <td>{{ numJogos }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}

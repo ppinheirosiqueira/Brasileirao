@@ -1,50 +1,23 @@
 {% extends "palpites/layout.html" %}
 {% load static %}
+{% load user_agents %}
 
 {% block title %}
     {{title}}
 {% endblock %}
 
 {% block style %}
-    <link rel="stylesheet" href="{% static 'css/login.css' %}?v=1.0">
+    {% if request|is_pc %}
+    <link rel="stylesheet" href="{% static 'css/login_pc.css' %}?v=1.0">
+    {% else %}
+    <link rel="stylesheet" href="{% static 'css/login_mobile.css' %}?v=1.0">
+    {% endif %}
 {% endblock %}
 
 {% block bodyPC %}
-
-    <div class="container">
-        <h2>Login</h2>
-
-        {% if message %}
-            <div>{{ message }}</div>
-        {% endif %}
-
-        <form action="{% url 'login' %}" method="post">
-            {% csrf_token %}
-            <input autofocus type="text" name="username" placeholder="Username">
-            <input type="password" name="password" placeholder="Password">
-            <input type="submit" value="Login">
-        </form>
-
-        <span>Não tem uma conta? <a href="{% url 'register' %}">Registre-se.</a></span>
-    </div>
+    {% include "palpites/blocos_auxiliares/auxiliar_login.html" %}
 {% endblock %}
 
 {% block bodyMobile %}
-
-    <div class="container">
-        <h2>Login</h2>
-
-        {% if message %}
-            <div>{{ message }}</div>
-        {% endif %}
-
-        <form action="{% url 'login' %}" method="post">
-            {% csrf_token %}
-            <input autofocus type="text" name="username" placeholder="Username">
-            <input type="password" name="password" placeholder="Password">
-            <input type="submit" value="Login">
-        </form>
-
-        <span>Não tem uma conta? <a href="{% url 'register' %}">Registre-se.</a></span>
-    </div>
+    {% include "palpites/blocos_auxiliares/auxiliar_login.html" %}
 {% endblock %}

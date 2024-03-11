@@ -3,6 +3,7 @@
   flex-direction: column;
   align-items: center;
   gap: 1em;
+  padding-top: 2em;
 }
 .container hr {
   height: 2px;
