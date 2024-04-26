@@ -220,7 +220,6 @@
 .itens #palpites {
   overflow-x: auto;
   overflow-y: auto;
-  sticky: 0;
 }
 .itens #palpites .palpites {
   border-collapse: collapse;
