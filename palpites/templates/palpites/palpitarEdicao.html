@@ -12,10 +12,10 @@
         var edicaoId = {{ edicao.id }}
     </script>
     {% if request|is_pc %}
-        <link rel="stylesheet" href="{% static 'css/palpitar_campeonato_pc.css' %}?v=1.0">
+        <link rel="stylesheet" href="{% static 'styles/palpitar_campeonato_pc.css' %}?v=1.0">
         <script type="text/javascript" src="{% static 'scripts/palpitarCampeonato_pc.js' %}?v=1.0"></script>
     {% else %}
-        <link rel="stylesheet" href="{% static 'css/palpitar_campeonato_mobile.css' %}?v=1.0">
+        <link rel="stylesheet" href="{% static 'styles/palpitar_campeonato_mobile.css' %}?v=1.0">
         <script type="text/javascript" src="{% static 'scripts/palpitarCampeonato_mobile.js' %}?v=1.0"></script>
     {% endif %}
 {% endblock %}

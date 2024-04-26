@@ -22,9 +22,9 @@
     <script type="text/javascript" src="{% static 'scripts/selecionarEstatistica.js' %}?v=1.0"></script>
     <script type="text/javascript" src="{% static 'scripts/pegar_palpites.js' %}?v=1.0"></script>
     {% if request|is_pc %}
-        <link rel="stylesheet" href="{% static 'css/grupo_pc.css' %}">
+        <link rel="stylesheet" href="{% static 'styles/grupo_pc.css' %}">
     {% else %}
-        <link rel="stylesheet" href="{% static 'css/grupo_mobile.css' %}">
+        <link rel="stylesheet" href="{% static 'styles/grupo_mobile.css' %}">
         <script type="text/javascript" src="{% static 'scripts/selecionarDiv.js' %}?v=1.0"></script>
     {% endif %}
 {% endblock %}

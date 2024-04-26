@@ -3,11 +3,6 @@
   font-size: 1rem;
   margin-bottom: 1em;
 }
-@media (max-width: 1000px) {
-  .profile {
-    font-size: 3rem;
-  }
-}
 .profile h1 {
   font-size: 2em;
   margin-bottom: 20px;
@@ -32,8 +27,8 @@
 }
 @media (max-width: 1000px) {
   .profile .profile-info .profile-image {
-    width: 350px;
-    height: 350px;
+    width: 250px;
+    height: 250px;
   }
 }
 .profile .profile-info .user-info h2 {
@@ -55,47 +50,29 @@ h1 {
 }
 
 .aproveitamento {
-  margin: 2em 10%;
-  gap: 1em;
-  display: grid;
-  align-items: center;
-  text-align: center;
-  justify-items: center;
-  grid-template-columns: 1fr 1fr 1fr;
+  margin: 2em auto;
+  border-collapse: collapse;
+  width: 80%;
 }
-@media (max-width: 1000px) {
-  .aproveitamento {
-    flex-direction: column;
-    font-size: 3rem;
-  }
-}
-.aproveitamento h2 {
+.aproveitamento th, .aproveitamento td {
+  padding: 8px;
   text-align: center;
 }
-.aproveitamento .escudo {
+.aproveitamento td {
+  width: 25%;
+}
+.aproveitamento td .escudo {
   width: 2em;
 }
-.aproveitamento #indicador-pepe, .aproveitamento #indicador-shroud {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  cursor: pointer;
+.aproveitamento th {
+  border-bottom: 1px solid var(--fc);
+  font-size: 1.5em;
 }
-.aproveitamento #indicador-pepe::after, .aproveitamento #indicador-shroud::after {
-  content: "";
-  display: inline-block;
-  margin-left: 5px;
-  width: 0;
-  height: 0;
-  border: 0.4em solid transparent;
+.aproveitamento tr {
+  height: 2em;
 }
-.aproveitamento #indicador-pepe.desc::after, .aproveitamento #indicador-shroud.desc::after {
-  border-top-color: var(--fc);
+.aproveitamento tr:nth-child(even) {
+  background: var(--hover);
 }
-.aproveitamento span {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  letter-spacing: 0.1em;
-}
+
+/*# sourceMappingURL=user.css.map */

@@ -4,11 +4,8 @@
   align-items: center;
   font-size: 1rem;
   gap: 1em;
-}
-@media (max-width: 1000px) {
-  .formulario {
-    font-size: 3rem;
-  }
+  margin-bottom: 1em;
+  padding-top: 1em;
 }
 .formulario .jogos {
   display: grid;
@@ -45,14 +42,14 @@
   width: 70%;
   margin: 0 auto;
   text-align: center;
-  border: 1px solid var(--fc);
+  border: 1px solid var(--border);
 }
 .formulario input[type=submit] {
   display: inline-block;
   padding: 10px 20px;
   background-color: var(--bg);
   color: var(--fc);
-  border: 1px solid var(--fc);
+  border: 1px solid var(--border);
   border-radius: 4px;
   font-size: 1em;
   text-align: center;
@@ -62,3 +59,5 @@
 .formulario input[type=submit]:hover {
   background-color: var(--hover);
 }
+
+/*# sourceMappingURL=palpitar.css.map */

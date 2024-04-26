@@ -1,9 +1,17 @@
-.container {
+.info {
   width: 80%;
   margin: 0 auto;
+  padding-top: 1em;
 }
-.container a {
+.info a {
   font-weight: bold;
   color: var(--fc);
-  text-decoration: none;
 }
+.info p {
+  padding: 1em 0;
+}
+.info img {
+  max-width: 100%;
+}
+
+/*# sourceMappingURL=about.css.map */

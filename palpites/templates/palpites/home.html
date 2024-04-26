@@ -14,10 +14,10 @@
         var isPc = "{{ request|is_pc }}"
     </script>
     {% if request|is_pc %}
-        <link rel="stylesheet" href="{% static 'css/home_pc.css' %}?v=1.1">
+        <link rel="stylesheet" href="{% static 'styles/home_pc.css' %}?v=1.1">
         <script type="text/javascript" src="{% static 'scripts/grafico.js' %}?v=1.0"></script>
     {% else %}
-        <link rel="stylesheet" href="{% static 'css/home_mobile.css' %}?v=1.1">
+        <link rel="stylesheet" href="{% static 'styles/home_mobile.css' %}?v=1.1">
     {% endif %}
 {% endblock %}
 

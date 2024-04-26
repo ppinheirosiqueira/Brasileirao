@@ -12,14 +12,14 @@
     </script>
     <script type="text/javascript" src="{% static 'scripts/att_rankingTimes.js' %}?v=1.0"></script>
     {% if request|is_pc %}
-        <link rel="stylesheet" href="{% static 'css/user_pc.css' %}">
+        <link rel="stylesheet" href="{% static 'styles/user_pc.css' %}">
         {% if user.id == usuario.id %}    
             <script type="text/javascript" src="{% static 'scripts/selecionarDiv.js' %}?v=1.0"></script>
             <script type="text/javascript" src="{% static 'scripts/att_timeFavorito.js' %}?v=1.0"></script>
             <script src="{% static 'scripts/changeTheme.js' %}?v=1.0"></script>
         {% endif %}
     {% else %}
-        <link rel="stylesheet" href="{% static 'css/user.css' %}?v=1.0">
+        <link rel="stylesheet" href="{% static 'styles/user.css' %}?v=1.0">
     {% endif %}
 {% endblock %}
 

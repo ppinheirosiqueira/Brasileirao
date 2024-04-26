@@ -2,14 +2,21 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-size: 1rem;
   gap: 1em;
+  padding-top: 2em;
+}
+.container hr {
+  height: 2px;
+  background-color: var(--border);
+  border: none;
 }
 .container .escudo {
   width: 15em;
 }
-.container .nome {
-  font-size: 5em;
+@media (max-width: 1000px) {
+  .container .escudo {
+    width: 10em;
+  }
 }
 .container .perfil {
   width: 4em;
@@ -20,12 +27,6 @@
   justify-content: center;
   text-align: center;
   flex-wrap: wrap;
-  font-size: 1em;
-}
-@media (max-width: 1000px) {
-  .container .fas {
-    font-size: 2em;
-  }
 }
 .container .fas h1 {
   text-align: center;
@@ -95,7 +96,6 @@
   .container .partidas .jogos_checkbox {
     flex-wrap: nowrap;
     flex-direction: column;
-    font-size: 2rem;
   }
 }
 .container .partidas .jogos_checkbox a {
@@ -103,7 +103,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   color: inherit;
-  border: 1px solid black;
+  border: 1px solid var(--border);
   border-radius: 1em;
   padding: 0.5em;
   margin: 0 1em 0.5em 1em;
@@ -135,14 +135,10 @@
 .container .ranking {
   margin: 0 20% 2em 20%;
   width: 60%;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  row-gap: 0.5em;
-  font-size: 1em;
+  border-collapse: collapse;
 }
 @media (max-width: 1000px) {
   .container .ranking {
-    font-size: 2em;
     margin: 0 5% 2em 5%;
     width: 90%;
   }
@@ -154,33 +150,22 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  font-size: 1em;
   font-weight: bold;
 }
-.container .ranking h2 {
+.container .ranking th, .container .ranking td {
+  padding: 8px;
   text-align: center;
+  width: 25%;
 }
-.container .ranking .porcentagem {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+.container .ranking th {
+  border-bottom: 1px solid var(--border);
+  font-size: 1.5em;
 }
-.container .ranking #indicador-pepe, .container .ranking #indicador-shroud {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  cursor: pointer;
+.container .ranking tr {
+  height: 2em;
 }
-.container .ranking #indicador-pepe::after, .container .ranking #indicador-shroud::after {
-  content: "";
-  display: inline-block;
-  margin-left: 5px;
-  width: 0;
-  height: 0;
-  border: 0.4em solid transparent;
+.container .ranking tr:nth-child(even) {
+  background: var(--hover);
 }
-.container .ranking #indicador-pepe.desc::after, .container .ranking #indicador-shroud.desc::after {
-  border-top-color: var(--fc);
-}
+
+/*# sourceMappingURL=time.css.map */

@@ -1,11 +1,9 @@
 .container {
   padding: 5em 0 0 0;
   height: auto;
-  font-size: 1rem;
 }
 @media (max-width: 1000px) {
   .container {
-    font-size: 3rem;
     padding: 2em 0 0 0;
   }
 }
@@ -30,7 +28,7 @@
   height: 2.5em;
   border-width: 2px;
   border-style: outset;
-  border-color: #ccc;
+  border-color: var(--border);
   padding: 5px;
   font-size: 1em;
   margin: auto 0;
@@ -45,7 +43,7 @@
   font-size: 2em;
   width: 100%;
   text-align: center;
-  border: 1px solid var(--fc);
+  border: 1px solid var(--border);
 }
 .container .partidas form input[type=datetime-local] {
   color: var(--fc);
@@ -54,14 +52,14 @@
   font-size: 1.5em;
   width: 100%;
   text-align: center;
-  border: 1px solid var(--fc);
+  border: 1px solid var(--border);
 }
 .container .partidas form input[type=submit] {
   display: inline-block;
   padding: 10px 20px;
   background-color: var(--bg);
   color: var(--fc);
-  border: 1px solid var(--fc);
+  border: 1px solid var(--border);
   border-radius: 4px;
   font-size: 1em;
   text-align: center;
@@ -71,3 +69,5 @@
 .container .partidas form input[type=submit]:hover {
   background-color: var(--hover);
 }
+
+/*# sourceMappingURL=att_partida.css.map */

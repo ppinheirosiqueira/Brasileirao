@@ -8,9 +8,9 @@
 
 {% block style %}
     {% if request|is_pc %}
-    <link rel="stylesheet" href="{% static 'css/login_pc.css' %}?v=1.0">
+    <link rel="stylesheet" href="{% static 'styles/login_pc.css' %}?v=1.0">
     {% else %}
-    <link rel="stylesheet" href="{% static 'css/login_mobile.css' %}?v=1.0">
+    <link rel="stylesheet" href="{% static 'styles/login_mobile.css' %}?v=1.0">
     {% endif %}
 {% endblock %}
 

@@ -19,9 +19,9 @@
         {% endif %}
     </script>
     {% if request|is_pc %}
-        <link rel="stylesheet" href="{% static 'css/campeonato_edicao_pc.css' %}">
+        <link rel="stylesheet" href="{% static 'styles/campeonato_edicao_pc.css' %}">
     {% else %}
-        <link rel="stylesheet" href="{% static 'css/campeonato_edicao_mobile.css' %}">
+        <link rel="stylesheet" href="{% static 'styles/campeonato_edicao_mobile.css' %}">
         <script type="text/javascript" src="{% static 'scripts/selecionarDiv.js' %}?v=1.0"></script>
     {% endif %}
     {% if edicao.campeonato.pontosCorridos %}

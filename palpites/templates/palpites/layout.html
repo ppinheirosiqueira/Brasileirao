@@ -10,9 +10,9 @@
         <title>{% block title %}{% endblock %}</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         {% if request|is_pc %}
-            <link rel="stylesheet" href="{% static 'css/layout_pc.css' %}?v=1.0">
+            <link rel="stylesheet" href="{% static 'styles/layout_pc.css' %}?v=1.0">
         {% else %}
-            <link rel="stylesheet" href="{% static 'css/layout_mobile.css' %}?v=1.0">
+            <link rel="stylesheet" href="{% static 'styles/layout_mobile.css' %}?v=1.0">
             <script src="{% static 'scripts/mudarIcone.js' %}?v=1.0"></script>
         {% endif %}
         {% block style %}{% endblock %}

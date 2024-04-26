@@ -11,9 +11,9 @@
         const idPartida = {{ partida.id }}
     </script>
     {% if request|is_pc %}
-        <link rel="stylesheet" href="{% static 'css/partida_pc.css' %}?v=2.4">
+        <link rel="stylesheet" href="{% static 'styles/partida_pc.css' %}?v=2.4">
     {% else %}
-        <link rel="stylesheet" href="{% static 'css/partida_mobile.css' %}?v=1.1">
+        <link rel="stylesheet" href="{% static 'styles/partida_mobile.css' %}?v=1.1">
         <script type="text/javascript" src="{% static 'scripts/outrosJogos.js' %}?v=1.0"></script>
         <script>
             var anterior = "{{ anterior }}";

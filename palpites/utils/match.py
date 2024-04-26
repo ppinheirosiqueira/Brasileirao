@@ -13,9 +13,9 @@ def palpite_da_partida(partida):
 
 def get_anterior_proximo_partida(partida, time):
     if not time:
-        partidas = list(Partida.objects.all())
+        partidas = list(Partida.objects.all().order_by('dia'))
     else:
-        partidas = list(Partida.objects.filter(Q(Mandante__Nome=time) | Q(Visitante__Nome=time)).order_by('id'))
+        partidas = list(Partida.objects.filter(Q(Mandante__Nome=time) | Q(Visitante__Nome=time)).order_by('dia'))
 
     indice = partidas.index(partida)
     anterior = partidas[indice - 1].id if indice - 1 >= 0 else None
