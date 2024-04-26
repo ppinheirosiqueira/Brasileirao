@@ -132,6 +132,7 @@
 }
 .itens #ranking #dono {
   margin-top: 1em;
+  display: flex;
   flex-direction: column;
   margin-inline: 2.5%;
   gap: 0.5em;
@@ -142,6 +143,9 @@
   background-color: var(--bg);
   color: var(--fc);
   margin: 0 auto;
+}
+.itens #ranking #dono select {
+  width: 80%;
 }
 .itens #ranking #dono button {
   font-size: 1em;

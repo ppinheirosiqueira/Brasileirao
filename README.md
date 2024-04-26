@@ -87,6 +87,7 @@ O site sempre poderá ter melhorias, então vou listar em ordem do que acho lega
 - Em Iphone's/Ipad's existe um bug na visualização dos jogos, onde os palpites das pessoas vão para baixo, não se sabe ainda a razão.
 
 <p align="center">
+<img src="images/bugIphone.png" alt="Bug Iphone" title="Bug Iphone" width="200" />
 <img src="images/bugIphone.jpg" alt="Bug Iphone" title="Bug Iphone" width="200" />
 </p>
 

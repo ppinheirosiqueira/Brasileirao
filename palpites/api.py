@@ -201,7 +201,7 @@ def att_rodadas(request : HttpRequest, edicao : int) -> JsonResponse:
     return JsonResponse(data, safe=False)
 
 def att_usuarios(request: HttpRequest, edicao : int) -> JsonResponse:
-    usuariosAux = list(Palpite_Partida.objects.filter(partida__Rodada__edicao_campeonato=edicao).values_list("usuario",flat=True).distinct()) 
+    usuariosAux = list(Palpite_Partida.objects.filter(partida__Rodada__edicao_campeonato=edicao).order_by('usuario__username').values_list("usuario",flat=True).distinct()) 
     usuarios = [User.objects.get(id=usuario).username for usuario in usuariosAux]
     data = {'usuarios': usuarios}
     return JsonResponse(data, safe=False)
@@ -465,7 +465,7 @@ def criar_convite(request: HttpRequest, idGrupo:int, nome: str) -> JsonResponse:
         mensagem.save()
         texto = f"<p>O usuário {grupo.dono} te chamou para participar do grupo {grupo.nome} que é referente ao campeonato {grupo.edicao}. Você aceita participar do grupo?</p>"        
         texto += f'<div class="links"><a href="../../aceitar_grupo/{grupo.id}/{convidado.id}/{mensagem.id}"><img src="../../static/icons/aceitar.svg" alt="Aceitar convite" title="Aceitar convite"></a>'
-        texto += f'<a href="../../recusar_grupo/{grupo.id}/{convidado.id}/{mensagem.id}"><img src="../../static/icons/recusar.svg" alt="recusar convite" title="Recusar convite"></a></div>'
+        texto += f'<a href="../../recusar_grupo/{mensagem.id}"><img src="../../static/icons/recusar.svg" alt="recusar convite" title="Recusar convite"></a></div>'
         mensagem.conteudo = texto
         mensagem.save()
 

@@ -32,32 +32,21 @@ def home(request : HttpRequest) -> HttpResponse:
         pagina_atual = paginator.num_pages
     page = paginator.get_page(pagina_atual)
 
-    user_agent = parse(request.META.get('HTTP_USER_AGENT', ''))
+    contexto = {
+            "title": "Pepe League",
+            "page": page,
+            "ranking": ranking(edicoes[0].id,0),
+            "edicoes": edicoes,
+            "rodadas": rodadas,
+        }
 
+    user_agent = parse(request.META.get('HTTP_USER_AGENT', ''))
     if (user_agent.is_pc):
-        usuariosAux = list(Palpite_Partida.objects.filter(partida__Rodada__edicao_campeonato=edicoes[0].id).values_list("usuario",flat=True).distinct()) 
-        usuarios = [User.objects.get(id=usuario).username for usuario in usuariosAux]
-        if request.user.is_authenticated:
-            grupos = Grupo.objects.filter(edicao=edicoes[0],usuarios=request.user)
-        else:
-            grupos = None
-        return render(request, "palpites/home.html", {
-            "title": "Pepe League",
-            "page": page,
-            "ranking": ranking(edicoes[0].id,0),
-            "edicoes": edicoes,
-            "grupos": grupos,
-            "rodadas": rodadas,
-            "usuarios": usuarios,
-        })
-    else:
-        return render(request, "palpites/home.html", {
-            "title": "Pepe League",
-            "page": page,
-            "ranking": ranking(edicoes[0].id,0),
-            "edicoes": edicoes,
-            "rodadas": rodadas,
-        })
+        usuariosPalpitaramCampeonatoGraficoInicial = list(Palpite_Partida.objects.filter(partida__Rodada__edicao_campeonato=edicoes[0].id).order_by('usuario__username').values_list("usuario",flat=True).distinct()) 
+        contexto['usuarios'] = [User.objects.get(id=usuario).username for usuario in usuariosPalpitaramCampeonatoGraficoInicial]
+        contexto['grupos'] = Grupo.objects.filter(edicao=edicoes[0],usuarios=request.user) if request.user.is_authenticated else None
+
+    return render(request, "palpites/home.html", contexto)
 
 # Views de Administração de Usuario
 def verLogin(request : HttpRequest) -> HttpResponse:
@@ -169,36 +158,25 @@ def verUsuario(request : HttpRequest, id : int) -> HttpResponse:
     else:
         media = None
 
+    contexto = {
+        "title": f"Perfil do Usuário - {usuario.username}",
+        "usuario": usuario,
+        "average_points_pepe": average_pepe(id),
+        "total_predictions": len(Palpite_Partida.objects.filter(usuario=id)),
+        "accuracy_goals_mandante": aGm,
+        "accuracy_goals_visitante": aGv,
+        "accuracy_result": aR,
+        "accuracy_total": aT,
+        "media": media,
+        "edicoes": edicoes,
+    }
+
     if request.user.id == id:
         formImage = ProfileImageUpdateForm(instance=request.user if request.user.is_authenticated else None)
-
-        return render(request, "palpites/usuario.html", {
-            "title": f"Perfil do Usuário - {usuario.username}",
-            "usuario": usuario,
-            "average_points_pepe": average_pepe(id),
-            "total_predictions": len(Palpite_Partida.objects.filter(usuario=id)),
-            "accuracy_goals_mandante": aGm,
-            "accuracy_goals_visitante": aGv,
-            "accuracy_result": aR,
-            "accuracy_total": aT,
-            "media": media,
-            "formImage": formImage,
-            "times": sorted(Time.objects.all(), key=lambda time: unidecode(time.Nome)),
-            "edicoes": edicoes,
-        })
-    else:
-        return render(request, "palpites/usuario.html", {
-            "title": f"Perfil do Usuário - {usuario.username}",
-            "usuario": usuario,
-            "average_points_pepe": average_pepe(id),
-            "total_predictions": len(Palpite_Partida.objects.filter(usuario=id)),
-            "accuracy_goals_mandante": aGm,
-            "accuracy_goals_visitante": aGv,
-            "accuracy_result": aR,
-            "accuracy_total": aT,
-            "media": media,
-            "edicoes": edicoes,
-        })
+        contexto['formImage'] = formImage
+        contexto['times'] = sorted(Time.objects.all(), key=lambda time: unidecode(time.Nome))
+        
+    return render(request, "palpites/usuario.html", contexto)
 
 def editarUsuario(request : HttpRequest, id : int) -> HttpResponse:
     if request.user.id != id:
@@ -361,19 +339,24 @@ def verCampeonato(request : HttpRequest, campeonato : int) -> HttpResponse:
 
 def verEdicaoCampeonato(request : HttpRequest, campeonato : int, edicao : int) -> HttpResponse:
     edicao = EdicaoCampeonato.objects.get(campeonato=campeonato,num_edicao=edicao)
-    ordem = list(range(1, 21))
-    temPalpite = False
+    edicoes = EdicaoCampeonato.objects.filter(campeonato=edicao.campeonato)
+    cravadasJogadores = cravadas(edicao.id,None)
+
+    rankingJogadores = None
+    if edicao.comecou:
+        rankingJogadores = ranking(edicao.id,0)
+        if rankingJogadores is not None:
+            rankingJogadores = list(rankingJogadores)
+
+    campeaoPepe = None
+    if edicao.terminou:
+        topPepe = [(id, pontosP) for _, _, id, pontosP, _ in list(rankingJogadores)[:3]]
+        campeaoPepe = [{'id': usuario[0],'imagem': User.objects.get(id=usuario[0]).profile_image, 'pontos': usuario[1]} for usuario in topPepe]
+    
     if edicao.campeonato.pontosCorridos:
-        # Pegar classificação se for Pontos Corridos
-        classificacaoCampeonato = classificacao(edicao,1,38,0)
-        classificacaoCampeonato = zip(ordem,classificacaoCampeonato)
-        # Os jogos serão pegos por rodada
         paginator = Paginator(Partida.objects.filter(Rodada__edicao_campeonato=edicao).order_by('Rodada'), 10)
         primeiro_jogo_nao_ocorrido = Partida.objects.filter(Rodada__edicao_campeonato=edicao).order_by('Rodada').first()
-        if len(Palpite_Campeonato.objects.filter(edicao_campeonato=edicao)) > 0:
-            temPalpite = True
     else:
-        # Os jogos serão pegos pelo dia
         paginator = Paginator(Partida.objects.filter(Rodada__edicao_campeonato=edicao).order_by('dia'), 10)
         primeiro_jogo_nao_ocorrido = Partida.objects.filter(Rodada__edicao_campeonato=edicao).order_by('dia').first()
         
@@ -382,50 +365,31 @@ def verEdicaoCampeonato(request : HttpRequest, campeonato : int, edicao : int) -
         pagina_atual = jogos_antes // 10 + 1
     else:
         pagina_atual = paginator.num_pages
+        
     page = paginator.get_page(pagina_atual)
 
-    # Independente do tipo, se já começou, mostrar o ranking
-    if edicao.comecou:
-        rankingJogadores = ranking(edicao.id,0)
-        if rankingJogadores is not None:
-            rankingJogadores = list(rankingJogadores)
-    else:
-        rankingJogadores = None
-
-    # Independente do tipo, se acabou, ver quem venceu nos palpites
-    if edicao.terminou:
-        topPepe = [(id, pontosP) for _, _, id, pontosP, _ in list(rankingJogadores)[:3]]
-        campeaoPepe = [{'id': usuario[0],'imagem': User.objects.get(id=usuario[0]).profile_image, 'pontos': usuario[1]} for usuario in topPepe]
-    else:
-        campeaoPepe = None
-
-    edicoes = EdicaoCampeonato.objects.filter(campeonato=edicao.campeonato)
-    cravadasJogadores = cravadas(edicao.id,None)
+    contexto = {
+        'edicao': edicao,
+        'rodadas': Rodada.objects.filter(edicao_campeonato=edicao).order_by("num"),
+        'campeaoPepe': campeaoPepe,
+        'ranking': rankingJogadores,
+        "page": page,
+        "edicoes": edicoes,
+        "cravadas": cravadasJogadores,
+    }
 
     if edicao.campeonato.pontosCorridos:
-        return render(request, "palpites/campeonato_edicao.html", {
-            'edicao': edicao,
-            'temPalpite': temPalpite,
-            'ordem': ordem,
-            'classificacao': classificacaoCampeonato,
-            'rodadas': Rodada.objects.filter(edicao_campeonato=edicao).order_by("num"),
-            'campeaoPepe': campeaoPepe,
-            'ranking': rankingJogadores,
-            "page": page,
-            "edicoes": edicoes,
-            "cravadas": cravadasJogadores,
-        })
-    else:
-        return render(request, "palpites/campeonato_edicao.html", {
-            'edicao': edicao,
-            'temPalpite': temPalpite,
-            'rodadas': Rodada.objects.filter(edicao_campeonato=edicao).order_by("num"),
-            'campeaoPepe': campeaoPepe,
-            'ranking': rankingJogadores,
-            "page": page,
-            "edicoes": edicoes,
-            "cravadas": cravadasJogadores,
-        })
+        ordem = list(range(1, 21))
+        temPalpite = False
+        classificacaoCampeonato = classificacao(edicao,1,38,0)
+        classificacaoCampeonato = zip(ordem,classificacaoCampeonato)
+        if len(Palpite_Campeonato.objects.filter(edicao_campeonato=edicao)) > 0:
+            temPalpite = True
+        contexto['temPalpite'] = temPalpite
+        contexto['ordem'] = ordem
+        contexto['classificacao'] = classificacaoCampeonato
+
+    return render(request, "palpites/campeonato_edicao.html", contexto)
 
 def verPalpitarEdicao(request : HttpRequest, edicao : int) -> HttpResponse:
     edicao = EdicaoCampeonato.objects.get(id=edicao)
@@ -603,12 +567,8 @@ def aceitarGrupo(request : HttpRequest, idGrupo:int, idUsuario:int, idMensagem:i
     url = reverse('grupo', args=(grupo.id,))
     return redirect(url)
 
-def recusarGrupo(request : HttpRequest, idGrupo:int, idUsuario:int, idMensagem:int) -> HttpResponse:
-    grupo = Grupo.objects.get(id=idGrupo)
-    usuario = User.objects.get(id=idUsuario)
-
+def recusarGrupo(request : HttpRequest, idMensagem:int) -> HttpResponse:
     mensagem = Mensagem.objects.get(id=idMensagem)
     mensagem.delete()
 
     return redirect(reverse('mensagens'))
-    

@@ -50,7 +50,7 @@ urlpatterns = [
     path("grupo/<int:id>", views.verGrupo, name="grupo"),
     path("sair_grupo/<int:idGrupo>", views.sairGrupo, name="sair_grupo"),
     path("aceitar_grupo/<int:idGrupo>/<int:idUsuario>/<int:idMensagem>", views.aceitarGrupo, name="aceitar_grupo"),
-    path("recusar_grupo/<int:idGrupo>/<int:idUsuario>/<int:idMensagem>", views.recusarGrupo, name="recusar_grupo"),
+    path("recusar_grupo/<int:idMensagem>", views.recusarGrupo, name="recusar_grupo"),
     
     # ============== Informaçõpes ==============
     path("info", views.verInfo, name="info"),
