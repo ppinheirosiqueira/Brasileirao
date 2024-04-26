@@ -20,6 +20,9 @@
 body {
   background: var(--bg);
   color: var(--fc);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 body select {
   width: 7em;
@@ -60,6 +63,23 @@ nav {
   padding: 0 2em;
   z-index: 999;
   border-bottom: 1px solid var(--border);
+}
+nav input[type=checkbox] {
+  display: none;
+}
+nav label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  text-decoration: none;
+  color: var(--fc);
+  width: 8em;
+  height: 100%;
+  cursor: pointer;
+}
+nav label:hover {
+  background: var(--hover);
 }
 nav span {
   display: flex;
@@ -150,6 +170,41 @@ nav .dropdown-content button img {
 
 .container {
   margin-top: 4em;
+  flex: 1;
+}
+
+footer {
+  flex-shrink: 0;
+  height: 4em;
+  width: 100%;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  text-align: center;
+  padding: 0 2em;
+  z-index: 999;
+  border-top: 1px solid var(--border);
+  margin-top: 1em;
+}
+footer a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  text-decoration: none;
+  color: var(--fc);
+  width: 8em;
+  height: 100%;
+}
+footer img {
+  width: 100%;
+  height: 2.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: transparent;
+  cursor: pointer;
 }
 
 /*# sourceMappingURL=layout_pc.css.map */

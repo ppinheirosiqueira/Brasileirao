@@ -7,6 +7,10 @@
 {% endblock %}
 
 {% block style %}
+    <script>
+        let idUsuario = {{usuario.id}};
+    </script>
+    <script type="text/javascript" src="{% static 'scripts/att_rankingTimes.js' %}?v=1.0"></script>
     {% if request|is_pc %}
         <link rel="stylesheet" href="{% static 'css/user_pc.css' %}">
         {% if user.id == usuario.id %}    
@@ -83,7 +87,7 @@
             <label for="tema_bege"><input type="radio" name="tema" id="tema_bege" onChange="mudarTema('tema_bege')">
                 <span>Tema Bege</span><img src="../media/temas/pc_bege.png" alt="Tema Bege">
             </label>
-            <label for="tema_amadeirado"><input type="radio" name="tema" id="tema_marrom" onChange="mudarTema('tema_marrom')">
+            <label for="tema_marrom"><input type="radio" name="tema" id="tema_marrom" onChange="mudarTema('tema_marrom')">
                 <span>Tema Marrom</span><img src="../media/temas/pc_marrom.png" alt="Tema Marrom">
             </label>
             <div class="forms">

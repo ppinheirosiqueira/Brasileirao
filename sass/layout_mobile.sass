@@ -21,6 +21,34 @@
 body 
     background: var(--bg)
     color: var(--fc)
+    display: flex
+    flex-direction: column
+    min-height: 100vh
+    
+    select
+        width: 90%
+        height: 2.5em
+        border-width: 2px
+        border-style: outset
+        border-color: var(--border)    
+        font-size: 1em
+        margin: auto 0
+        color: var(--fc)
+        background-color: var(--bg)
+    
+        option
+            background: var(--bg)
+            color: var(--fc)
+
+    button
+        background-color: var(--bg)
+        color: var(--fc)
+        margin: 0 0.5em
+        padding: 0.2em 0.8em
+        border-width: 2px
+        border-style: outset
+        border-color: var(--border)
+        cursor: pointer
 
 nav
     height: 4em
@@ -57,19 +85,16 @@ nav
         width: 2.5em
         filter: var(--filter)
 
-    input[type=checkbox]
-            display: none
-
-    .fecharAdmin
+    .fecharAdmin, .fecharUser
         display: none
 
-    #openAdm:checked ~ .dropdown-adm
+    #openAdm:checked ~ .dropdown-adm, #openPerfil:checked ~ .dropdown-perfil
         display: flex
         flex-direction: column
         text-align: left
         gap: 8px
 
-    .dropdown-adm
+    .dropdown-adm, .dropdown-perfil
         display: none
         position: fixed
         top: 4.5em
@@ -83,7 +108,36 @@ nav
 
         a
             @include mixins.link
-                
+
+        button
+            background-color: transparent
+            width: 100%
+            border: none
+            height: 3em
+            cursor: pointer
+            display: block
+            text-align: left
+
+            img
+                height: 100%
+
+#infoFooter
+    height: 4em
+    width: 100%
+    background: var(--bg)
+
+    display: flex
+    align-items: center
+    text-align: center
+    justify-content: space-evenly
+
+    border-top: 1px solid var(--border)
+
+    margin-bottom: 4em
+
+    img
+        width: 2.5em
+        filter: var(--filter)
 
 footer
     height: 4em
@@ -108,41 +162,6 @@ footer
     input[type=checkbox]
             display: none
 
-    .fecharUser
-        display: none
-
-    #openPerfil:checked ~ .dropdown-perfil
-        display: flex
-        flex-direction: column
-        text-align: left
-        gap: 8px
-
-    .dropdown-perfil
-        display: none
-        position: fixed
-        top: 4.5em
-        width: 90%
-        padding: 1em
-        background: var(--bg)
-        border: 2px solid var(--border)
-        border-radius: 2em
-        padding: 2em
-
-        a
-            text-decoration: none
-            color: var(--fc)
-
-        button
-            background-color: transparent
-            width: 100%
-            border: none
-            height: 3em
-            cursor: pointer
-            display: block
-            text-align: left
-
-            img
-                height: 100%
-
 .container
-    margin: 5.5em 0
+    margin: 5.5em 0 2em 0
+    flex: 1

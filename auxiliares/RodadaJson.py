@@ -10,8 +10,9 @@ times = {
     'BAH': "Bahia",
     'BOT': "Botafogo",
     'RED': "Bragantino",
-    'COR': "Corinthians/Coritiba",
-    'CRI': "Criciumá",
+    # 'COR': "Corinthians/Coritiba",
+    'COR': 'Corinthians',
+    'CRI': "Criciúma",
     'CRU': "Cruzeiro",
     'CUI': "Cuiabá",
     'FLA': "Flamengo",
@@ -32,7 +33,7 @@ campeonato = input("Qual campeonato vai recolher?")
 edicaoCampeonato = input("Qual a edição desse campeonato?")
 rodada = input("Qual rodada deseja recolher?")
 
-url = 'https://www.cbf.com.br/futebol-brasileiro/competicoes/campeonato-brasileiro-serie-a?csrt=8969359475780767906'
+url = 'https://www.cbf.com.br/futebol-brasileiro/competicoes/campeonato-brasileiro-serie-a?csrt=9148758663506143319'
 response = requests.get(url)
 if response.status_code == 200:
         soup = BeautifulSoup(response.text, 'html.parser')
@@ -45,17 +46,20 @@ if response.status_code == 200:
             correspondencias = re.search(padrao, dado)
             siglaMandante = li.find('div', {'class': 'time pull-left'}).find('span', {'class':'time-sigla'}).text
             siglaVisitante = li.find('div', {'class': 'time pull-right'}).find('span', {'class':'time-sigla'}).text
+            print(correspondencias)
+            print(siglaMandante)
+            print(siglaVisitante)
             aux = {
-                'data': correspondencias.group(1),
+                'data': (correspondencias.group(1) if correspondencias else '31/12/2099 00:00'),
                 'mandante': times[siglaMandante],
                 'visitante':  times[siglaVisitante],
             }
             jogos.append(aux)
 
-with open(f'auxiliares/arquivosJson/{campeonato + "_" +  rodada}.json', 'w', encoding='utf-8') as json_file:
+with open(f'auxiliares/arquivosJson/{campeonato + "_" + edicaoCampeonato + "_" +  rodada}.json', 'w', encoding='utf-8') as json_file:
     json.dump({
         'campeonato': campeonato,
         'edicao_campeonato': edicaoCampeonato,
-        'rodada': rodada,
+        'rodada': f'{rodada}ª',
         'jogos': jogos,
     }, json_file, ensure_ascii=False, indent=2)  # ensure_ascii=False para permitir caracteres especiais

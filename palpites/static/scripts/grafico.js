@@ -38,7 +38,7 @@ function mudarRodadaFinal(value){
   }
 }
 
-function mudarCampeonatoGrafico(value){
+function att_rodadas(value){
   rodada_inicial = document.getElementById('rodada_inicial')
   rodada_final = document.getElementById('rodada_final')
   rodada_inicial.disabled = true
@@ -75,6 +75,55 @@ function mudarCampeonatoGrafico(value){
       .catch(function(error) {
           console.log('Ocorreu um erro:', error)
   })
+}
+
+function att_usuarios(value){
+  usuarios_checkbox = document.getElementById('checkboxes')
+  fetch('attUsuarios/' + value )
+      .then(function(response) {
+          return response.json()
+      })
+      .then(function(data) {
+        texto = ""
+        data['usuarios'].forEach(usuario => {
+          texto += `<label><input type="checkbox" id="${usuario}Check" name="usuarios" value="${usuario}" onclick="modificarUsuario('${usuario}')"><span>${usuario}</span></label>`
+        })
+        usuarios_checkbox.innerHTML = texto
+      })
+      .catch(function(error) {
+        console.log('Ocorreu um erro:', error)
+  })
+}
+
+function att_grupos(value){
+  grupos_radios = document.getElementById('radios')
+  fetch('attGrupos/' + value )
+      .then(function(response) {
+          return response.json()
+      })
+      .then(function(data) {
+        texto = ""
+        if (data['grupos'].length > 0) {
+          data['grupos'].forEach(grupo => {
+            texto += `<label><input type="radio" name="grupo" value=${grupo.id} onclick="chamarGrupo('${grupo.id}')"><span>${grupo.nome}</span></label>`
+          })
+        }
+        else{
+          texto = "Você não faz parte de nenhum grupo para este campeonato"
+        }
+        grupos_radios.innerHTML = texto
+      })
+      .catch(function(error) {
+        console.log('Ocorreu um erro:', error)
+  })
+}
+
+function mudarCampeonatoGrafico(value){
+  document.getElementById('usuario').value = 'voce'
+  mudarUsuario('voce')
+  att_rodadas(value)
+  att_usuarios(value)
+  att_grupos(value)
 }
 
 function mudarUsuario(value){
@@ -125,20 +174,30 @@ function modificarUsuario(nome){
 }
 
 function chamarGrafico(usuarios,rod_ini,rod_fim){
-  fetch('attGrafico/' + usuarios + '/' + document.getElementById('campeonato').value + '/' + rod_ini + '/' + rod_fim)
-  .then(response => response.json())
-  .then(data => {
-      exibirGrafico(data)
-  })
-  .catch(error => {
-      console.error(error)
-  })
+  if (usuarios == ''){
+      var radios = document.getElementsByName('grupo');
+      for (var i = 0; i < radios.length; i++) {
+          if (radios[i].checked) {
+            chamarGrupo(radios[i].value)
+          }
+      }
+  }
+  else{
+    fetch('attGrafico/' + usuarios + '/' + document.getElementById('campeonato').value + '/' + rod_ini + '/' + rod_fim)
+    .then(response => response.json())
+    .then(data => {
+        exibirGrafico(data)
+    })
+    .catch(error => {
+        console.error(error)
+    })
+  }
 }
 
 function chamarGrupo(grupo){
   var inicial = parseInt(document.getElementById('rodada_inicial').value)
   var final = parseInt(document.getElementById('rodada_final').value)
-  fetch('attGrafico/grupo+' + grupo + '/' + inicial + '/' + final)
+  fetch('attGraficoGrupo/' + grupo + '/' + inicial + '/' + final)
   .then(response => response.json())
   .then(data => {
       exibirGrafico(data);

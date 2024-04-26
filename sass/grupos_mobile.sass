@@ -1,0 +1,28 @@
+@use 'variables'
+@use 'mixins'
+
+.grupos
+    margin-inline: 2.5%
+
+    h1
+        font-size: 3em
+        margin-bottom: 1em
+
+    h2
+        font-size: 2em
+
+    .gruposList
+        font-size: 1.5em
+        margin-bottom: 3em
+
+        a
+            color: var(--fc)
+    
+    .formulario
+        display: flex
+        flex-direction: column
+        gap: 0.5em
+
+        input[type=text], select, button
+            width: 90%
+            margin-inline: 2.5%

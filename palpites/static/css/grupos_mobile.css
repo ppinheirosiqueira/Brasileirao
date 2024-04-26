@@ -1,0 +1,28 @@
+.grupos {
+  margin-inline: 2.5%;
+}
+.grupos h1 {
+  font-size: 3em;
+  margin-bottom: 1em;
+}
+.grupos h2 {
+  font-size: 2em;
+}
+.grupos .gruposList {
+  font-size: 1.5em;
+  margin-bottom: 3em;
+}
+.grupos .gruposList a {
+  color: var(--fc);
+}
+.grupos .formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+.grupos .formulario input[type=text], .grupos .formulario select, .grupos .formulario button {
+  width: 90%;
+  margin-inline: 2.5%;
+}
+
+/*# sourceMappingURL=grupos_mobile.css.map */

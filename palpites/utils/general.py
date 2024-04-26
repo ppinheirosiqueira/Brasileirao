@@ -1,5 +1,5 @@
-from ..models import Palpite_Partida, User
-from .score import check_diferenca_gols, check_pontuacao_pepe
+from ..models import Palpite_Partida, User, Grupo
+from .score import check_diferenca_gols, check_pontuacao_pepe, check_pontuacao_pepe_grupo
 
 def ranking(edicao, rodada):
     
@@ -24,7 +24,31 @@ def ranking(edicao, rodada):
     usernames, ids, pontosP, difGols = zip(*tuplas_ordenadas)
     posicao = []
     for i, _ in enumerate(usernames, start=1):
-        if i < len(usernames) and (pontosP[i] == pontosP[i - 1] and difGols[i] == difGols[i - 1]):
+        if i > 1 and (pontosP[i - 1] == pontosP[i - 2] and difGols[i - 1] == difGols[i - 2]):
+            posicao.append("-")
+        else:
+            posicao.append(i)
+
+    return zip(posicao,usernames,ids,pontosP,difGols)
+
+
+def rankingGrupo(grupo):
+    palpites = Palpite_Partida.objects.filter(partida__Rodada__edicao_campeonato=Grupo.objects.get(id=grupo).edicao,usuario__in = list(Grupo.objects.get(id=grupo).usuarios.all())) # Pega o ranking de tudo        
+    pessoas = list(User.objects.order_by('id').filter(id__in=palpites.values_list("usuario", flat=True).distinct()))
+    usernames = [pessoa.username for pessoa in pessoas]
+    ids = [pessoa.id for pessoa in pessoas]
+    pontosP = [check_pontuacao_pepe_grupo(palpites.filter(usuario=pessoa),grupo) for pessoa in ids]
+    difGols = [check_diferenca_gols(palpites.filter(usuario=pessoa).exclude(partida__golsMandante=-1, partida__golsVisitante=-1)) for pessoa in ids]
+
+    if (len(usernames) == 0):
+        return None
+    tuplas = zip(usernames,ids,pontosP,difGols)
+    tuplas_ordenadas = sorted(tuplas, key=lambda x: (-x[2], x[3]))
+
+    usernames, ids, pontosP, difGols = zip(*tuplas_ordenadas)
+    posicao = []
+    for i, _ in enumerate(usernames, start=1):
+        if i > 1 and (pontosP[i - 1] == pontosP[i - 2] and difGols[i - 1] == difGols[i - 2]):
             posicao.append("-")
         else:
             posicao.append(i)
@@ -37,3 +61,41 @@ def definirVencedor(golsMandante, golsVisitante):
     elif golsMandante < golsVisitante:
         return 2
     return 0
+
+def palpites_campeonato_to_json(palpites,palpitador):    
+    return {
+        'nome': palpitador,
+        'palpites': [palpite_campeonato_to_json(palpite) for palpite in palpites[palpitador]]
+    }
+    
+
+def palpite_campeonato_to_json(palpite):
+    return {
+        'time': palpite.time.id,
+        'posicao': palpite.posicao_prevista,
+    }
+    
+def modificador_to_json(modificador):
+    return {
+        'id': modificador.id,
+        'nome': modificador.rodada.nome,
+        'modificador': modificador.modificador,
+    }
+    
+def titulo_mensagem_to_json(mensagem):
+    return {
+        'idMensagem': mensagem.id,
+        'titulo': mensagem.titulo,
+        'lida': mensagem.lida,
+        'idFrom': mensagem.from_user.id,
+        'from': mensagem.from_user.username
+    }
+    
+def mensagem_to_json(mensagem):
+    return {
+        'idMensagem': mensagem.id,
+        'titulo': mensagem.titulo,
+        'idFrom': mensagem.from_user.id,
+        'from': mensagem.from_user.username,
+        'texto': mensagem.conteudo
+    }

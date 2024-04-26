@@ -1,0 +1,28 @@
+<div class="grupos">
+    <h1>Grupos</h1>
+        
+    {% if user.is_authenticated %}
+        <h2>Meus Grupos:</h2>
+        <ul id="grupos" class="gruposList">
+            {% for grupo in grupos %}
+                <li><a href="{% url 'grupo' id=grupo.id %}">{{ grupo.nome }}</a></li>
+            {% endfor %}
+        </ul>
+        
+        <h2>Criar Novo Grupo:</h2>
+        {% csrf_token %}
+        <div class="formulario">
+            <label for="group_name">Nome do Grupo:</label>
+            <input type="text" id="group_name" name="group_name" required>
+            <label for="group_name">Edição do Campeonato do Grupo:</label>
+            <select name="edicao" id="edicao" class="select">
+                {% for edicao in edicoes %}
+                    <option value="{{edicao.id}}">{{ edicao }}</option>
+                {% endfor %}
+            </select>
+            <button onClick="criarGrupo()">Criar</button>
+        </div>
+    {% else %}
+        <p>Faça login para ver seus grupos.</p>
+    {% endif %}
+</div>

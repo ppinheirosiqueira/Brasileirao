@@ -29,7 +29,14 @@ async function selecionarEstatistica(valor){
 }
 
 async function callEstatistica(item){
-    return fetch('../../estatistica/' + edicaoId + '/' + item)
+    var url
+    if (idGrupo != null){
+        url = '../../estatistica/' + edicaoId + '/' + item + '/' + idGrupo
+    }
+    else{
+        url = '../../estatistica/' + edicaoId + '/' + item
+    }
+    return fetch(url)
         .then(function(response) {
             return response.json();
         })

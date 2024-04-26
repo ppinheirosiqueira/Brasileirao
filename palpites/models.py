@@ -88,9 +88,13 @@ class User(AbstractUser):
     
 class Grupo(models.Model):
     id = models.AutoField(primary_key=True)
-    Nome = models.CharField(max_length=30)
-    Dono = models.ForeignKey(User, on_delete=models.CASCADE, related_name="grupos_dono", null=True, blank=True)
+    nome = models.CharField(max_length=30)
+    dono = models.ForeignKey(User, on_delete=models.SET_NULL, related_name="grupos_dono", null=True, blank=True)
+    edicao = models.ForeignKey(EdicaoCampeonato, on_delete=models.CASCADE, null=True)
     usuarios = models.ManyToManyField(User, related_name="grupos", blank=True)
+    
+    def __str__(self):
+        return f"{self.nome} - {self.edicao}"
 
 class Partida(models.Model):
     id = models.AutoField(primary_key=True)
@@ -126,3 +130,18 @@ class Palpite_Campeonato(models.Model):
 
     class Meta:
         unique_together = ('usuario', 'time', 'edicao_campeonato')
+        
+class RodadaModificada(models.Model):
+    grupo = models.ForeignKey(Grupo, on_delete=models.CASCADE)
+    rodada = models.ForeignKey(Rodada, on_delete=models.CASCADE)
+    modificador = models.DecimalField(default=1, max_digits=5, decimal_places=2, null=False)
+    
+    class Meta:
+        unique_together = ('grupo', 'rodada')
+        
+class Mensagem(models.Model):
+    to_user = models.ForeignKey("User", related_name="receptor", on_delete=models.CASCADE)
+    from_user = models.ForeignKey("User", related_name="remetente", on_delete=models.CASCADE)
+    titulo = models.CharField(max_length=100)
+    conteudo = models.TextField(null=True,blank=True)
+    lida = models.BooleanField(default=False)

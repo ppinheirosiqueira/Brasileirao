@@ -1,0 +1,29 @@
+{% extends "palpites/layout.html" %}
+{% load static %}
+{% load user_agents %}
+
+{% block title %}
+    {{ mensagem.titulo }}
+{% endblock %}
+
+{% block style %}
+    <script type="text/javascript" src="{% static 'scripts/mensagens.js' %}?v=1.0"></script>
+    {% if request|is_pc %}
+        <link rel="stylesheet" href="{% static 'css/mensagens_pc.css' %}?v=1.0">
+    {% else %}
+        <link rel="stylesheet" href="{% static 'css/mensagens_mobile.css' %}?v=1.0">
+    {% endif %}
+{% endblock %}
+
+{% block bodyPC %}
+    Como você chegou aqui?
+{% endblock %}
+
+{% block bodyMobile %}
+    <div id="mensagem">
+        <div class="titulo">{{mensagem.titulo}}</div>
+        <div class="from"><b>De:</b> <a href="{% url 'userView' id=mensagem.from_user.id %}">{{ mensagem.from_user }}</a></div>
+        <span class="lixo" onClick="apagarMensagemCelular({{mensagem.id}})"><img src="../../static/icons/trash.svg" alt="Apagar mensagem" title="Apagar Mensagem"></span>
+        <div class="mensagem">{{ mensagem.conteudo | safe }}</div>
+    </div>
+{% endblock %}

@@ -1,1 +1,1 @@
-{"version":3,"sourceRoot":"","sources":["../../../sass/campeonato.sass","../../../sass/_mixins.sass"],"names":[],"mappings":"AAEA;EACI;EACA;EACA;EACA;;ACyBA;ED7BJ;IAOQ;;;AAEJ;EACI;;AAEJ;EACI;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;ACOJ;EDjBA;IAaQ","file":"campeonato.css"}
+{"version":3,"sourceRoot":"","sources":["../../../sass/campeonato.sass","../../../sass/_mixins.sass"],"names":[],"mappings":"AAGI;EACI;EACA;EACA;EACA;;ACwBJ;ED5BA;IAOQ;;;AAEJ;EACI;;AAEJ;EACI;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;EACA;;ACMR;EDhBI;IAaQ","file":"campeonato.css"}

@@ -1,0 +1,27 @@
+{% extends "palpites/layout.html" %}
+{% load static %}
+{% load user_agents %}
+
+{% block title %}
+    Grupos
+{% endblock %}
+
+{% block style %}
+    <script>
+        let idUsuario = {{ user.id }}
+    </script>
+    <script type="text/javascript" src="{% static 'scripts/criarGrupo.js' %}?v=1.0"></script>
+    {% if request|is_pc %}
+        <link rel="stylesheet" href="{% static 'css/grupos_pc.css' %}?v=1.0">
+    {% else %}
+        <link rel="stylesheet" href="{% static 'css/grupos_mobile.css' %}?v=1.0">
+    {% endif %}
+{% endblock %}
+
+{% block bodyPC %}
+    {% include "palpites/blocos_auxiliares/auxiliar_grupos.html" %}
+{% endblock %}
+
+{% block bodyMobile %}
+    {% include "palpites/blocos_auxiliares/auxiliar_grupos.html" %}
+{% endblock %}

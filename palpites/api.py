@@ -10,11 +10,41 @@ from django.core.paginator import Paginator
 import os
 import importlib.util
 
-from .utils import get_tema, cravadas, avgPontos, modaPalpites, modaResultados, ranking, rankingClassicacao, obter_dados_campeonato, definirVencedor, classificacao, partida_to_json, check_pontuacao_pepe
-from .models import Partida, Palpite_Partida, Campeonato, EdicaoCampeonato, Rodada, Time, Palpite_Campeonato, User
+from .utils import get_tema, cravadas, avgPontos, modaPalpites, modaResultados, ranking, rankingClassicacao, obter_dados_campeonato, definirVencedor, classificacao, partida_to_json, check_pontuacao_pepe, rankingTimesNoPerfil, palpites_campeonato_to_json, modificador_to_json, titulo_mensagem_to_json, mensagem_to_json
+from .models import Partida, Palpite_Partida, Campeonato, EdicaoCampeonato, Rodada, Time, Palpite_Campeonato, User, Grupo, RodadaModificada, Mensagem
 
-def tema(request):
+def tema(request : HttpRequest):
     return {'tema': get_tema(request.user)}
+
+def mensagensNaoLidas(request : HttpRequest):
+    mensagemNaoLida = False
+    
+    for mensagem in Mensagem.objects.filter(to_user=request.user):
+        if not mensagem.lida:
+            mensagemNaoLida = True
+            break
+    return {'mensagemNaoLida': mensagemNaoLida}
+
+def marcarNaoLida(request : HttpRequest, idMensagem: int) -> JsonResponse:
+    mensagem = Mensagem.objects.get(id=idMensagem)
+    mensagem.lida = False
+    mensagem.save()
+    
+    mensagens = [titulo_mensagem_to_json(mensagem) for mensagem in Mensagem.objects.filter(to_user=request.user).order_by('-id')]
+    return JsonResponse({'titulos': mensagens})
+
+def pegarMensagem(request : HttpRequest, idMensagem: int) -> JsonResponse:
+    mensagem = Mensagem.objects.get(id=idMensagem)
+    mensagem.lida = True
+    mensagem.save()
+    paraTitulos = [titulo_mensagem_to_json(mensagem) for mensagem in Mensagem.objects.filter(to_user=request.user).order_by('-id')]
+    return JsonResponse({'mensagem': mensagem_to_json(mensagem),'titulos': paraTitulos})
+
+def apagarMensagem(request : HttpRequest, idMensagem: int) -> JsonResponse:
+    mensagem = Mensagem.objects.get(id=idMensagem)
+    mensagem.delete()
+    paraTitulos = [titulo_mensagem_to_json(mensagem) for mensagem in Mensagem.objects.filter(to_user=request.user).order_by('-id')]
+    return JsonResponse({'titulos': paraTitulos})
 
 def timesCampeonato(request : HttpRequest, idEdicao : int) -> JsonResponse:
     try:
@@ -23,24 +53,24 @@ def timesCampeonato(request : HttpRequest, idEdicao : int) -> JsonResponse:
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=404)
 
-def estatisticaCravada(request : HttpRequest, idEdicao : int) -> JsonResponse:
-    dados_cravadas = cravadas(idEdicao)
+def estatisticaCravada(request : HttpRequest, idEdicao : int, idGrupo:int = None) -> JsonResponse:
+    dados_cravadas = cravadas(idEdicao, idGrupo)
     return JsonResponse(dados_cravadas, safe=False)
 
-def estatisticaAvgPontos(request : HttpRequest, idEdicao : int) -> JsonResponse:
-    dados_avgPontos = avgPontos(idEdicao)
+def estatisticaAvgPontos(request : HttpRequest, idEdicao : int, idGrupo:int = None) -> JsonResponse:
+    dados_avgPontos = avgPontos(idEdicao, idGrupo)
     return JsonResponse(dados_avgPontos, safe=False)
 
-def estatisticaModaPalpites(request : HttpRequest, idEdicao : int) -> JsonResponse:
-    dados_modaPalpites = modaPalpites(idEdicao)
+def estatisticaModaPalpites(request : HttpRequest, idEdicao : int, idGrupo:int = None) -> JsonResponse:
+    dados_modaPalpites = modaPalpites(idEdicao, idGrupo)
     return JsonResponse(dados_modaPalpites, safe=False)
 
 def estatisticaModaResultados(request : HttpRequest, idEdicao : int) -> JsonResponse:
     dados_modaResultados = modaResultados(idEdicao)
     return JsonResponse(dados_modaResultados, safe=False)
 
-def estatisticaRankingClassicacao(request : HttpRequest, idEdicao : int) -> JsonResponse:
-    dados_rankingClassicacao = rankingClassicacao(idEdicao)
+def estatisticaRankingClassicacao(request : HttpRequest, idEdicao : int, idGrupo:int = None) -> JsonResponse:
+    dados_rankingClassicacao = rankingClassicacao(idEdicao, idGrupo)
     return JsonResponse(dados_rankingClassicacao, safe=False)
 
 def attResultado(request : HttpRequest, idPartida : int, golsMandante : int, golsVisitante : int) -> JsonResponse:
@@ -73,6 +103,7 @@ def attPalpite(request : HttpRequest, idPartida : int, golsMandante : int, golsV
         if not criado:
             palpite.golsMandante = golsMandante
             palpite.golsVisitante = golsVisitante
+            palpite.vencedor = definirVencedor(golsMandante,golsVisitante)
             palpite.save()
             sucesso = "Sucesso - Palpite Alterado"
         else:
@@ -166,6 +197,17 @@ def att_rodadas(request : HttpRequest, edicao : int) -> JsonResponse:
     data = serializers.serialize('json', Rodada.objects.filter(edicao_campeonato__id=edicao).order_by('num'))
     return JsonResponse(data, safe=False)
 
+def att_usuarios(request: HttpRequest, edicao : int) -> JsonResponse:
+    usuariosAux = list(Palpite_Partida.objects.filter(partida__Rodada__edicao_campeonato=edicao).values_list("usuario",flat=True).distinct()) 
+    usuarios = [User.objects.get(id=usuario).username for usuario in usuariosAux]
+    data = {'usuarios': usuarios}
+    return JsonResponse(data, safe=False)
+
+def att_grupos(request: HttpRequest, edicao : int) -> JsonResponse:
+    grupos = [{'id': grupo.id, 'nome': grupo.nome} for grupo in Grupo.objects.filter(edicao=edicao,usuarios=request.user)]
+    data = {'grupos': grupos}
+    return JsonResponse(data, safe=False)
+
 def get_ranking(request : HttpRequest, edicao : int, rodada : int) -> JsonResponse:
     rankingPreenchido = ranking(edicao, rodada)
     try:
@@ -186,9 +228,6 @@ def attGrafico(request : HttpRequest, usuarios : str, campeonato : int, rod_Ini 
         usernames.append(request.user.username)
         if usernames[0] == '':
             usernames[0]= palpites.order_by('?').first().usuario.username
-    elif usuarios[0:5] == "grupo":
-        valor = int(usuarios.split("+")[1])
-        usernames[0]= User.objects.filter(grupo=valor).values_list("user__username",flat=True)
     else:
         usernames = usuarios.split("+")
 
@@ -199,6 +238,30 @@ def attGrafico(request : HttpRequest, usuarios : str, campeonato : int, rod_Ini 
         "datasets":[]
     }
 
+    for username in usernames:
+        pontosP = [check_pontuacao_pepe(palpites.filter(partida__Rodada__num=rodada, usuario__username=username)) for rodada in rodadas]
+        aux = {
+            "label": username,
+            "data": pontosP,
+            "borderColor": User.objects.get(username=username).corGrafico,
+            "fill":False,
+        }
+        grafico['datasets'].append(aux)
+
+    json_string = dumps(grafico)
+    json_data = loads(json_string)
+
+    return JsonResponse(json_data, safe=False)
+
+def attGraficoGrupo(request : HttpRequest, idGrupo : int, rod_Ini : int, rod_Fin : int) -> JsonResponse:
+    grupo = Grupo.objects.get(id=idGrupo)
+    palpites = Palpite_Partida.objects.filter(partida__Rodada__edicao_campeonato=grupo.edicao,partida__Rodada__num__gte=rod_Ini, partida__Rodada__num__lte=rod_Fin)
+    usernames = [usuario.username for usuario in grupo.usuarios.all()]
+    rodadas = list(range(rod_Ini, rod_Fin + 1))
+    grafico = {
+        "labels": rodadas,
+        "datasets":[]
+    }
     for username in usernames:
         pontosP = [check_pontuacao_pepe(palpites.filter(partida__Rodada__num=rodada, usuario__username=username)) for rodada in rodadas]
         aux = {
@@ -328,3 +391,81 @@ def alterar_tema(request : HttpRequest) -> JsonResponse:
     user.corFiltro = tema['filter-color']
     user.save()
     return JsonResponse({'mensagem': "Cor atualizada"}, safe=False)
+
+def attRankingTimes(request: HttpRequest, id:int, edicao:int) -> JsonResponse:
+    dados = rankingTimesNoPerfil(id,edicao)
+    return JsonResponse({'data': dados}, safe=False)
+
+def create_group(request: HttpRequest, idDono:int, nome:str, idCampeonato:int):
+    dono = User.objects.get(id=idDono)
+    edicao = EdicaoCampeonato.objects.get(id=idCampeonato)
+    
+    if len(Grupo.objects.filter(nome=nome,edicao=edicao)) > 0:
+        return JsonResponse({'mensagem': "Já existe um grupo com este nome para este campeonato"}, safe=False)
+    
+    novo_grupo = Grupo(nome=nome,dono=dono,edicao=edicao)
+    novo_grupo.save()
+    novo_grupo.usuarios.add(dono)
+    novo_grupo.save()
+    
+    grupos = Grupo.objects.filter(usuarios=idDono)
+    return JsonResponse({'mensagem': "Grupo Criado com Sucesso", "grupos": serializers.serialize('json', grupos)}, safe=False)
+
+def pegarPalpite(request: HttpRequest, idCampeonato:int, idGrupo:int = None) -> JsonResponse:
+
+    palpites = Palpite_Campeonato.objects.filter(edicao_campeonato=idCampeonato).order_by("usuario", "posicao_prevista")
+
+    if idGrupo:
+        palpites = palpites.filter(usuario__in=Grupo.objects.get(id=idGrupo).usuarios.all())
+
+    palpites_agrupados = {}
+    for palpite in palpites:
+        if palpite.usuario.username not in palpites_agrupados:
+            palpites_agrupados[palpite.usuario.username] = []
+        palpites_agrupados[palpite.usuario.username].append(palpite)
+        
+    serialized_times = serializers.serialize('json', Time.objects.all())
+
+    data = {
+        'palpites': [palpites_campeonato_to_json(palpites_agrupados,palpite) for palpite in palpites_agrupados],
+        'times': serialized_times,
+    }
+
+    return JsonResponse(data, safe=False)
+
+def mod_rodada(request: HttpRequest, idGrupo:int, idRodada:int, mod:str) -> JsonResponse:
+    mod_valor = float(mod)
+    modificador, criado = RodadaModificada.objects.get_or_create(grupo_id=idGrupo, 
+                                                            rodada_id=idRodada,
+                                                            defaults={
+                                                                'modificador': mod_valor, 
+                                                            })
+    if not criado:
+        modificador.modificador = mod_valor
+    modificador.save()
+    rodadasModificadas = RodadaModificada.objects.filter(grupo_id=idGrupo).order_by('rodada')
+    return JsonResponse({'mensagem': 'Rodada modificada com sucesso', 'rodadasModificadas': [modificador_to_json(modificador) for modificador in rodadasModificadas]}, safe=False)
+
+def excluir_mod_rodada(request: HttpRequest, idModificador:int) -> JsonResponse:
+    modificador = RodadaModificada.objects.get(id=idModificador)
+    grupo = Grupo.objects.get(id=modificador.grupo.id)
+    modificador.delete()
+    rodadasModificadas = RodadaModificada.objects.filter(grupo=grupo).order_by('rodada')
+    return JsonResponse({'mensagem': 'Modificador Excluído com sucesso', 'rodadasModificadas': [modificador_to_json(modificador) for modificador in rodadasModificadas]}, safe=False)
+
+def criar_convite(request: HttpRequest, idGrupo:int, nome: str) -> JsonResponse:
+
+    try:
+        grupo = Grupo.objects.get(id=idGrupo)
+        convidado = User.objects.get(username=nome)
+        mensagem = Mensagem(to_user=convidado,from_user=grupo.dono,titulo=f"{grupo.dono} te convida para o grupo {grupo.nome}")
+        mensagem.save()
+        texto = f"<p>O usuário {grupo.dono} te chamou para participar do grupo {grupo.nome} que é referente ao campeonato {grupo.edicao}. Você aceita participar do grupo?</p>"        
+        texto += f'<div class="links"><a href="../../aceitar_grupo/{grupo.id}/{convidado.id}/{mensagem.id}"><img src="../../static/icons/aceitar.svg" alt="Aceitar convite" title="Aceitar convite"></a>'
+        texto += f'<a href="../../recusar_grupo/{grupo.id}/{convidado.id}/{mensagem.id}"><img src="../../static/icons/recusar.svg" alt="recusar convite" title="Recusar convite"></a></div>'
+        mensagem.conteudo = texto
+        mensagem.save()
+
+        return JsonResponse({'mensagem': 'Jogador convidado com sucesso'}, safe=False)
+    except:
+        return JsonResponse({'mensagem': 'Algum erro ocorreu ao convidá-lo'}, safe=False)

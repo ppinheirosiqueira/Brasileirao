@@ -1,0 +1,86 @@
+.titulos {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5em;
+  border-right: 1px solid var(--fc);
+}
+.titulos .mensagem-nao-lida {
+  background-color: var(--selecionado);
+  color: var(--bg);
+}
+.titulos .mensagemTitulo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1em;
+  padding: 1em;
+  border-bottom: 1px solid var(--fc);
+}
+.titulos .mensagemTitulo .titulo {
+  font-weight: bold;
+  font-style: italic;
+}
+.titulos .mensagemTitulo .titulo a {
+  text-decoration: none;
+  color: inherit;
+}
+.titulos .mensagemTitulo .marcarNaoLido {
+  text-decoration: underline;
+  text-align: right;
+  padding-right: 0.5em;
+}
+.titulos .mensagemTitulo .from a {
+  text-decoration: none;
+  color: inherit;
+}
+
+#mensagem {
+  padding: 1em;
+  display: grid;
+  grid-template-rows: 1fr 1fr auto;
+  grid-template-columns: 90fr 10fr;
+  grid-template-areas: "titulo lixo" "from lixo" "mensagem mensagem";
+}
+#mensagem .titulo {
+  grid-area: titulo;
+  font-weight: bold;
+  font-style: italic;
+}
+#mensagem .from {
+  grid-area: from;
+  border-bottom: 1px solid var(--fc);
+}
+#mensagem .from a {
+  text-decoration: none;
+  color: inherit;
+}
+#mensagem .lixo {
+  grid-area: lixo;
+  cursor: pointer;
+  border-bottom: 1px solid var(--fc);
+  border-left: 1px solid var(--fc);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#mensagem .lixo img {
+  filter: var(--filter);
+  width: 50%;
+}
+#mensagem .mensagem {
+  grid-area: mensagem;
+  padding-top: 1em;
+}
+#mensagem .mensagem p {
+  padding-bottom: 1em;
+}
+#mensagem .mensagem .links {
+  display: flex;
+  justify-content: space-evenly;
+}
+#mensagem .mensagem .links a img {
+  margin-inline: auto;
+  width: 3em;
+}
+
+/*# sourceMappingURL=mensagens_mobile.css.map */

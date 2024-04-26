@@ -14,12 +14,40 @@
   --pontos-0: red;
   --pontos-1: orange;
   --pontos-2: yellow;
-  --pontos-3: greem;
+  --pontos-3: green;
 }
 
 body {
   background: var(--bg);
   color: var(--fc);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+body select {
+  width: 90%;
+  height: 2.5em;
+  border-width: 2px;
+  border-style: outset;
+  border-color: var(--border);
+  font-size: 1em;
+  margin: auto 0;
+  color: var(--fc);
+  background-color: var(--bg);
+}
+body select option {
+  background: var(--bg);
+  color: var(--fc);
+}
+body button {
+  background-color: var(--bg);
+  color: var(--fc);
+  margin: 0 0.5em;
+  padding: 0.2em 0.8em;
+  border-width: 2px;
+  border-style: outset;
+  border-color: var(--border);
+  cursor: pointer;
 }
 
 nav {
@@ -57,19 +85,16 @@ nav img {
   width: 2.5em;
   filter: var(--filter);
 }
-nav input[type=checkbox] {
+nav .fecharAdmin, nav .fecharUser {
   display: none;
 }
-nav .fecharAdmin {
-  display: none;
-}
-nav #openAdm:checked ~ .dropdown-adm {
+nav #openAdm:checked ~ .dropdown-adm, nav #openPerfil:checked ~ .dropdown-perfil {
   display: flex;
   flex-direction: column;
   text-align: left;
   gap: 8px;
 }
-nav .dropdown-adm {
+nav .dropdown-adm, nav .dropdown-perfil {
   display: none;
   position: fixed;
   top: 4.5em;
@@ -81,9 +106,37 @@ nav .dropdown-adm {
   border-radius: 2em;
   padding: 2em;
 }
-nav .dropdown-adm a {
+nav .dropdown-adm a, nav .dropdown-perfil a {
   text-decoration: none;
   color: var(--fc);
+}
+nav .dropdown-adm button, nav .dropdown-perfil button {
+  background-color: transparent;
+  width: 100%;
+  border: none;
+  height: 3em;
+  cursor: pointer;
+  display: block;
+  text-align: left;
+}
+nav .dropdown-adm button img, nav .dropdown-perfil button img {
+  height: 100%;
+}
+
+#infoFooter {
+  height: 4em;
+  width: 100%;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: space-evenly;
+  border-top: 1px solid var(--border);
+  margin-bottom: 4em;
+}
+#infoFooter img {
+  width: 2.5em;
+  filter: var(--filter);
 }
 
 footer {
@@ -106,45 +159,10 @@ footer img {
 footer input[type=checkbox] {
   display: none;
 }
-footer .fecharUser {
-  display: none;
-}
-footer #openPerfil:checked ~ .dropdown-perfil {
-  display: flex;
-  flex-direction: column;
-  text-align: left;
-  gap: 8px;
-}
-footer .dropdown-perfil {
-  display: none;
-  position: fixed;
-  top: 4.5em;
-  width: 90%;
-  padding: 1em;
-  background: var(--bg);
-  border: 2px solid var(--border);
-  border-radius: 2em;
-  padding: 2em;
-}
-footer .dropdown-perfil a {
-  text-decoration: none;
-  color: var(--fc);
-}
-footer .dropdown-perfil button {
-  background-color: transparent;
-  width: 100%;
-  border: none;
-  height: 3em;
-  cursor: pointer;
-  display: block;
-  text-align: left;
-}
-footer .dropdown-perfil button img {
-  height: 100%;
-}
 
 .container {
-  margin: 5.5em 0;
+  margin: 5.5em 0 2em 0;
+  flex: 1;
 }
 
 /*# sourceMappingURL=layout_mobile.css.map */

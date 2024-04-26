@@ -18,7 +18,7 @@ document.addEventListener('touchend', function(e) {
     var diffY = endY - startY;
     
     if (Math.abs(diffX) > Math.abs(diffY)) {
-        if (diffX > 0) {
+        if (diffX > 50) {
             if (anterior != "None"){
                 if (time != "None"){
                     window.location.href = `../../partida/${time}/${anterior}`
@@ -27,7 +27,7 @@ document.addEventListener('touchend', function(e) {
                     window.location.href = `../partida/${anterior}`
                 }
             }
-        } else {
+        } else if (diffX < -50) {
             if (proxima != "None"){
                 if (time != "None"){
                     window.location.href = `../../partida/${time}/${proxima}`

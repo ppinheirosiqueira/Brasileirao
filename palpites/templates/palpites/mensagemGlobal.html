@@ -1,0 +1,29 @@
+{% extends "palpites/layout.html" %}
+{% load static %}
+{% load user_agents %}
+
+{% block title %}
+    Mensagem Global
+{% endblock %}
+
+{% block style %}
+
+{% endblock %}
+
+{% block bodyPC %}
+    <form action="{% url 'processarMensagemGlobal' %}" method="post">
+        {% csrf_token %}
+        <input type="text" name="titulo" id="titulo" placeHolder="titulo">
+        <input type="text" name="conteudo" id="conteudo" placeHolder="texto">
+        <button type="submit">Enviar</button>
+    </form>
+{% endblock %}
+
+{% block bodyMobile %}
+    <form action="{% url 'processarMensagemGlobal' %}" method="post">
+        {% csrf_token %}
+        <input type="text" name="titulo" id="titulo" placeHolder="titulo">
+        <input type="text" name="conteudo" id="conteudo" placeHolder="texto">
+        <button type="submit">Enviar</button>
+    </form>
+{% endblock %}

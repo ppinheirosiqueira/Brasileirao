@@ -4,14 +4,54 @@
   "rodada": "1ª",
   "jogos": [
     {
-      "data": "06/04/2024 19:00",
-      "mandante": "Vasco",
-      "visitante": "Atlético"
+      "data": "13/04/2024 18:30",
+      "mandante": "Criciúma",
+      "visitante": "Juventude"
     },
     {
-      "data": "06/04/2024 21:30",
+      "data": "13/04/2024 18:30",
+      "mandante": "Internacional",
+      "visitante": "Bahia"
+    },
+    {
+      "data": "13/04/2024 21:00",
+      "mandante": "São Paulo",
+      "visitante": "Fortaleza"
+    },
+    {
+      "data": "13/04/2024 21:00",
       "mandante": "Fluminense",
+      "visitante": "Bragantino"
+    },
+    {
+      "data": "14/04/2024 16:00",
+      "mandante": "Vasco",
       "visitante": "Grêmio"
+    },
+    {
+      "data": "14/04/2024 16:00",
+      "mandante": "Corinthians",
+      "visitante": "Atlético-MG/Atlético-GO"
+    },
+    {
+      "data": "14/04/2024 16:00",
+      "mandante": "Athletico",
+      "visitante": "Cuiabá"
+    },
+    {
+      "data": "14/04/2024 16:00",
+      "mandante": "Atlético-MG/Atlético-GO",
+      "visitante": "Flamengo"
+    },
+    {
+      "data": "14/04/2024 17:00",
+      "mandante": "Cruzeiro",
+      "visitante": "Botafogo"
+    },
+    {
+      "data": "14/04/2024 18:30",
+      "mandante": "Vitória",
+      "visitante": "Palmeiras"
     }
   ]
 }

@@ -64,11 +64,11 @@
         <div id="radios" class="radio-container">
             {% for grupo in grupos %}
             <label>
-                <input type="radio" onclick="chamarGrupo('{{grupo}}')">
+                <input type="radio" name="grupo" value={{ grupo.id }} onclick="chamarGrupo('{{grupo.id}}')">
                 <span>{{ grupo }}</span>
             </label>
             {% empty %}
-                Você não faz parte de nenhum grupo
+                Você não faz parte de nenhum grupo para este campeonato
             {% endfor %}
         </div>
         <div id="checkboxes" class="checkbox-container">

@@ -14,29 +14,39 @@
         </div>
     </div>
 </div>
-{% if media != None %}
+{% if total_predictions > 0 %}
     <hr width="80%">
     <h1>Ranking Média por clube</h1>
-    <table class="aproveitamento">
-        <thead>
-            <tr>
-                <th>Time</th>
-                <th>% Pepe</th>
-                <th>Média Dif. Gols</th>
-                <th>Número de Jogos Palpitados</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for imagem,ids,pontosP,difGols,numJogos in media %}
-                <tr>
-                    <td><a href="{% url 'show_team' id=ids %}">
-                        <img src="../{{ imagem }}" alt="escudo" class="escudo">
-                    </a></td>
-                    <td>{{ pontosP|floatformat:2 }}</td>
-                    <td>{{ difGols|floatformat:2 }}</td>
-                    <td>{{ numJogos }}</td>
-                </tr>
+    <center>
+        <select name="edicaoCampeonato" id="edicaoCampeonato" class="select" onchange="mudarCampeonato()">
+            {% for edicao in edicoes %}
+                <option value="{{edicao.id}}">{{ edicao }}</option>
             {% endfor %}
-        </tbody>
+            <option value="0">Todos</option>
+        </select>
+    </center>
+    <table class="aproveitamento">
+        {% if media != None %}
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>% Pepe</th>
+                    <th>Média Dif. Gols</th>
+                    <th>Número de Jogos Palpitados</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for imagem,ids,pontosP,difGols,numJogos in media %}
+                    <tr>
+                        <td><a href="{% url 'show_team' id=ids %}">
+                            <img src="../{{ imagem }}" alt="escudo" class="escudo">
+                        </a></td>
+                        <td>{{ pontosP|floatformat:2 }}</td>
+                        <td>{{ difGols|floatformat:2 }}</td>
+                        <td>{{ numJogos }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        {% endif %}
     </table>
 {% endif %}

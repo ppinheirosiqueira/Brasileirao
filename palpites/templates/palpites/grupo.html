@@ -1,18 +1,351 @@
 {% extends "palpites/layout.html" %}
 {% load static %}
+{% load user_agents %}
 
 {% block title %}
     Grupos
 {% endblock %}
 
 {% block style %}
-    <link rel="stylesheet" href="{% static 'styles/grupo.css' %}?v=1.0">
+    <script>
+        const edicaoId = {{ grupo.edicao.id }};
+        const idGrupo = {{ grupo.id }};
+        {% if temPalpite %}
+            const temPalpite = true;
+        {% else %}
+            const temPalpite = false;
+        {% endif %}
+        const userList = JSON.parse('{{ userList|escapejs }}');
+    </script>
+    <script type="text/javascript" src="{% static 'scripts/modificadorRodada.js' %}?v=1.0"></script>
+    <script type="text/javascript" src="{% static 'scripts/searchUser.js' %}?v=1.0"></script>
+    <script type="text/javascript" src="{% static 'scripts/selecionarEstatistica.js' %}?v=1.0"></script>
+    <script type="text/javascript" src="{% static 'scripts/pegar_palpites.js' %}?v=1.0"></script>
+    {% if request|is_pc %}
+        <link rel="stylesheet" href="{% static 'css/grupo_pc.css' %}">
+    {% else %}
+        <link rel="stylesheet" href="{% static 'css/grupo_mobile.css' %}">
+        <script type="text/javascript" src="{% static 'scripts/selecionarDiv.js' %}?v=1.0"></script>
+    {% endif %}
 {% endblock %}
 
 {% block bodyPC %}
-    Em construção
+    <div class="nomeGrupo">
+        <h1>{{ grupo.nome }} - {{ grupo.edicao }} - <a href="{% url 'sair_grupo' idGrupo=grupo.id %}"><img src="{% static 'icons/leave-group.svg' %}" alt="sair do grupo" title="Sair do Grupo"></a></h1> 
+    </div>
+    <div class="itens">
+        {% if grupo.edicao.terminou %}
+            <div class="podium">
+                <div class="tituloPodio"><h1>Campeão</h1></div>
+                {% if campeaoPepe.0 %}
+                    <a class="imagem1" href="{%  url 'userView' id=campeaoPepe.0.id %}"><img src="/media/{{ campeaoPepe.0.imagem }}" alt="Primeiro Lugar"></a>
+                    <div class="first-place">{{ campeaoPepe.0.pontos }}</div>
+                {% endif %}
+                {% if campeaoPepe.1 %}
+                    <a class="imagem2" href="{%  url 'userView' id=campeaoPepe.1.id %}"><img src="/media/{{ campeaoPepe.1.imagem }}" alt="Segundo Lugar"></a>
+                    <div class="second-place">{{ campeaoPepe.1.pontos }}</div>
+                {% endif %}
+                {% if campeaoPepe.2 %}
+                    <a class="imagem3" href="{%  url 'userView' id=campeaoPepe.2.id %}"><img src="/media/{{ campeaoPepe.2.imagem }}" alt="Terceiro Lugar"></a>
+                    <div class="third-place">{{ campeaoPepe.2.pontos }}</div>
+                {% endif %}
+            </div>
+        {% endif %}
+        <div id="ranking">
+            <table class="ranking">
+                <thead>
+                    <tr>
+                        <th>Posição</th>
+                        <th>Usuário</th>
+                        <th>Pontuação</th>
+                        <th>Dif. Gols</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for posicao, usuario, id, pontosP, difGols in ranking %}
+                        <tr>
+                            <td>
+                                {% if posicao == 1 or posicao == 2 or posicao == 3 %}
+                                    <span class="{% if posicao == 1 %}ouro{% elif posicao == 2 %}prata{% elif posicao == 3 %}bronze{% endif %}">{{ posicao }}</span>
+                                {% else %}
+                                    {{ posicao }}
+                                {% endif %}
+                            </td>
+                            <td><a href="{%  url 'userView' id=id %}">{{ usuario }}</a></td>
+                            <td>{{ pontosP }}</td>
+                            <td>{{ difGols }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% if dono %}
+                <div id="dono"  class="divConteudo" data-display="flex">
+                    <h2>Convidar Usuário</h2>
+                    <input type="text" id="searchInput" onkeyup="searchUsers()" placeholder="Digite para pesquisar...">
+                    <ul id="searchResults"></ul>
+                    <button onClick="convidarPessoa()">Convidar</button>
+                    <h2>Criar Rodada Modificada</h2>
+                    <select name="rodada" id="rodada">
+                        {% for rodada in rodadas %}
+                            <option value="{{ rodada.id }}">{{ rodada }}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="modificador">Qual modificador você quer?</label>
+                    <input type="number" min='0.01' max="99999" step="0.01" name="modificador" id="modificador" placeholder="De 0.01 até 99999">
+                    <button onClick="criarModificador()">Criar Modificador</button>
+                    <ul id="listaModificadores">
+                        {% for rodadaModificada in rodadasModificadas %}
+                            <li>{{ rodadaModificada.rodada.nome }} - {{ rodadaModificada.modificador }} - <button onClick="excluirModificador({{ rodadaModificada.id }})"><img src="{% static 'icons/trash.svg' %}" alt="excluir modificador"></button></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% else %}
+                <div id="modificadores"  class="divConteudo" data-display="flex">
+                    <h2>Lista de Modificadores de Rodada neste grupo</h2>
+                    <ul id="listaModificadores">
+                        {% for rodadaModificada in rodadasModificadas %}
+                            <li>{{ rodadaModificada.rodada.nome }} - {{ rodadaModificada.modificador }}</li>
+                        {% empty %}    
+                            <li>Não existe nenhum modificador neste grupo</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+        </div>
+        <div id="estatisticas">
+            <select name="seletorEstatisticas" id="seletorEstatisticas" onChange="selecionarEstatistica(value)">
+                <option value="cravadas">Nº Cravadas</option>
+                <option value="avgPontos">Média de Pontos/Jogos</option>
+                {% if temPalpite %}<option value="rankingClassicacao">Ranking pela Classificação</option>{% endif %}
+                <option value="modaPalpites">Palpites Mais Comuns</option>
+            </select>
+            <table class="ranking">
+                <thead>
+                    <tr>
+                        <th>Posição</th>
+                        <th>Usuário</th>
+                        <th>Nº de Cravadas</th>
+                        <th>Nº de Zeradas</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for posicao, id, usuario, N_cravadas, N_zeradas in cravadas %}
+                        <tr>
+                            <td>
+                                {% if posicao == 1 or posicao == 2 or posicao == 3 %}
+                                    <span class="{% if posicao == 1 %}ouro{% elif posicao == 2 %}prata{% elif posicao == 3 %}bronze{% endif %}">{{ posicao }}</span>
+                                {% else %}
+                                    {{ posicao }}
+                                {% endif %}
+                            </td>
+                            <td><a href="{%  url 'userView' id=id %}">{{ usuario }}</a></td>
+                            <td>{{ N_cravadas }}</td>
+                            <td>{{ N_zeradas }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% if temPalpite %}
+            <div id="palpites"> 
+                <table class="palpites">
+                    <thead>
+                        <tr class="header">
+                            <th class="posicao">Posição</th>
+                            {% for username in palpites %}
+                                <th>{{ username }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for posicao in ordem %}
+                            <tr>
+                                <td class="posicao">{{ posicao }}</td>
+                                {% for username, palpites_usuario in palpites.items %}
+                                    <td>
+                                        {% for palpite in palpites_usuario %}
+                                            {% if palpite.posicao_prevista == posicao %}
+                                                <img class="escudo" src="../../{{ palpite.time.escudo }}" alt="escudo {{ palpite.time }}" title="{{ palpite.time }}">
+                                            {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}
 
 {% block bodyMobile %}
-    Em construção
+    <div class="nomeGrupo">
+        <h1>{{ grupo.nome }} - {{ grupo.edicao }} - <a href="{% url 'sair_grupo' idGrupo=grupo.id %}"><img src="{% static 'icons/leave-group.svg' %}" alt="sair do grupo" title="Sair do Grupo"></a></h1> 
+    </div>
+    <div class="seletorDiv">
+        {% if grupo.edicao.terminou %}
+            <input type="radio" name="seletorDiv" id="destaqueSeletor" checked data-display="block"><label for="destaqueSeletor">Destaques</label>
+        {% endif %}
+        {% if dono %}
+            <input type="radio" name="seletorDiv" id="donoSeletor" {% if not grupo.edicao.terminou %}checked{% endif %} data-display="flex"><label for="donoSeletor">Gerenciamento</label>
+        {% endif %}
+        {% if grupo.edicao.comecou %}
+            <input type="radio" name="seletorDiv" id="rankingSeletor" {% if not grupo.edicao.terminou and not dono %}checked{% endif %} data-display="flex"><label for="rankingSeletor">Ranking</label>
+            <input type="radio" name="seletorDiv" id="estatisticasSeletor" data-display="none"><label for="estatisticasSeletor">Estatísticas</label>
+        {% endif %}
+        {% if temPalpite %}
+            <input type="radio" name="seletorDiv" id="palpitesSeletor" data-display="flex"><label for="palpitesSeletor">Palpites</label>
+        {% endif %}
+        {% if not dono %}
+            <input type="radio" name="seletorDiv" id="modificadoresSeletor" data-display="flex"><label for="modificadoresSeletor">Modificadores</label>
+        {% endif %}
+    </div>
+    {% if grupo.edicao.terminou %}
+        <div id="destaque" class="divConteudo" data-display="block">
+            <div class="podium">
+                <div class="tituloPodio"><h1>Campeão</h1></div>
+                {% if campeaoPepe.0 %}
+                    <a class="imagem1" href="{%  url 'userView' id=campeaoPepe.0.id %}"><img src="/media/{{ campeaoPepe.0.imagem }}" alt="Primeiro Lugar"></a>
+                    <div class="first-place">{{ campeaoPepe.0.pontos }}</div>
+                {% endif %}
+                {% if campeaoPepe.1 %}
+                    <a class="imagem2" href="{%  url 'userView' id=campeaoPepe.1.id %}"><img src="/media/{{ campeaoPepe.1.imagem }}" alt="Segundo Lugar"></a>
+                    <div class="second-place">{{ campeaoPepe.1.pontos }}</div>
+                {% endif %}
+                {% if campeaoPepe.2 %}
+                    <a class="imagem3" href="{%  url 'userView' id=campeaoPepe.2.id %}"><img src="/media/{{ campeaoPepe.2.imagem }}" alt="Terceiro Lugar"></a>
+                    <div class="third-place">{{ campeaoPepe.2.pontos }}</div>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+    {% if dono %}
+        <div id="dono"  class="divConteudo" data-display="flex">
+            <h2>Convidar Usuário</h2>
+            <input type="text" id="searchInput" onkeyup="searchUsers()" placeholder="Digite para pesquisar...">
+            <ul id="searchResults"></ul>
+            <button onClick="convidarPessoa()">Convidar</button>
+            <h2>Criar Rodada Modificada</h2>
+            <select name="rodada" id="rodada">
+                {% for rodada in rodadas %}
+                    <option value="{{ rodada.id }}">{{ rodada }}</option>
+                {% endfor %}
+            </select>
+            <label for="modificador">Qual modificador você quer?</label>
+            <input type="number" min='0.01' max="99999" step="0.01" name="modificador" id="modificador" placeholder="De 0.01 até 99999">
+            <button onClick="criarModificador()">Criar Modificador</button>
+            <ul id="listaModificadores">
+                {% for rodadaModificada in rodadasModificadas %}
+                    <li>{{ rodadaModificada.rodada.nome }} - {{ rodadaModificada.modificador }} - <button onClick="excluirModificador({{ rodadaModificada.id }})"><img src="{% static 'icons/trash.svg' %}" alt="excluir modificador"></button></li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    {% if grupo.edicao.comecou %}
+        <div id="ranking" class="divConteudo" data-display="flex">
+            <table class="ranking">
+                <thead>
+                    <tr>
+                        <th>Posição</th>
+                        <th>Usuário</th>
+                        <th>Pontuação</th>
+                        <th>Dif. Gols</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for posicao, usuario, id, pontosP, difGols in ranking %}
+                        <tr>
+                            <td>
+                                {% if posicao == 1 or posicao == 2 or posicao == 3 %}
+                                    <span class="{% if posicao == 1 %}ouro{% elif posicao == 2 %}prata{% elif posicao == 3 %}bronze{% endif %}">{{ posicao }}</span>
+                                {% else %}
+                                    {{ posicao }}
+                                {% endif %}
+                            </td>
+                            <td><a href="{%  url 'userView' id=id %}">{{ usuario }}</a></td>
+                            <td>{{ pontosP }}</td>
+                            <td>{{ difGols }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div id="estatisticas" class="divConteudo" data-display="flex">
+            <select name="seletorEstatisticas" id="seletorEstatisticas" onChange="selecionarEstatistica(value)">
+                <option value="cravadas">Nº Cravadas</option>
+                <option value="avgPontos">Média de Pontos/Jogos</option>
+                {% if temPalpite %}<option value="rankingClassicacao">Ranking pela Classificação</option>{% endif %}
+                <option value="modaPalpites">Palpites Mais Comuns</option>
+            </select>
+            <table class="ranking">
+                <thead>
+                    <tr>
+                        <th>Posição</th>
+                        <th>Usuário</th>
+                        <th>Nº de Cravadas</th>
+                        <th>Nº de Zeradas</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for posicao, id, usuario, N_cravadas, N_zeradas in cravadas %}
+                        <tr>
+                            <td>
+                                {% if posicao == 1 or posicao == 2 or posicao == 3 %}
+                                    <span class="{% if posicao == 1 %}ouro{% elif posicao == 2 %}prata{% elif posicao == 3 %}bronze{% endif %}">{{ posicao }}</span>
+                                {% else %}
+                                    {{ posicao }}
+                                {% endif %}
+                            </td>
+                            <td><a href="{%  url 'userView' id=id %}">{{ usuario }}</a></td>
+                            <td>{{ N_cravadas }}</td>
+                            <td>{{ N_zeradas }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+    {% if temPalpite %}
+        <div id="palpites" class="divConteudo" data-display="flex"> 
+            <table class="palpites">
+                <thead>
+                    <tr class="header">
+                        <th class="posicao">Posição</th>
+                        {% for username in palpites %}
+                            <th>{{ username }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for posicao in ordem %}
+                        <tr>
+                            <td class="posicao">{{ posicao }}</td>
+                            {% for username, palpites_usuario in palpites.items %}
+                                <td>
+                                    {% for palpite in palpites_usuario %}
+                                        {% if palpite.posicao_prevista == posicao %}
+                                            <img class="escudo" src="../../{{ palpite.time.escudo }}" alt="escudo {{ palpite.time }}" title="{{ palpite.time }}">
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+    {% if not dono %}
+    <div id="modificadores"  class="divConteudo" data-display="flex">
+        <h2>Lista de Modificadores de Rodada neste grupo</h2>
+        <ul id="listaModificadores">
+            {% for rodadaModificada in rodadasModificadas %}
+                <li>{{ rodadaModificada.rodada.nome }} - {{ rodadaModificada.modificador }}</li>
+            {% empty %}    
+                <li>Não existe nenhum modificador neste grupo</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
 {% endblock %}

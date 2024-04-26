@@ -33,18 +33,24 @@
                 {% if user.is_authenticated %}
                     <span><img src="{{ user.profile_image.url }}" alt="Imagem de Perfil" class="profile-image-bar">Bem-Vindo {{ user.username }}</span>
                     <a href="{% url 'home' %}"><img src="{% static 'icons/home.svg' %}" alt="Home" class="icon_home"></a>
-                    <a href="{% url 'info' %}">Informações</a>
+                    <input type="checkbox" id="openMessages" name="openMessages" onchange="mudarIcone('User',checked)">
+                    {% if mensagemNaoLida %}
+                        <a href="{% url 'mensagens' %}"><img src="{% static 'icons/mail-notification.svg' %}" alt="Mensagens" class="icon_messages"></a>
+                    {% else %}
+                        <a href="{% url 'mensagens' %}"><img src="{% static 'icons/mail.svg' %}" alt="Mensagens" class="icon_messages"></a>
+                    {% endif %}
                     {% if user.is_staff %}
-                    <div class="dropdown"><span>Administração</span>
-                        <div class="dropdown-content">
-                            <a href="../../admin/">Admin Page</a>
-                            <a href="{% url 'register_tournament' %}">Registrar Campeonato</a>
-                            <a href="{% url 'register_team' %}">Registrar Time</a>
-                            <a href="{% url 'register_match' %}">Registrar Partida</a>
-                            <a href="{% url 'register_matches' %}">Registrar por Json</a>
-                            <a href="{% url 'change_match' %}">Alterar Partida</a>
+                        <div class="dropdown"><span>Administração</span>
+                            <div class="dropdown-content">
+                                <a href="../../admin/">Admin Page</a>
+                                <a href="{% url 'register_tournament' %}">Registrar Campeonato</a>
+                                <a href="{% url 'register_team' %}">Registrar Time</a>
+                                <a href="{% url 'register_match' %}">Registrar Partida</a>
+                                <a href="{% url 'register_matches' %}">Registrar por Json</a>
+                                <a href="{% url 'change_match' %}">Alterar Partida</a>
+                                <a href="{% url 'mensagemGlobal' %}">Mensagem Global</a>
+                            </div>
                         </div>
-                    </div>
                     {% endif %}
                     <a href="{% url 'campeonatos' %}">Campeonatos</a>
                     <a href="{% url 'show_teams' %}">Times</a>
@@ -68,46 +74,6 @@
         {% else %}
             <nav>
                 {% if user.is_authenticated %}
-                    <span>Bem-Vindo {{ user.username }}</span>
-                    <a href="{% url 'home' %}"><img src="{% static 'icons/home.svg' %}" alt="Home" class="icon_home"></a>
-                    <a href="{% url 'info' %}"><img src="{% static 'icons/info.svg' %}" alt="Informações" class="icon"></a>
-                    {% if user.is_staff %}
-                    <input type="checkbox" id="openAdm" name="openAdm" onchange="mudarIcone('Admin',checked)">
-                    <label for="openAdm">
-                        <img src="{% static 'icons/gear.svg' %}" alt="Administração" class="abrirAdmin icon">
-                        <img src="{% static 'icons/close-x.svg' %}" alt="Fechar-Usuários" class="fecharAdmin icon">
-                    </label>
-                    <div class="dropdown-adm">
-                        <a href="../../admin/">Admin Page</a>
-                        <a href="{% url 'register_tournament' %}">Registrar Campeonato</a>
-                        <a href="{% url 'register_team' %}">Registrar Time</a>
-                        <a href="{% url 'register_match' %}">Registrar Partida</a>
-                        <a href="{% url 'register_matches' %}">Registrar por Json</a>
-                        <a href="{% url 'change_match' %}">Alterar Partida</a>
-                    </div>
-                    {% endif %}
-                    <a href="{% url 'logout' %}"><img src="{% static 'icons/logout.svg' %}" alt="Logout" class="icon"></a>
-                {% else %}
-                    <span>Não logado</span>
-                    <a href="{% url 'home' %}"><img src="{% static 'icons/home.svg' %}" alt="Home" class="icon_home"></a>
-                    <a href="{% url 'info' %}"><img src="{% static 'icons/info.svg' %}" alt="Informações" class="icon"></a>
-                {% endif %}
-            </nav>
-        {% endif %}
-
-        {% if request|is_pc %}
-            <div class="container">{% block bodyPC %}{% endblock %}</div>
-        {% else %}
-            <div class="container">{% block bodyMobile %}{% endblock %}</div>
-        {% endif %}
-
-        {% if request|is_mobile %}
-            <footer>
-                {% if user.is_authenticated %}
-                    <a href="{% url 'palpitar' %}"><img src="{% static 'icons/football.svg' %}" alt="Palpitar" class="icon"></a>
-                    <a href="{% url 'campeonatos' %}"><img src="{% static 'icons/trophy.svg' %}" alt="Campeonatos" class="icon"></a>
-                    <a href="{% url 'show_teams' %}"><img src="{% static 'icons/shirt.svg' %}" alt="Times" class="icon"></a>
-                    <a href="{% url 'groups' %}"><img src="{% static 'icons/group.svg' %}" alt="Grupos" class="icon"></a>
                     <label for="openPerfil">
                         <img src="{% static 'icons/id-card.svg' %}" alt="Usuários" class="abrirUser icon">
                         <img src="{% static 'icons/close-x.svg' %}" alt="Fechar-Usuários" class="fecharUser icon">
@@ -119,6 +85,56 @@
                             <a class="nav-link" href="{% url 'change_password' %}">Mudar Senha</a>
                             <a class="nav-link" href="{% url 'mudar_tema' %}"><img src="{% static 'icons/palette-color.svg' %}" alt="palette-color"></a>
                         </div>
+                    <a href="{% url 'home' %}"><img src="{% static 'icons/home.svg' %}" alt="Home" class="icon_home"></a>
+                    {% if user.is_staff %}
+                        <input type="checkbox" id="openAdm" name="openAdm" onchange="mudarIcone('Admin',checked)">
+                        <label for="openAdm">
+                            <img src="{% static 'icons/gear.svg' %}" alt="Administração" class="abrirAdmin icon">
+                            <img src="{% static 'icons/close-x.svg' %}" alt="Fechar-Usuários" class="fecharAdmin icon">
+                        </label>
+                        <div class="dropdown-adm">
+                            <a href="../../admin/">Admin Page</a>
+                            <a href="{% url 'register_tournament' %}">Registrar Campeonato</a>
+                            <a href="{% url 'register_team' %}">Registrar Time</a>
+                            <a href="{% url 'register_match' %}">Registrar Partida</a>
+                            <a href="{% url 'register_matches' %}">Registrar por Json</a>
+                            <a href="{% url 'change_match' %}">Alterar Partida</a>
+                            <a href="{% url 'mensagemGlobal' %}">Mensagem Global</a>
+                        </div>
+                    {% endif %}
+                    <input type="checkbox" id="openMessages" name="openMessages" onchange="mudarIcone('User',checked)">
+                    {% if mensagemNaoLida %}
+                        <a href="{% url 'mensagens' %}"><img src="{% static 'icons/mail-notification.svg' %}" alt="Mensagens" class="icon_messages"></a>
+                    {% else %}
+                        <a href="{% url 'mensagens' %}"><img src="{% static 'icons/mail.svg' %}" alt="Mensagens" class="icon_messages"></a>
+                    {% endif %}
+                {% else %}
+                    <span>Não logado</span>
+                    <a href="{% url 'home' %}"><img src="{% static 'icons/home.svg' %}" alt="Home" class="icon_home"></a>
+                    <a href="{% url 'info' %}"><img src="{% static 'icons/info.svg' %}" alt="Informações" class="icon"></a>
+                {% endif %}
+            </nav>
+        {% endif %}
+
+        {% if request|is_pc %}
+            <div class="container">{% block bodyPC %}{% endblock %}</div>
+            <footer>
+                <a href="{% url 'info' %}">Informações</a>
+                <a href="https://discord.gg/qffnMPXS" target="_blank"><img src="{% static 'icons/discord.svg' %}" alt="Discord" class="icon"></a>
+            </footer>
+        {% else %}
+            <div class="container">{% block bodyMobile %}{% endblock %}</div>
+            <div id='infoFooter'>
+                <a href="{% url 'info' %}"><img src="{% static 'icons/info.svg' %}" alt="Informações" class="icon"></a>
+                <a href="https://discord.gg/qffnMPXS" target="_blank"><img src="{% static 'icons/discord.svg' %}" alt="Discord" class="icon"></a>
+            </div>
+            <footer>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'palpitar' %}"><img src="{% static 'icons/football.svg' %}" alt="Palpitar" class="icon"></a>
+                    <a href="{% url 'campeonatos' %}"><img src="{% static 'icons/trophy.svg' %}" alt="Campeonatos" class="icon"></a>
+                    <a href="{% url 'show_teams' %}"><img src="{% static 'icons/shirt.svg' %}" alt="Times" class="icon"></a>
+                    <a href="{% url 'groups' %}"><img src="{% static 'icons/group.svg' %}" alt="Grupos" class="icon"></a>
+                    <a href="{% url 'logout' %}"><img src="{% static 'icons/logout.svg' %}" alt="Logout" class="icon"></a>                    
                 {% else %}
                     <a href="{% url 'campeonatos' %}"><img src="{% static 'icons/trophy.svg' %}" alt="Campeonatos" class="icon"></a>
                     <a href="{% url 'show_teams' %}"><img src="{% static 'icons/shirt.svg' %}" alt="Times" class="icon"></a>

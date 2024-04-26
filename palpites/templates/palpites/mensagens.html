@@ -1,0 +1,51 @@
+{% extends "palpites/layout.html" %}
+{% load static %}
+{% load user_agents %}
+
+{% block title %}
+    Mensagens
+{% endblock %}
+
+{% block style %}
+    <script type="text/javascript" src="{% static 'scripts/mensagens.js' %}?v=1.0"></script>
+    {% if request|is_pc %}
+        <link rel="stylesheet" href="{% static 'css/mensagens_pc.css' %}?v=1.0">
+    {% else %}
+        <link rel="stylesheet" href="{% static 'css/mensagens_mobile.css' %}?v=1.0">
+    {% endif %}
+{% endblock %}
+
+{% block bodyPC %}
+    <div class="tudo">
+        <div class="titulos">
+            <h2>Lista de Mensagens</h2>
+            {% for mensagem in mensagens %}
+                <div class="{% if not mensagem.lida %}mensagem-nao-lida{% endif %} mensagemTitulo">
+                    <span class='titulo' onClick="abrirMensagem({{ mensagem.id }})">{{ mensagem.titulo }}</span>
+                    <span class='marcarNaoLido' onClick="marcarNaoLido({{ mensagem.id }})">Marcar como não lido</span>
+                    <span class="from"><b>De:</b> <a href="{% url 'userView' id=mensagem.from_user.id %}">{{ mensagem.from_user }}</a></span>
+                </div>
+            {% empty %}
+                Você não tem nenhuma mensagem
+            {% endfor %}
+        </div>
+        <div id="mensagem">
+            <span>Nenhuma mensagem selecionada</span>
+        </div>
+    </div>
+{% endblock %}
+
+{% block bodyMobile %}
+    <div class="titulos">
+        <h2>Lista de Mensagens</h2>
+        {% for mensagem in mensagens %}
+            <div class="{% if not mensagem.lida %}mensagem-nao-lida{% endif %} mensagemTitulo">
+                <span class='titulo'><a href="{% url 'mensagemAberta' idMensagem=mensagem.id %}">{{mensagem.titulo}}</a></span>
+                <span class='marcarNaoLido' onClick="marcarNaoLido({{ mensagem.id }})">Marcar como não lido</span>
+                <span class="from"><b>De:</b> <a href="{% url 'userView' id=mensagem.from_user.id %}">{{ mensagem.from_user }}</a></span>
+            </div>
+        {% empty %}
+            Você não tem nenhuma mensagem
+        {% endfor %}
+    </div>
+{% endblock %}

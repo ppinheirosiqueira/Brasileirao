@@ -29,8 +29,11 @@ def average_pepe(id_usuario):
     soma = check_pontuacao_pepe(palpites)
     return soma/(len(palpites))
 
-def rankingTimesNoPerfil(id):
-    palpites = Palpite_Partida.objects.filter(usuario=id).exclude(partida__golsMandante=-1, partida__golsVisitante=-1)
+def rankingTimesNoPerfil(id:int,edicao:int):
+    if edicao == 0:
+        palpites = Palpite_Partida.objects.filter(usuario=id).exclude(partida__golsMandante=-1, partida__golsVisitante=-1)
+    else:
+        palpites = Palpite_Partida.objects.filter(usuario=id,partida__Rodada__edicao_campeonato=edicao).exclude(partida__golsMandante=-1, partida__golsVisitante=-1)
     if not palpites:
         return None
     times = Time.objects.filter(id__in=(list(palpites.values_list('partida__Mandante', flat=True).distinct().order_by("partida__Mandante__Nome")) + list(palpites.values_list('partida__Visitante', flat=True).distinct().order_by("partida__Visitante__Nome"))))

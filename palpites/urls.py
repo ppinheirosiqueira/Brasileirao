@@ -47,9 +47,19 @@ urlpatterns = [
 
     # ============== Grupos ==============
     path("grupos", views.verGrupos, name="groups"),
-
+    path("grupo/<int:id>", views.verGrupo, name="grupo"),
+    path("sair_grupo/<int:idGrupo>", views.sairGrupo, name="sair_grupo"),
+    path("aceitar_grupo/<int:idGrupo>/<int:idUsuario>/<int:idMensagem>", views.aceitarGrupo, name="aceitar_grupo"),
+    path("recusar_grupo/<int:idGrupo>/<int:idUsuario>/<int:idMensagem>", views.recusarGrupo, name="recusar_grupo"),
+    
     # ============== Informaçõpes ==============
     path("info", views.verInfo, name="info"),
+    
+    # ============== Mensagens ==============
+    path("mensagens", views.mensagens, name="mensagens"),
+    path("mensagem/<int:idMensagem>", views.mensagemAberta, name="mensagemAberta"),
+    path("mensagemGlobal", views.mensagemGlobal, name="mensagemGlobal"),
+    path("processarMensagemGlobal", views.processarMensagemGlobal, name="processarMensagemGlobal"),
 
 # =====================================================================================================================
 # =============================================== URL de APIs =========================================================
@@ -58,7 +68,10 @@ urlpatterns = [
 
     # ============== Home ==============
     path("attGrafico/<str:usuarios>/<int:campeonato>/<int:rod_Ini>/<int:rod_Fin>", api.attGrafico, name="attGrafico"),
+    path("attGraficoGrupo/<int:idGrupo>/<int:rod_Ini>/<int:rod_Fin>", api.attGraficoGrupo, name="attGraficoGrupo"),
     path("attRodadas/<int:edicao>", api.att_rodadas, name="att_rodadas"),
+    path("attUsuarios/<int:edicao>", api.att_usuarios, name="att_usuarios"),
+    path("attGrupos/<int:edicao>", api.att_grupos, name="att_grupos"),
     path("ranking/<int:edicao>/<int:rodada>", api.get_ranking, name="ranking"),
     path("attPagina/<int:pagina>", api.get_partidas, name="att_paginas"),
 
@@ -68,6 +81,7 @@ urlpatterns = [
     path("alterar_cor_grafico/<int:id>", views.alterar_cor_grafico, name="alterar_cor_grafico"),
     path("profile/<int:id>", views.profile, name="profile"),
     path("alterar_tema", api.alterar_tema, name="alterar_tema"),
+    path("attRankingTimes/<int:id>/<int:edicao>", api.attRankingTimes, name="att_ranking_times"),
 
     # ============== Campeonatos ==============
     path("attPaginaEdicao/<int:edicao>/<int:pagina>", api.get_partidas_edicao, name="att_paginas_edicao"),
@@ -79,6 +93,7 @@ urlpatterns = [
     path("estatistica/<int:idEdicao>/modaResultados", api.estatisticaModaResultados, name="estatisticaModaResultados"),
     path("estatistica/<int:idEdicao>/modaPalpites", api.estatisticaModaPalpites, name="estatisticaModaPalpites"),
     path("estatistica/<int:idEdicao>/rankingClassicacao", api.estatisticaRankingClassicacao, name="estatisticaRankingClassicacao"),
+    path("pegarPalpite/<int:idCampeonato>", api.pegarPalpite, name="pegarPalpites"),
 
     # ============== Partidas ==============
     path("registrar_rodada_feita", api.registrar_rodada_feita, name="registrar_rodada_feita"),
@@ -86,4 +101,21 @@ urlpatterns = [
     path("attResultado/<int:idPartida>/<int:golsMandante>/<int:golsVisitante>", api.attResultado, name="attResultado"),
     path("att_partida", api.att_partida, name="attPartida"),
     path("att_data_partida", api.att_data_partida, name="attDataPartida"),
+    
+    # ============== Grupo ==============
+    path("create_group/<int:idDono>/<str:nome>/<int:idCampeonato>", api.create_group, name="create_group"),
+    path("create_mod/<int:idGrupo>/<int:idRodada>/<str:mod>", api.mod_rodada, name="criar_modificador"),
+    path("delete_mod/<int:idModificador>", api.excluir_mod_rodada, name="excluir_modificador"),
+    path("pegarPalpite/<int:idCampeonato>/<int:idGrupo>", api.pegarPalpite, name="pegarPalpitesGrupo"),
+    path("estatistica/<int:idEdicao>/cravadas/<int:idGrupo>", api.estatisticaCravada, name="estatisticaCravada"),
+    path("estatistica/<int:idEdicao>/avgPontos/<int:idGrupo>", api.estatisticaAvgPontos, name="estatisticaAvgPontos"),
+    path("estatistica/<int:idEdicao>/modaResultados/<int:idGrupo>", api.estatisticaModaResultados, name="estatisticaModaResultados"),
+    path("estatistica/<int:idEdicao>/modaPalpites/<int:idGrupo>", api.estatisticaModaPalpites, name="estatisticaModaPalpites"),
+    path("estatistica/<int:idEdicao>/rankingClassicacao/<int:idGrupo>", api.estatisticaRankingClassicacao, name="estatisticaRankingClassicacao"),
+    path("convidarPessoa/<int:idGrupo>/<str:nome>", api.criar_convite, name="convidarPessoa"),
+    
+    # ============== Mensagens ==============
+    path("marcarNaoLida/<int:idMensagem>", api.marcarNaoLida, name="marcarNaoLida"),
+    path("pegarMensagem/<int:idMensagem>", api.pegarMensagem, name="pegarMensagem"),
+    path("apagarMensagem/<int:idMensagem>", api.apagarMensagem, name="apagarMensagem"),
 ]

@@ -1,9 +1,11 @@
-<h1>Lista de Campeonatos</h1>
-{% for campeonato, edicoes in campeonatos.items %}
-    <select name="{{ campeonato }}" id="{{ campeonato }}" onchange="redirect(this)">
-        <option>{{ campeonato }}</option>
-        {% for edicao in edicoes %}
-            <option data-url="{% url 'edicao' campeonato=edicao.campeonato.id edicao=edicao.num_edicao %}">{{ edicao }}</option>
-        {% endfor %}
-    </select>
-{% endfor %}
+<span>
+    <h1>Lista de Campeonatos</h1>
+    {% for campeonato, edicoes in campeonatos.items %}
+        <select name="{{ campeonato }}" id="{{ campeonato }}" onchange="redirect(this)">
+            <option>{{ campeonato }}</option>
+            {% for edicao in edicoes %}
+                <option data-url="{% url 'edicao' campeonato=edicao.campeonato.id edicao=edicao.num_edicao %}">{{ edicao }}</option>
+            {% endfor %}
+        </select>
+    {% endfor %}
+</span>

@@ -1,0 +1,86 @@
+@use 'mixins'
+@use 'variables'
+
+.titulos
+    @include mixins.flex-column
+    gap: 0.5em
+    border-right: 1px solid var(--fc)
+
+    .mensagem-nao-lida
+        background-color: var(--selecionado)
+        color: var(--bg)
+
+    .mensagemTitulo
+        display: grid
+        grid-template-columns: 1fr 1fr
+        gap: 1em
+        padding: 1em
+        border-bottom: 1px solid var(--fc)
+
+        .titulo
+            font-weight: bold
+            font-style: italic
+
+            a
+                text-decoration: none
+                color: inherit
+
+        .marcarNaoLido
+            text-decoration: underline
+            text-align: right
+            padding-right: 0.5em
+
+        .from
+            a
+                text-decoration: none
+                color: inherit
+
+#mensagem
+    padding: 1em
+    display: grid
+    grid-template-rows: 1fr 1fr auto
+    grid-template-columns: 90fr 10fr
+    grid-template-areas: 'titulo lixo' 'from lixo' 'mensagem mensagem' 
+
+    .titulo
+        grid-area: titulo
+        font-weight: bold
+        font-style: italic
+
+    .from
+        grid-area: from
+        border-bottom: 1px solid var(--fc)
+
+        a
+            text-decoration: none
+            color: inherit
+
+    .lixo
+        grid-area: lixo
+        cursor: pointer
+        border-bottom: 1px solid var(--fc)
+        border-left: 1px solid var(--fc)
+        display: flex
+        align-items: center
+        justify-content: center
+
+        img
+            filter: var(--filter)
+            width: 50%
+            
+
+    .mensagem
+        grid-area: mensagem
+        padding-top: 1em
+
+        p
+            padding-bottom: 1em
+        
+        .links
+            display: flex
+            justify-content: space-evenly 
+
+            a
+                img
+                    margin-inline: auto
+                    width: 3em

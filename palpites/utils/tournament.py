@@ -1,4 +1,4 @@
-from ..models import Palpite_Partida, User, Partida, Palpite_Campeonato, EdicaoCampeonato, Rodada
+from ..models import Palpite_Partida, User, Partida, Palpite_Campeonato, EdicaoCampeonato, Rodada, Grupo
 from django.db.models import F, Count, Sum, Q, Value
 from django.db.models.functions import Coalesce
 from .score import check_pontuacao_pepe, check_diferenca_gols
@@ -6,15 +6,22 @@ from collections import defaultdict
 from django.utils import timezone
 
 def get_edicoes() -> list:
-    edicoes = list(EdicaoCampeonato.objects.annotate(num_partidas=Count('rodada__partida')).filter(num_partidas__gt=0).order_by('-id'))
+    edicoes = list(EdicaoCampeonato.objects.filter(id__in=Partida.objects.all().values_list("Rodada__edicao_campeonato",flat=True).distinct()))
     ultimo_jogo_ocorrido = Partida.objects.exclude(dia__gt=timezone.now()).order_by('dia').last()
     Edicao_ultimo_jogo = EdicaoCampeonato.objects.get(rodada__partida__id=ultimo_jogo_ocorrido.id)
     edicoes.remove(Edicao_ultimo_jogo)
     edicoes.insert(0, Edicao_ultimo_jogo)
     return edicoes
 
-def cravadas(edicao):
+def get_edicoes_usuario(id:int) -> list:
+    palpites = Palpite_Partida.objects.filter(usuario=id)
+    edicoes = palpites.values_list("partida__Rodada__edicao_campeonato",flat=True).distinct()
+    return EdicaoCampeonato.objects.filter(id__in=edicoes)
+
+def cravadas(edicao,grupo):
     palpites = Palpite_Partida.objects.filter(partida__Rodada__edicao_campeonato__id=edicao)
+    if grupo:
+        palpites = palpites.filter(usuario__in = list(Grupo.objects.get(id=grupo).usuarios.all()))
     palpites_cravados = palpites.filter(
         golsMandante=F('partida__golsMandante'),
         golsVisitante=F('partida__golsVisitante'),
@@ -45,8 +52,10 @@ def cravadas(edicao):
 
     return dados
 
-def avgPontos(edicao):
+def avgPontos(edicao, grupo):
     palpites = Palpite_Partida.objects.filter(partida__Rodada__edicao_campeonato__id=edicao).exclude(partida__golsMandante=-1, partida__golsVisitante=-1)
+    if grupo:
+        palpites = palpites.filter(usuario__in = list(Grupo.objects.get(id=grupo).usuarios.all()))
     pessoas = list(User.objects.order_by('id').filter(id__in=palpites.values_list("usuario", flat=True).distinct()))
     usernames = [pessoa.username for pessoa in pessoas]
     ids = [pessoa.id for pessoa in pessoas]
@@ -68,8 +77,10 @@ def avgPontos(edicao):
 
     return [[posicao[i], ids[i], usernames[i], pontosP[i], difGols[i]] for i in range(len(posicao))]
 
-def modaPalpites(edicao):
+def modaPalpites(edicao, grupo):
     jogos = Palpite_Partida.objects.filter(partida__Rodada__edicao_campeonato__id=edicao)
+    if grupo:
+        jogos = jogos.filter(usuario__in = list(Grupo.objects.get(id=grupo).usuarios.all()))
     resultados_mais_comuns = jogos.values('golsMandante', 'golsVisitante').annotate(ocorrencias=Count('id')).order_by('-ocorrencias')
     return [[item['ocorrencias'] ,item['golsMandante'], item['golsVisitante']] for item in resultados_mais_comuns]
 
@@ -124,9 +135,11 @@ def auxRankingClassificacao(edicao):
 
     return estatisticas_times
 
-def rankingClassicacao(edicao):
+def rankingClassicacao(edicao, grupo):
     classificaoTimes = auxRankingClassificacao(EdicaoCampeonato.objects.get(id=edicao))
     palpites = Palpite_Campeonato.objects.filter(edicao_campeonato__id=edicao)
+    if grupo:
+        palpites = palpites.filter(usuario__in = list(Grupo.objects.get(id=grupo).usuarios.all()))
     pontuacao_usuarios = defaultdict(lambda: {'pontuacao_total': 0, 'pontuacao_especifica': 0})
 
     for i, item in enumerate(classificaoTimes, 1):
@@ -144,7 +157,7 @@ def rankingClassicacao(edicao):
     
     posicao = []
     for i, x in enumerate(classificacao_usuarios, start=0):
-        if i > 0 and x[1]['pontuacao_total'] == classificacao_usuarios[i - 1][1]['pontuacao_total']:
+        if i > 0 and x[1]['pontuacao_total'] == classificacao_usuarios[i - 1][1]['pontuacao_total'] and x[1]['pontuacao_especifica'] == classificacao_usuarios[i - 1][1]['pontuacao_especifica']:
             posicao.append("-")
         else:
             posicao.append(i + 1)

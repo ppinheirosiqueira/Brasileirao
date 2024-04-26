@@ -7,9 +7,16 @@
 {% endblock %}
 
 {% block style %}
+    <script type="text/javascript" src="{% static 'scripts/pegar_palpites.js' %}?v=1.0"></script>
     <script>
         var edicaoId = {{ edicao.id }}
+        var idGrupo = null
         var isPc = "{{ request|is_pc }}"
+        {% if temPalpite %}
+            var temPalpite = true
+        {% else %}
+            var temPalpite = false
+        {% endif %}
     </script>
     {% if request|is_pc %}
         <link rel="stylesheet" href="{% static 'css/campeonato_edicao_pc.css' %}">
