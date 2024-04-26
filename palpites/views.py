@@ -37,7 +37,10 @@ def home(request : HttpRequest) -> HttpResponse:
     if (user_agent.is_pc):
         usuariosAux = list(Palpite_Partida.objects.filter(partida__Rodada__edicao_campeonato=edicoes[0].id).values_list("usuario",flat=True).distinct()) 
         usuarios = [User.objects.get(id=usuario).username for usuario in usuariosAux]
-        grupos = Grupo.objects.filter(edicao=edicoes[0],usuarios=request.user)
+        if request.user.is_authenticated:
+            grupos = Grupo.objects.filter(edicao=edicoes[0],usuarios=request.user)
+        else:
+            grupos = None
         return render(request, "palpites/home.html", {
             "title": "Pepe League",
             "page": page,

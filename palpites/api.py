@@ -19,6 +19,9 @@ def tema(request : HttpRequest):
 def mensagensNaoLidas(request : HttpRequest):
     mensagemNaoLida = False
     
+    if request.user.is_anonymous:
+        return {'mensagemNaoLida': mensagemNaoLida}
+    
     for mensagem in Mensagem.objects.filter(to_user=request.user):
         if not mensagem.lida:
             mensagemNaoLida = True

@@ -29,9 +29,9 @@ Caso deseje ver o site em funcionamento, visite: https://pepepepi.pythonanywhere
 ## Tecnologias Utilizadas
 
 - Django: Um framework web em Python utilizado para o desenvolvimento do backend da aplicação.
-- Chart.js: Uma biblioteca JavaScript utilizada para a criação do gráfico interativo na página web.
 - HTML: Linguagem de marcação utilizada para estruturar a página web.
 - CSS: Linguagem de estilização utilizada para definir o visual da página web.
+- Chart.js: Uma biblioteca JavaScript utilizada para a criação do gráfico interativo na página web.
 
 ## Funcionalidades
 
@@ -40,6 +40,7 @@ Caso deseje ver o site em funcionamento, visite: https://pepepepi.pythonanywhere
 - Filtro de qual rodada deseja ver o ranking.
 - Exibição do gráfico de pontuação de usuários em diferentes rodadas do campeonato.
 - Filtros para selecionar quais usuários e quais rodadas deseja visualizar no gráfico.
+- Grupos de Usuários para um campeonato específico, podendo ter um peso de rodada 
 
 ## Instruções de Uso
 
@@ -53,28 +54,41 @@ Caso deseje ver o site em funcionamento, visite: https://pepepepi.pythonanywhere
 O projeto não está dos mais bem estruturados dado que fiz para me divertir com meus amigos enquanto treinava algumas técnicas.
 
 - `brasileirao/`: Diretório principal do projeto Django e suas configurações.
-- `media/`: Diretório onde ficam guardados os escudos dos times e as imagens de perfis dos usuários
+- `media/`: Diretório onde ficam guardados os escudos dos times, as imagens de perfis dos usuários, os exemplos de temas do site e algumas imagens explicativas do site.
 - `palpites`: O único aplicativo Django do projeto. Tudo está ocorrendo nele.
   - `models.py`: Arquivo onde ficam descritos os modelos do banco de dados utilizado
   - `templates/`: Diretório contendo os templates HTML utilizados pela aplicação.
-  - `static/`: Diretório contendo os arquivos estáticos da aplicação, como scripts JavaScript e arquivos de estilo CSS.
+  - `static/`: Diretório contendo os arquivos estáticos da aplicação, como scripts JavaScript, arquivos de estilo CSS, icons.
   - `views.py`: Arquivo contendo as views (controladores) do Django que definem o comportamento da aplicação.
-
+  - `api.py`: Arquivo contendo diversas API's do site.
+  - `utils.py`: Arquivo contendo diversas funções que foram utilizadas tanto nas `views.py` quanto na `api.py`
+- `sass`: Pasta onde foram colocados os arquivos sass que geram os arquivos .css do projeto.
+- `auxiliares`: Pasta onde foi colocado o arquivo que extrai os dados da rodada do campeonato brasileiro.
+  
 ## Melhorias Futuras
 
-- Melhoria do banco de dados. Por querer utilizar um serviço gratuito na internet, não queria deixar o banco de dados ficar pesado, graças a isso, alguns elementos que poderiam ser uteis no futuro foram neglicenciados. Como, por exemplo:
-  - Criação do campo edição na partida, contando assim a edição do campeonato em que este jogo ocorre, os filtros atuais utilizam o dia, sendo assim ruins/impossível para campeonatos europeus
-  - Melhorar os times, colocando uma sigla, o nome completo, etc
-- Criar mais aplicativos e deixar assim o código mais modular:
-  - Melhorar muito a parte de Usuário do sistema, as páginas de registro/modificação de senha foram basicamente deixadas as padrões do django;
-  - Melhorar a parte de administração do sistema, criando um aplicativo somente para os administradores;
-- Caso crie múltiplos campeonatos:
-  - Seria bom que o Usuário pudesse filtrar os campeonatos favoritos, para que assim, na página principal e na aba de Palpitar aparecessem os jogos/rankings/gráficos destes campeonatos
-- Criação de grupos de Usuários:
-  - Caso o projeto se tornasse grande, um gráfico com todos os usuários se tornaria inviável, sendo de bom gosto criar um grupo para que cada usuário se compare com seus amigos;
-- Criação de códigos automatizados para criação dos jogos e coleta dos resultados de cada campeonato.
+O site sempre poderá ter melhorias, então vou listar em ordem do que acho legal de ter:
 
-- Diversas outras melhorias que podem surgir enquanto eu e meus amigos vamos usando o site.
+- Resolução de qualquer bug descoberto;
+- Quando acessar um jogo pelo campeonato, ao ir para o jogo anterior ou para o próximo, que este jogo seja o do próprio campeonato e não de tudo;
+- Habilitar e-mails a serem algo funcionais;
+- Modificação dos times no banco de dados, colocando uma sigla, o nome completo, país de origem, etc;
+- Modificação dos campeonatos, permitindo que seja colocado o país de origem ou a organização que é responsável;
+- Filtro do usuário para que apareça os campeonatos que ele prefere na página inicial;
+- Filtro na página de palpitar para que apareça o campeonato que o usuário quer;
+- Criação de códigos automatizados para coleta dos jogos e resultados de cada campeonato (feito para o campeonato brasileiro especificamente, mas deixado em separado no projeto porque o host gratuito não deixa eu fazer a busca por outro site, então tenho que fazer por fora);
+
+- Criação de um aplicativo android;
+  
+- Criação de um aplicativo para iphones.
+
+## Bugs conhecidos sem solução
+
+- Em Iphone's/Ipad's existe um bug na visualização dos jogos, onde os palpites das pessoas vão para baixo, não se sabe ainda a razão.
+
+<p align="center">
+<img src="images/bugIphone.jpg" alt="Bug Iphone" title="Bug Iphone" width="200" />
+</p>
 
 ## Contribuição
 
