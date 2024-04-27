@@ -28,8 +28,8 @@
     {% include "palpites/blocos_auxiliares/auxiliar_modificar_palpite_partida.html" %}
     <div class="partida">
         {% if anterior != None %}
-            {% if time %}
-                <a href="{% url 'partida_time' id=anterior time=time %}"><button type="button" class="arrow-button left-arrow">&#8592;</button></a>
+            {% if variacao != 0 %}
+                <a href="{% url 'partida_variacao' id=anterior variacao=variacao %}"><button type="button" class="arrow-button left-arrow">&#8592;</button></a>
             {% else %}
                 <a href="{% url 'partida' id=anterior %}"><button type="button" class="arrow-button left-arrow">&#8592;</button></a>
             {% endif %}
@@ -67,8 +67,8 @@
             <img class="escudo" src="/{{ partida.Visitante.escudo }}" alt="escudo visitante">
         </a>
         {% if proxima != None %}
-            {% if time %}
-                <a href="{% url 'partida_time' id=proxima time=time %}"><button type="button" class="arrow-button right-arrow">&#8594;</button></a>
+            {% if variacao != 0 %}
+                <a href="{% url 'partida_variacao' id=proxima variacao=variacao %}"><button type="button" class="arrow-button right-arrow">&#8594;</button></a>
             {% else %}
                 <a href="{% url 'partida' id=proxima %}"><button type="button" class="arrow-button right-arrow">&#8594;</button></a>
             {% endif %}        

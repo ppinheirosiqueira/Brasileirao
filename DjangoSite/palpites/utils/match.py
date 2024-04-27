@@ -11,11 +11,13 @@ def palpite_da_partida(partida):
     
     return zip(palpites,resultados), len(palpites)
 
-def get_anterior_proximo_partida(partida, time):
-    if not time:
+def get_anterior_proximo_partida(partida, variacao): # variacao, se = 0, normal, se > 0, é referente a time, se < 0, é referente ao campeonato
+    if variacao == 0:
         partidas = list(Partida.objects.all().order_by('dia'))
+    elif variacao > 0:
+        partidas = list(Partida.objects.filter(Q(Mandante__id=variacao) | Q(Visitante__id=variacao)).order_by('dia'))
     else:
-        partidas = list(Partida.objects.filter(Q(Mandante__Nome=time) | Q(Visitante__Nome=time)).order_by('dia'))
+        partidas = list(Partida.objects.filter(Rodada__edicao_campeonato_id=-variacao).order_by('dia'))
 
     indice = partidas.index(partida)
     anterior = partidas[indice - 1].id if indice - 1 >= 0 else None

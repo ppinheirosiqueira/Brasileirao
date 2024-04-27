@@ -23,7 +23,7 @@
             </label>
             <div class="content-spoiler jogos_checkbox">
                 {% for jogo in partidas %}
-                    <a href="{% url 'partida_time' id=jogo.id time=time.Nome %}">
+                    <a href="{% url 'partida_variacao' id=jogo.id variacao=time.id %}">
                         <img class="escudo" src="../{{ jogo.Mandante.escudo }}" alt="escudo mandante">
                         <span class="texto">
                             {% if jogo.golsMandante > -1 %}{{ jogo.golsMandante }}{% endif %}

@@ -1,0 +1,9 @@
+brasileirao/__pycache__/
+palpites/__pycache__/
+palpites/migrations/
+palpites/utils/__pycache__/
+palpites/templatetags/__pycache__/
+media/Escudos/*
+media/profile_images/*
+!media/profile_images/imagem_inexistente.png
+*.sqlite3

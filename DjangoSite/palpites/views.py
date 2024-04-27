@@ -134,9 +134,11 @@ def verPagPalpitar(request : HttpRequest) -> HttpResponse:
                 "partidas_faltantes": faltantes
     })
 
-def verPartida(request : HttpRequest, id : int, time: str = None) -> HttpResponse:
+def verPartida(request : HttpRequest, id : int, variacao: str = 0) -> HttpResponse:
+    if variacao != 0:
+        variacao = int(variacao)
     partida = Partida.objects.get(id=id)
-    anterior, proximo = get_anterior_proximo_partida(partida, time)
+    anterior, proximo = get_anterior_proximo_partida(partida, variacao)
     palpites, tam_palpites = palpite_da_partida(partida)
     return render(request, "palpites/partida.html", {
                 "title": partida,
@@ -145,7 +147,7 @@ def verPartida(request : HttpRequest, id : int, time: str = None) -> HttpRespons
                 "anterior": anterior,
                 "proxima": proximo,
                 "tamanho_palpites": tam_palpites,
-                "time": time,
+                "variacao": variacao,
                 "jogoComecou": timezone.now() >= partida.dia,
     })
 

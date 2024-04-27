@@ -1,6 +1,7 @@
 {% extends "palpites/layout.html" %}
 {% load static %}
 {% load user_agents %}
+{% load custom_filters %}
 
 {% block title %}
     {{ edicao }}
@@ -213,7 +214,7 @@
                     <div class="container-partidas">
                         {% for partida in page %}
                             <div class="partida">
-                                <a href="{% url 'partida' id=partida.id %}">
+                                <a href="{% url 'partida_variacao' id=partida.id variacao=edicao.id|neg %}">
                                     <span class="texto nomeCampeonato">{{ partida.Rodada.edicao_campeonato.campeonato}} - {{ partida.Rodada.nome }}</span>
                                     <img class="escudo" src="../../{{ partida.Mandante.escudo }}" alt="escudo mandante" title="{{ partida.Mandante.Nome }}">
                                     <span class="texto">{% if partida.golsMandante > -1 %}{{ partida.golsMandante }}{% endif %} 
@@ -325,7 +326,7 @@
                 <div class="container-partidas">
                     {% for partida in page %}
                         <div class="partida">
-                            <a href="{% url 'partida' id=partida.id %}">
+                            <a href="{% url 'partida_variacao' id=partida.id variacao=edicao.id|neg %}">
                                 <span class="texto nomeCampeonato">{{ partida.Rodada.edicao_campeonato.campeonato}} - {{ partida.Rodada.nome }}</span>
                                 <img class="escudo" src="../../{{ partida.Mandante.escudo }}" alt="escudo mandante" title="{{ partida.Mandante.Nome }}">
                                 <span class="texto">{% if partida.golsMandante > -1 %}{{ partida.golsMandante }}{% endif %} 
@@ -482,7 +483,7 @@
         <div class="container-partidas">
             {% for partida in page %}
                 <div class="partida">
-                    <a href="{% url 'partida' id=partida.id %}">
+                    <a href="{% url 'partida_variacao' id=partida.id variacao=edicao.id|neg %}">
                         <span class="texto nomeCampeonato">{{ partida.Rodada.edicao_campeonato.campeonato}} - {{ partida.Rodada.nome }}</span>
                         <img class="escudo" src="../../{{ partida.Mandante.escudo }}" alt="escudo mandante" title="{{ partida.Mandante.Nome }}">
                         <span class="texto">{% if partida.golsMandante > -1 %}{{ partida.golsMandante }}{% endif %} 

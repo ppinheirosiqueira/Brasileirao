@@ -70,7 +70,6 @@ O projeto não está dos mais bem estruturados dado que fiz para me divertir com
 O site sempre poderá ter melhorias, então vou listar em ordem do que acho legal de ter:
 
 - Resolução de qualquer bug descoberto;
-- Quando acessar um jogo pelo campeonato, ao ir para o jogo anterior ou para o próximo, que este jogo seja o do próprio campeonato e não de tudo;
 - Habilitar e-mails a serem algo funcionais;
 - Modificação dos times no banco de dados, colocando uma sigla, o nome completo, país de origem, etc;
 - Modificação dos campeonatos, permitindo que seja colocado o país de origem ou a organização que é responsável;

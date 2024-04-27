@@ -37,7 +37,7 @@ urlpatterns = [
 
     # ============== Partidas ==============
     path("partida/<int:id>", views.verPartida, name="partida"),
-    path("partida/<str:time>/<int:id>", views.verPartida, name="partida_time"),
+    path("partida/<str:variacao>/<int:id>", views.verPartida, name="partida_variacao"),
     path("registrar_partida", views.register_match, name="register_match"),
     path("atualizar_partida", views.editarPartida, name="change_match"),
     path("registrar_partidas", views.register_matches, name="register_matches"),

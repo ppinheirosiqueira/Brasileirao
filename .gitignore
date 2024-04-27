@@ -1,9 +1,1 @@
-DjangoSite/brasileirao/__pycache__/
-DjangoSite/palpites/__pycache__/
-DjangoSite/palpites/migrations/
-DjangoSite/palpites/utils/__pycache__/
-DjangoSite/media/Escudos/*
-DjangoSite/media/profile_images/*
-!DjangoSite/media/profile_images/imagem_inexistente.png
-*.sqlite3
 auxiliares/arquivosJson/*
