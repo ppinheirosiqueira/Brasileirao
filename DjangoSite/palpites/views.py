@@ -2,7 +2,6 @@ from django.views.decorators.http import require_POST
 from django.shortcuts import render, redirect
 from django.db import IntegrityError
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.http import HttpRequest, HttpResponse
 from datetime import timedelta
@@ -61,7 +60,7 @@ def verLogin(request : HttpRequest) -> HttpResponse:
         # Check if authentication successful
         if user is not None:
             login(request, user)
-            return HttpResponseRedirect(reverse("home"))
+            return redirect(reverse("home"))
         else:
             return render(request, "palpites/login.html", {
                 "title": "Login",
@@ -74,7 +73,7 @@ def verLogin(request : HttpRequest) -> HttpResponse:
 
 def logout_view(request : HttpRequest) -> HttpResponse:
     logout(request)
-    return HttpResponseRedirect(reverse("home"))
+    return redirect(reverse("home"))
 
 def register(request : HttpRequest) -> HttpResponse:
     if request.method == "POST":
@@ -100,7 +99,7 @@ def register(request : HttpRequest) -> HttpResponse:
                 "message": "Username already taken."
             })
         login(request, user)
-        return HttpResponseRedirect(reverse("home"))
+        return redirect(reverse("home"))
     else:
         return render(request, "palpites/register.html",{
             "title": "Register"
@@ -185,7 +184,7 @@ def verUsuario(request : HttpRequest, id : int) -> HttpResponse:
 
 def editarUsuario(request : HttpRequest, id : int) -> HttpResponse:
     if request.user.id != id:
-        return HttpResponseRedirect(reverse("home"))
+        return redirect(reverse("home"))
 
     formImage = ProfileImageUpdateForm(instance=request.user if request.user.is_authenticated else None)
     usuario = User.objects.get(id=id)
@@ -242,7 +241,7 @@ def verGrupo(request: HttpRequest, id:int) -> HttpResponse:
     grupo = Grupo.objects.get(id=id)
     
     if not request.user.is_authenticated or not Grupo.objects.filter(usuarios=request.user).filter(id=grupo.id).exists():
-        return HttpResponseRedirect(reverse("home"))
+        return redirect(reverse("home"))
     
     if  grupo.edicao.comecou:
         rankingJogadores = rankingGrupo(grupo.id)
@@ -284,18 +283,18 @@ def sairGrupo(request: HttpRequest, idGrupo:int) -> HttpResponse:
 
     if len(grupo.usuarios.all()) == 0:
         grupo.delete()
-        return HttpResponseRedirect(reverse("groups"))
+        return redirect(reverse("groups"))
     
     if grupo.dono == request.user:
         grupo.dono = grupo.usuarios.all().order_by('?').first()
     
     grupo.save()
 
-    return HttpResponseRedirect(reverse("groups"))
+    return redirect(reverse("groups"))
 
 def mensagens(request: HttpRequest) -> HttpResponse:
     if not request.user.is_authenticated:
-        return HttpResponseRedirect(reverse("home"))
+        return redirect(reverse("home"))
 
     return render(request, "palpites/mensagens.html",{
         'mensagens': Mensagem.objects.filter(to_user=request.user).order_by('-id')
@@ -319,7 +318,7 @@ def processarMensagemGlobal(request: HttpRequest) -> HttpResponse:
             mensagem = Mensagem(to_user=user,from_user=request.user,titulo=titulo,conteudo=conteudo)
             mensagem.save()
             
-    return HttpResponseRedirect(reverse("mensagemGlobal"))
+    return redirect(reverse("mensagemGlobal"))
 
 def verInfo(request : HttpRequest) -> HttpResponse:
     return render(request, "palpites/info.html", {})
@@ -406,7 +405,7 @@ def verPalpitarEdicao(request : HttpRequest, edicao : int) -> HttpResponse:
             'times': list(zip(range(1, 11), times[:10], range(11, 21), times_10_a_frente)),
             'range': range(1,21),
         })
-    return HttpResponseRedirect(reverse("home"))
+    return redirect(reverse("home"))
 
 def verRodada(request : HttpRequest, campeonato : int, edicao : int, rodada : int) -> HttpResponse:
     edicao = EdicaoCampeonato.objects.get(campeonato=campeonato,num_edicao=edicao)
@@ -462,7 +461,7 @@ def register_tournament(request : HttpRequest) -> HttpResponse:
     })
 
 @require_POST
-def register_team_tournament(request : HttpRequest) -> HttpResponseRedirect:
+def register_team_tournament(request : HttpRequest) -> HttpResponse:
     times = request.POST.getlist('times')
     for time in times:
         quebra = time.split('_')
@@ -470,7 +469,7 @@ def register_team_tournament(request : HttpRequest) -> HttpResponseRedirect:
         edicao = EdicaoCampeonato.objects.get(campeonato=campeonato,id=quebra[1])
         auxTime = Time.objects.get(id=quebra[2])
         edicao.times.add(auxTime)
-    return HttpResponseRedirect(reverse("register_team"))
+    return redirect(reverse("register_team"))
 
 def register_match(request : HttpRequest) -> HttpResponse:
     message = ""
@@ -554,7 +553,7 @@ def mudarTema(request : HttpRequest) -> HttpResponse:
     user = request.user
     
     if not user.is_authenticated:
-        return HttpResponseRedirect(reverse("home"))
+        return redirect(reverse("home"))
 
     return render(request, "palpites/mudar_tema.html", {
         "title": "Mudar Tema",
