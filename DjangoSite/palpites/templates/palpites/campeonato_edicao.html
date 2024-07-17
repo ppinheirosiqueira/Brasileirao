@@ -378,6 +378,9 @@
             {% endif %}
         </div>
     {% endif %}
+    {% if user.is_staff and edicao.comecou and not edicao.terminou %}
+        <a href="{% url 'finalizarCampeonato' edicao=edicao.id %}">Finalizar Campeonato</a>
+    {% endif %}
 {% endblock %}
 
 {% block bodyMobile %}

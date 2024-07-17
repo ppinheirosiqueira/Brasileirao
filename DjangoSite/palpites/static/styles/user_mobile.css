@@ -1,0 +1,83 @@
+.profile {
+  text-align: center;
+  font-size: 1rem;
+  margin-bottom: 1em;
+}
+.profile h1 {
+  font-size: 2em;
+  margin-bottom: 20px;
+}
+.profile .profile-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  flex-direction: column;
+}
+.profile .profile-info .profile-image {
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 20px;
+}
+.profile .profile-info .user-info h2 {
+  font-size: 1.5em;
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+}
+.profile .profile-info .user-info p {
+  font-size: 1em;
+  margin-bottom: 1em;
+}
+
+hr {
+  margin: auto;
+}
+
+h1 {
+  text-align: center;
+  margin: 1em 0;
+}
+
+.aproveitamento {
+  margin: 2em auto;
+  border-collapse: collapse;
+  width: 80%;
+}
+.aproveitamento th, .aproveitamento td {
+  padding: 8px;
+  text-align: center;
+}
+.aproveitamento td {
+  width: 25%;
+}
+.aproveitamento td .escudo {
+  width: 2em;
+}
+.aproveitamento th {
+  border-bottom: 1px solid var(--fc);
+  font-size: 1.5em;
+}
+.aproveitamento tr {
+  height: 2em;
+}
+.aproveitamento tr:nth-child(even) {
+  background: var(--hover);
+}
+
+.medalhas {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 1% 20%;
+}
+.medalhas .podio {
+  flex-grow: 1;
+  width: 100%;
+  height: 6em;
+}
+.medalhas img {
+  width: 4em;
+}
+
+/*# sourceMappingURL=user_mobile.css.map */

@@ -35,6 +35,9 @@
   display: block;
   border-left: 2px solid var(--border);
 }
+#principal select {
+  width: 60%;
+}
 #principal .profile {
   text-align: center;
   font-size: 1rem;
@@ -226,6 +229,20 @@
 }
 #edicao .checkbox-imagem:checked + label .indicator, #edicao .checkbox-time:checked ~ label .indicator, #edicao .checkbox-cor:checked ~ label .indicator, #edicao .checkbox-cor-2:checked ~ label .indicator {
   transform: rotate(-225deg);
+}
+
+.medalhas {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 1% 20%;
+}
+.medalhas .podio {
+  flex-grow: 1;
+  width: 100%;
+  height: 6em;
+}
+.medalhas img {
+  width: 4em;
 }
 
 /*# sourceMappingURL=user_pc.css.map */

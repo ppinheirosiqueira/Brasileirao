@@ -29,6 +29,7 @@ urlpatterns = [
     path("palpitarEdicao/<int:edicao>", views.verPalpitarEdicao, name="palpiteEdicao"),
     path("register_tournament", views.register_tournament, name="register_tournament"),
     path("register_team_tournament", views.register_team_tournament, name="register_team_tournament"),
+    path("finalizarCampeonato/<int:edicao>", views.finalizarCampeonato, name="finalizarCampeonato"),
 
     # ============== Times ==============
     path("times", views.verTimes, name="show_teams"),

@@ -14,7 +14,7 @@ from django.utils import timezone
 from user_agents import parse
 import json
 
-from .models import User, Time, Partida, Palpite_Partida, Campeonato, EdicaoCampeonato, Rodada, Grupo, Palpite_Campeonato, RodadaModificada, Mensagem
+from .models import User, Time, Partida, Palpite_Partida, Campeonato, EdicaoCampeonato, Rodada, Grupo, Palpite_Campeonato, RodadaModificada, Mensagem, Medal
 from .forms import ProfileImageUpdateForm
 from .utils import rankingGrupo, cravadas, get_edicoes, get_edicoes_usuario, ranking, definirVencedor, get_anterior_proximo_partida, accuracy_user, average_pepe, rankingUsuariosNoTime, palpite_da_partida, rankingTimesNoPerfil, classificacao
 
@@ -159,6 +159,7 @@ def verUsuario(request : HttpRequest, id : int) -> HttpResponse:
         media = rankingTimesNoPerfil(id,edicoes[0].id)
     else:
         media = None
+    medalhas = Medal.objects.filter(usuario=usuario).order_by("nivel")
 
     contexto = {
         "title": f"Perfil do Usuário - {usuario.username}",
@@ -171,6 +172,8 @@ def verUsuario(request : HttpRequest, id : int) -> HttpResponse:
         "accuracy_total": aT,
         "media": media,
         "edicoes": edicoes,
+        "tem_medalha": len(medalhas),
+        "medalhas": medalhas,
     }
 
     if request.user.id == id:
@@ -574,3 +577,22 @@ def recusarGrupo(request : HttpRequest, idMensagem:int) -> HttpResponse:
     mensagem.delete()
 
     return redirect(reverse('mensagens'))
+
+def finalizarCampeonato(request: HttpRequest, edicao:int) -> HttpRequest:
+    campeonato = EdicaoCampeonato.objects.get(id=edicao)
+    
+    rankingJogadores = ranking(edicao,0)
+    if rankingJogadores is not None:
+        rankingJogadores = list(rankingJogadores)
+
+    topPepe = [(id, pontosP) for _, _, id, pontosP, _ in list(rankingJogadores)[:3]]
+    
+    for i, jogador in enumerate(topPepe,1):
+        aux = Medal(usuario = User.objects.get(id=jogador[0]), edicao_campeonato = campeonato, nivel = i)
+        aux.save()
+    
+    campeonato.terminou = True
+    campeonato.save()
+    
+    url = reverse('edicao', args=(campeonato.campeonato.id,campeonato.num_edicao,))
+    return redirect(url)

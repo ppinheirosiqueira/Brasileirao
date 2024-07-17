@@ -1,3 +1,5 @@
+{% load static %}
+
 <div class="profile">
     <h1>Perfil do Usuário</h1>
     <div class="profile-info">
@@ -14,6 +16,23 @@
         </div>
     </div>
 </div>
+{% if tem_medalha %}
+    <hr width="80%">
+    <div class="medalhas">
+        <img src="{% static 'icons/podium.svg' %}" alt="pódio" class="podio">
+        {% for medalha in medalhas %}
+            <a href="{% url 'edicao' campeonato=medalha.edicao_campeonato.campeonato.id edicao=medalha.edicao_campeonato.num_edicao %}">
+                {% if medalha.nivel == 1 %}
+                    <img src="{% static 'icons/medal-gold.svg' %}" alt="ouro"  title="Campeão - {{ medalha.edicao_campeonato }}">
+                {% elif medalha.nivel == 2 %}
+                    <img src="{% static 'icons/medal-silver.svg' %}" alt="prata"  title="Vice - {{ medalha.edicao_campeonato }}">
+                {% elif medalha.nivel == 3 %}
+                    <img src="{% static 'icons/medal-bronze.svg' %}" alt="bronze"  title="3ª lugar - {{ medalha.edicao_campeonato }}">
+                {% endif %}
+            </a>
+        {% endfor %}
+    </div>
+{% endif %}
 {% if total_predictions > 0 %}
     <hr width="80%">
     <h1>Ranking Média por clube</h1>

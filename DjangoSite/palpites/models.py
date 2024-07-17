@@ -145,3 +145,14 @@ class Mensagem(models.Model):
     titulo = models.CharField(max_length=100)
     conteudo = models.TextField(null=True,blank=True)
     lida = models.BooleanField(default=False)
+    
+class Medal(models.Model):
+    usuario = models.ForeignKey("User",on_delete=models.CASCADE)
+    edicao_campeonato = models.ForeignKey(EdicaoCampeonato, on_delete=models.CASCADE)
+    nivel = models.IntegerField()
+    
+    class Meta:
+        unique_together = ('usuario', 'edicao_campeonato')
+
+    def __str__(self):
+        return f"{self.nivel}º - {self.usuario.username} - {self.edicao_campeonato}"

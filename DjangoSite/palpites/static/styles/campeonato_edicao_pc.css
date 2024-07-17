@@ -16,6 +16,7 @@
 
 .campeonato {
   display: flex;
+  margin-inline: 5%;
 }
 .campeonato .left {
   flex: 1;
@@ -43,73 +44,6 @@
   border-color: #333333;
   text-decoration: none;
   padding: 8px;
-}
-.campeonato .left #destaque .podium {
-  max-width: 50%;
-  width: 100%;
-  height: 96%;
-  margin: 2% 0;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 1fr 2fr 2fr 2fr 2fr;
-  grid-template-areas: "nome nome nome" "imagem2 imagem1 imagem3" "imagem2 primeiro imagem3" "segundo primeiro imagem3" "segundo primeiro terceiro";
-}
-.campeonato .left #destaque .podium .tituloPodio {
-  grid-area: nome;
-  text-align: center;
-}
-.campeonato .left #destaque .podium .imagem1 {
-  grid-area: imagem1;
-  bottom: 0;
-  position: relative;
-  align-self: end;
-  margin: auto;
-  margin-bottom: 1em;
-}
-.campeonato .left #destaque .podium .imagem2 {
-  grid-area: imagem2;
-  bottom: 0;
-  position: relative;
-  align-self: end;
-  margin: auto;
-  margin-bottom: 1em;
-}
-.campeonato .left #destaque .podium .imagem3 {
-  grid-area: imagem3;
-  bottom: 0;
-  position: relative;
-  align-self: end;
-  margin: auto;
-  margin-bottom: 1em;
-}
-.campeonato .left #destaque .podium img {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-}
-.campeonato .left #destaque .podium .first-place {
-  grid-area: primeiro;
-  background-color: gold;
-  color: black;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.campeonato .left #destaque .podium .second-place {
-  grid-area: segundo;
-  background-color: silver;
-  color: black;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.campeonato .left #destaque .podium .third-place {
-  grid-area: terceiro;
-  background-color: #cd7f32;
-  color: black;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 .campeonato .left #classificacao .filtro {
   margin: 2% 10%;
@@ -367,6 +301,73 @@
   margin: auto 0;
   color: var(--fc);
   background-color: var(--bg);
+}
+
+.podium {
+  width: 90%;
+  height: 96%;
+  margin: 2% 5%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 2fr 2fr 2fr 2fr;
+  grid-template-areas: "nome nome nome" "imagem2 imagem1 imagem3" "imagem2 primeiro imagem3" "segundo primeiro imagem3" "segundo primeiro terceiro";
+}
+.podium .tituloPodio {
+  grid-area: nome;
+  text-align: center;
+}
+.podium .imagem1 {
+  grid-area: imagem1;
+  bottom: 0;
+  position: relative;
+  align-self: end;
+  margin: auto;
+  margin-bottom: 1em;
+}
+.podium .imagem2 {
+  grid-area: imagem2;
+  bottom: 0;
+  position: relative;
+  align-self: end;
+  margin: auto;
+  margin-bottom: 1em;
+}
+.podium .imagem3 {
+  grid-area: imagem3;
+  bottom: 0;
+  position: relative;
+  align-self: end;
+  margin: auto;
+  margin-bottom: 1em;
+}
+.podium img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+.podium .first-place {
+  grid-area: primeiro;
+  background-color: gold;
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.podium .second-place {
+  grid-area: segundo;
+  background-color: silver;
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.podium .third-place {
+  grid-area: terceiro;
+  background-color: #cd7f32;
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /*# sourceMappingURL=campeonato_edicao_pc.css.map */

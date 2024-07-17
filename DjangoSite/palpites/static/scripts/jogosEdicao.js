@@ -34,7 +34,7 @@ function exibirPartidas(dados){
     partidas.forEach(function(jogo){
         texto += '<div class="partida">'
         texto += '<a href="../../partida/' + (-edicaoId) + '/' + jogo.pk +'">'
-        texto += '<span class="texto nomeCampeonato">' + jogo.Rodada + ' - </span>'
+        texto += '<span class="texto nomeCampeonato">' + jogo.Rodada + '</span>'
         texto += '<img class="escudo" src="../../' + times[jogo.Mandante-1].fields.escudo + '" alt="escudo mandante" title="' + times[jogo.Mandante-1].fields.Nome +'">'
         texto += '<span class="texto">'
         if (jogo.golsMandante > -1 ){

@@ -2,6 +2,8 @@ import requests
 from bs4 import BeautifulSoup
 import re
 import json
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 times = {
     'AME': "América-MG",
@@ -33,8 +35,8 @@ campeonato = input("Qual campeonato vai recolher?")
 edicaoCampeonato = input("Qual a edição desse campeonato?")
 rodada = input("Qual rodada deseja recolher?")
 
-url = 'https://www.cbf.com.br/futebol-brasileiro/competicoes/campeonato-brasileiro-serie-a?csrt=9148758663506143319'
-response = requests.get(url)
+url = 'https://www.cbf.com.br/futebol-brasileiro/competicoes/campeonato-brasileiro-serie-a'
+response = requests.get(url, verify=False)
 if response.status_code == 200:
         soup = BeautifulSoup(response.text, 'html.parser')
         todosJogos = soup.find('div', {'class': 'swiper-wrapper'})
@@ -46,9 +48,6 @@ if response.status_code == 200:
             correspondencias = re.search(padrao, dado)
             siglaMandante = li.find('div', {'class': 'time pull-left'}).find('span', {'class':'time-sigla'}).text
             siglaVisitante = li.find('div', {'class': 'time pull-right'}).find('span', {'class':'time-sigla'}).text
-            print(correspondencias)
-            print(siglaMandante)
-            print(siglaVisitante)
             aux = {
                 'data': (correspondencias.group(1) if correspondencias else '31/12/2099 00:00'),
                 'mandante': times[siglaMandante],
