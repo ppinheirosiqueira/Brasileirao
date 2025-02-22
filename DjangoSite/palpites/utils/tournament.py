@@ -4,13 +4,16 @@ from django.db.models.functions import Coalesce
 from .score import check_pontuacao_pepe, check_diferenca_gols
 from collections import defaultdict
 from django.utils import timezone
+from datetime import timedelta
 
 def get_edicoes() -> list:
-    edicoes = list(EdicaoCampeonato.objects.filter(id__in=Partida.objects.all().values_list("Rodada__edicao_campeonato",flat=True).distinct()))
+    edicoes = list(EdicaoCampeonato.objects.filter(id__in=Partida.objects.filter(dia__gte=timezone.now() - timedelta(days=90)).values_list("Rodada__edicao_campeonato", flat=True).distinct()))
     ultimo_jogo_ocorrido = Partida.objects.exclude(dia__gt=timezone.now()).order_by('dia').last()
-    Edicao_ultimo_jogo = EdicaoCampeonato.objects.get(rodada__partida__id=ultimo_jogo_ocorrido.id)
-    edicoes.remove(Edicao_ultimo_jogo)
-    edicoes.insert(0, Edicao_ultimo_jogo)
+    if ultimo_jogo_ocorrido:
+        edicao_ultimo_jogo = EdicaoCampeonato.objects.get(rodada__partida__id=ultimo_jogo_ocorrido.id)
+        if edicao_ultimo_jogo in edicoes:
+            edicoes.remove(edicao_ultimo_jogo)
+        edicoes.insert(0, edicao_ultimo_jogo)
     return edicoes
 
 def get_edicoes_usuario(id:int) -> list:

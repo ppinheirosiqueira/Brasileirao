@@ -26,6 +26,6 @@ function registrar() {
         },
         body: fileContent
     }).then(response => response.json())
-        .then(data => alert(data))
+        .then(data => alert(data.texto))
         .catch(error => console.error('Erro:', error))
 }
