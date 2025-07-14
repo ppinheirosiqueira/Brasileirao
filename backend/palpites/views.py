@@ -445,10 +445,7 @@ def register_team(request : HttpRequest) -> HttpResponse:
 def register_tournament(request : HttpRequest) -> HttpResponse:
     message = ""
     if request.method == "POST":
-        try: 
-            pontosCorridos = request.POST["pontosCorridos"]
-        except:
-            pontosCorridos = False
+        pontosCorridos = True if request.POST["pontosCorridos"] == "on" else False
         campeonato = Campeonato.objects.get_or_create(nome=request.POST["campeonato"],pontosCorridos=pontosCorridos)[0]
         maiorNum = EdicaoCampeonato.objects.filter(campeonato=campeonato).aggregate(Max('num_edicao'))['num_edicao__max']
         if maiorNum is None:

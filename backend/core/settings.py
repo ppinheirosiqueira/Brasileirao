@@ -52,7 +52,7 @@ MIDDLEWARE = [
     'django_user_agents.middleware.UserAgentMiddleware',
 ]
 
-ROOT_URLCONF = 'brasileirao.urls'
+ROOT_URLCONF = 'core.urls'
 
 TEMPLATES = [
     {
@@ -72,7 +72,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'brasileirao.wsgi.application'
+WSGI_APPLICATION = 'core.wsgi.application'
 
 
 # Database
