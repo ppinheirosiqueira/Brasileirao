@@ -1,4 +1,6 @@
-from ..models import Palpite_Partida, Partida
+# from ..models import Palpite_Partida, Partida
+from ..models import Palpite_Partida
+from futebol_manager.models import Partida
 from django.db.models import Q
 from django.db.models.functions import Lower
 from .score import check_pontuacao_pepe_jogo

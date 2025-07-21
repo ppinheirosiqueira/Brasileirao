@@ -1,4 +1,6 @@
-from ..models import Palpite_Partida, Time
+# from ..models import Palpite_Partida, Time
+from ..models import Palpite_Partida
+from futebol_manager.models import Time
 from .score import check_pontuacao_pepe, check_diferenca_gols
 from django.db.models import F, Q
 

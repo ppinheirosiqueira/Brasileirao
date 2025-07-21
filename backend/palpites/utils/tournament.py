@@ -1,4 +1,7 @@
-from ..models import Palpite_Partida, User, Partida, Palpite_Campeonato, EdicaoCampeonato, Rodada, Grupo
+# from ..models import Palpite_Partida, User, Partida, Palpite_Campeonato, EdicaoCampeonato, Rodada, Grupo
+from ..models import Palpite_Partida, Palpite_Campeonato
+from usuarios.models import User, Grupo
+from futebol_manager.models import Partida, EdicaoCampeonato, Rodada
 from django.db.models import F, Count, Sum, Q, Value
 from django.db.models.functions import Coalesce
 from .score import check_pontuacao_pepe, check_diferenca_gols

@@ -13,9 +13,14 @@ from django.utils import timezone
 from user_agents import parse
 import json
 
-from .models import User, Time, Partida, Palpite_Partida, Campeonato, EdicaoCampeonato, Rodada, Grupo, Palpite_Campeonato, RodadaModificada, Mensagem, Medal
+# from .models import User, Time, Partida, Palpite_Partida, Campeonato, EdicaoCampeonato, Rodada, Grupo, Palpite_Campeonato, RodadaModificada, Mensagem, Medal
 from .forms import ProfileImageUpdateForm
 from .utils import rankingGrupo, cravadas, get_edicoes, get_edicoes_usuario, ranking, definirVencedor, get_anterior_proximo_partida, accuracy_user, average_pepe, rankingUsuariosNoTime, palpite_da_partida, rankingTimesNoPerfil, classificacao
+
+from avisos.models import Mensagem
+from futebol_manager.models import Time, Partida, Campeonato, EdicaoCampeonato, Rodada
+from .models import Palpite_Partida, Palpite_Campeonato, Medal
+from usuarios.models import User, Grupo, RodadaModificada
 
 # Visão Principal
 def home(request : HttpRequest) -> HttpResponse:

@@ -1,4 +1,6 @@
-from ..models import Palpite_Partida, User
+# from ..models import Palpite_Partida, User
+from ..models import Palpite_Partida
+from usuarios.models import User
 from .score import check_pontuacao_pepe, check_diferenca_gols
 
 def rankingUsuariosNoTime(jogos):

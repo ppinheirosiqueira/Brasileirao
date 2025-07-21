@@ -1,4 +1,6 @@
-from ..models import Palpite_Partida, User, Grupo
+# from ..models import Palpite_Partida, User, Grupo
+from ..models import Palpite_Partida
+from usuarios.models import User, Grupo
 from .score import check_diferenca_gols, check_pontuacao_pepe, check_pontuacao_pepe_grupo
 
 def ranking(edicao, rodada):

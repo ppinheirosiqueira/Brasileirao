@@ -31,7 +31,6 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'palpites',
     'django_user_agents',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -39,6 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'avisos',
+    'futebol_manager',
+    'palpites',
+    'usuarios'
 ]
 
 MIDDLEWARE = [
@@ -85,7 +88,7 @@ DATABASES = {
     }
 }
 
-AUTH_USER_MODEL = 'palpites.User'
+AUTH_USER_MODEL =  'usuarios.User'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators

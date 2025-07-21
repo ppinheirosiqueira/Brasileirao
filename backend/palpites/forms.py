@@ -1,5 +1,5 @@
 from django import forms
-from .models import User
+from usuarios.models import User
 
 class ProfileImageUpdateForm(forms.ModelForm):
     class Meta:

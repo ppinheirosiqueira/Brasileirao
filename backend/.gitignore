@@ -3,6 +3,12 @@ palpites/__pycache__/
 palpites/migrations/
 palpites/utils/__pycache__/
 palpites/templatetags/__pycache__/
+avisos/__pycache__/
+avisos/migrations/
+futebol_manager/__pycache__/
+futebol_manager/migrations/
+usuarios/__pycache__/
+usuarios/migrations/
 media/Escudos/*
 media/profile_images/*
 !media/profile_images/imagem_inexistente.png

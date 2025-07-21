@@ -11,7 +11,12 @@ import os
 import importlib.util
 
 from .utils import get_tema, cravadas, avgPontos, modaPalpites, modaResultados, ranking, rankingClassicacao, obter_dados_campeonato, definirVencedor, classificacao, partida_to_json, check_pontuacao_pepe, rankingTimesNoPerfil, palpites_campeonato_to_json, modificador_to_json, titulo_mensagem_to_json, mensagem_to_json
-from .models import Partida, Palpite_Partida, Campeonato, EdicaoCampeonato, Rodada, Time, Palpite_Campeonato, User, Grupo, RodadaModificada, Mensagem
+# from .models import Partida, Palpite_Partida, Campeonato, EdicaoCampeonato, Rodada, Time, Palpite_Campeonato, User, Grupo, RodadaModificada, Mensagem
+
+from avisos.models import Mensagem
+from futebol_manager.models import Time, Partida, Campeonato, EdicaoCampeonato, Rodada
+from .models import Palpite_Partida, Palpite_Campeonato
+from usuarios.models import User, Grupo, RodadaModificada
 
 def tema(request : HttpRequest):
     return {'tema': get_tema(request.user)}

@@ -1,5 +1,7 @@
 from django.db.models import F, Func, Sum
-from ..models import Rodada, RodadaModificada
+# from ..models import Rodada, RodadaModificada
+from futebol_manager.models import Rodada
+from usuarios.models import RodadaModificada
 
 def check_pontuacao_pepe(palpites):
     mandante = palpites.filter(golsMandante=F('partida__golsMandante')).count()
