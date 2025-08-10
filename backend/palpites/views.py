@@ -18,7 +18,7 @@ from .forms import ProfileImageUpdateForm
 from .utils import rankingGrupo, cravadas, get_edicoes, get_edicoes_usuario, ranking, definirVencedor, get_anterior_proximo_partida, accuracy_user, average_pepe, rankingUsuariosNoTime, palpite_da_partida, rankingTimesNoPerfil, classificacao
 
 from avisos.models import Mensagem
-from futebol_manager.models import Time, Partida, Campeonato, EdicaoCampeonato, Rodada
+from futebol_manager.models import Continente, Time, Partida, Campeonato, EdicaoCampeonato, Rodada, TipoTime
 from .models import Palpite_Partida, Palpite_Campeonato, Medal
 from usuarios.models import User, Grupo, RodadaModificada
 
@@ -202,11 +202,38 @@ def editarUsuario(request : HttpRequest, id : int) -> HttpResponse:
     })
 
 def verTimes(request : HttpRequest) -> HttpResponse:
-    times = Time.objects.all().order_by("Nome")
-    return render(request, "palpites/times.html",{
-        "title": "Times",
-        "times": sorted(times, key=lambda time: unidecode(time.Nome)),
-    })
+    # 1. A busca eficiente ao banco de dados continua a mesma
+    continentes_qs = Continente.objects.prefetch_related('paises__times').order_by('nome')
+    
+    # 2. Aqui começa a transformação dos dados
+    dados_para_template = []
+    for continente in continentes_qs:
+        selecoes_do_continente = []
+        clubes_por_pais = {} # Usaremos um dicionário para agrupar os clubes por país
+
+        for pais in continente.paises.all():
+            for time in pais.times.all():
+                if time.tipo == TipoTime.SELECAO:
+                    selecoes_do_continente.append(time)
+                else: # Se não for seleção, é clube
+                    # Se for a primeira vez que vemos este país com um clube, criamos a entrada
+                    if pais not in clubes_por_pais:
+                        clubes_por_pais[pais] = []
+                    clubes_por_pais[pais].append(time)
+        
+        # Apenas adicionamos o continente à lista final se ele tiver alguma seleção OU algum clube
+        if selecoes_do_continente or clubes_por_pais:
+            dados_para_template.append({
+                'continente_obj': continente,
+                'selecoes': sorted(selecoes_do_continente, key=lambda t: t.Nome), # Ordena as seleções alfabeticamente
+                'paises_com_clubes': sorted(clubes_por_pais.items(), key=lambda item: item[0].nome) # Ordena os países alfabeticamente
+            })
+
+    context = {
+        'dados_para_template': dados_para_template
+    }
+    
+    return render(request, 'palpites/times.html', context)
 
 def verTime(request : HttpRequest, id : int) -> HttpResponse:
     time = Time.objects.get(id=id)

@@ -1,11 +1,44 @@
-<h2>Lista de Times</h2>
-<div class="times">
-    {% for time in times %}
-        <a href="{% url 'show_team' id=time.id %}">
-            <img src="{{ time.escudo }}" alt="escudo" class="escudo">
-            <span class="nome">{{ time.Nome }}</span>
-        </a>
-    {% empty %}
-        <span>Nenhum time Registrado</span>
-    {% endfor %}
-</div>
+<h2>Lista de Times por Região</h2>
+
+{% for data_continente in dados_para_template %}
+    <div class="times">
+        <h3>{{ data_continente.continente_obj.nome }}</h3>
+
+        {# ===== SEÇÃO DE SELEÇÕES ===== #}
+        {% if data_continente.selecoes %}
+            <div class="times">
+                <h4>Seleções</h4>
+                <div class="times">
+                    {% for selecao in data_continente.selecoes %}
+                        <a href="{% url 'show_team' id=selecao.id %}" class="time-item">
+                            <img src="{{ selecao.escudo }}" alt="escudo de {{ selecao.Nome }}" class="escudo">
+                            <span class="nome">{{ selecao.Nome }}</span>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
+        {# ===== SEÇÃO DE CLUBES POR PAÍS ===== #}
+        {% if data_continente.paises_com_clubes %}
+                <div class="times">
+                <h4>Clubes</h4>
+                {% for pais, clubes in data_continente.paises_com_clubes %}
+                    <div class="times">
+                        <h5>{{ pais.nome }}</h5>
+                        <div class="times">
+                            {% for clube in clubes %}
+                                <a href="{% url 'show_team' id=clube.id %}" class="time-item">
+                                    <img src="{{ clube.escudo }}" alt="escudo de {{ clube.Nome }}" class="escudo">
+                                    <span class="nome">{{ clube.Nome }}</span>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+    </div>
+    <hr>
+{% endfor %}
